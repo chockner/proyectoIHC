@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Doctor;
+use App\Models\Secretary;
+use App\Models\Patient;
+use App\Models\Appointment;
+use App\Models\Specialty;
+use App\Models\Payment;
+
+class DashboardController extends Controller
+{
+    public function index()
+    {
+        $role = Auth::user()->role->name;
+
+        return match ($role){
+            'admin' => view('dashboard.admin'),
+            'doctor' => view('dashboard.doctor'),
+            'paciente' => view('dashboard.paciente'),
+            'secretaria' => view('dashboard.secretaria'),
+            default => abort(403, 'Unauthorized action.'),
+        };
+    }
+
+    public function adminDashboard()
+    {
+        return view('dashboard.admin', [
+            'totalDoctores' => Doctor::count(),
+            'totalSecretarias' => Secretary::count(),
+            'totalPacientes' => Patient::count(),
+            'totalEspecialidades' => Specialty::count(),
+            'totalCitas' => Appointment::count(),
+            'totalPagos' => Payment::count(),
+        ]);
+    }
+
+    public function secretariaDashboard()
+    {
+        return view('dashboard.secretaria', [
+            'totalPacientes' => Patient::count(),
+        ]);
+    }
+
+    public function doctorDashboard()
+    {
+        return view('dashboard.doctor', [
+            'totalPacientes' => Patient::count(),
+        ]);
+    }
+
+    public function pacienteDashboard()
+    {
+        return view('dashboard.paciente', [
+            'totalCitas' => 0, // Cambia esto por la lógica real para contar citas
+        ]);
+    }
+}
