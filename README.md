@@ -7,8 +7,11 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-### 1. Conar el repositorio
+## 1. Conar el repositorio
 
-'''bash
+```bash
 git clone https://github.com/chockner/proyectoIHC.git
+cd proyectoIHC
 
+
+## 2. intalalar dependecias 
