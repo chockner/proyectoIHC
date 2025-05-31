@@ -13,49 +13,49 @@ XAMPP v3.3.0
 
 ## INSTALACION
 
-    ### 1. Conar el repositorio
+### 1. Conar el repositorio
 
-    ```bash
-    git clone https://github.com/chockner/proyectoIHC.git
-    cd proyectoIHC
-    ```
+```bash
+git clone https://github.com/chockner/proyectoIHC.git
+cd proyectoIHC
+```
 
-    ### 2. Instalar dependencias de PHP
+### 2. Instalar dependencias de PHP
 
-    ```bash
-    composer install
-    ```
+```bash
+composer install
+```
 
-    ### 3. Copiar archivo de entorno y generar la clave de la aplicación
+### 3. Copiar archivo de entorno y generar la clave de la aplicación
 
-    ```bash
-    cp .env.example .env
-    php artisan key:generate
-    ```
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-    ### 4. Configurar el archivo `.env`
+### 4. Configurar el archivo `.env`
 
-    Edita el archivo `.env` con los datos de tu base de datos:
+Edita el archivo `.env` con los datos de tu base de datos:
 
-    ```
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=ihcproyectofinal
-    DB_USERNAME=root
-    DB_PASSWORD=
-    ```
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ihcproyectofinal
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-    ### 5. Ejecutar migraciones y seeders 
+### 5. Ejecutar migraciones y seeders 
 
-    ```bash
-    php artisan migrate
-    php artisan db:seed --class=DatabaseSeeder
-    ```
+```bash
+php artisan migrate
+php artisan db:seed --class=DatabaseSeeder
+```
 
-    ### 6. Levantar el servidor local
+### 6. Levantar el servidor local
 
-    ```bash
-    php artisan serve
-    ```
+```bash
+php artisan serve
+```
 
