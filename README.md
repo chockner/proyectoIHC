@@ -7,8 +7,8 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-1 clonar el repo
-2 composer instal
-3 hacer las migraciones
-4 subir los seeders
+### 1. Conar el repositorio
+
+'''bash
+git clone https://github.com/chockner/proyectoIHC.git
 
