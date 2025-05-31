@@ -12,6 +12,6 @@
 ```bash
 git clone https://github.com/chockner/proyectoIHC.git
 cd proyectoIHC
-
+```bash
 
 ## 2. intalalar dependecias 
