@@ -7,11 +7,55 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## 1. Conar el repositorio
+## Requisitos
 
-```bash
-git clone https://github.com/chockner/proyectoIHC.git
-cd proyectoIHC
-```bash
+XAMPP v3.3.0
 
-## 2. intalalar dependecias 
+## INSTALACION
+
+    ### 1. Conar el repositorio
+
+    ```bash
+    git clone https://github.com/chockner/proyectoIHC.git
+    cd proyectoIHC
+    ```
+
+    ### 2. Instalar dependencias de PHP
+
+    ```bash
+    composer install
+    ```
+
+    ### 3. Copiar archivo de entorno y generar la clave de la aplicación
+
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+
+    ### 4. Configurar el archivo `.env`
+
+    Edita el archivo `.env` con los datos de tu base de datos:
+
+    ```
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=ihcproyectofinal
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
+
+    ### 5. Ejecutar migraciones y seeders 
+
+    ```bash
+    php artisan migrate
+    php artisan db:seed --class=DatabaseSeeder
+    ```
+
+    ### 6. Levantar el servidor local
+
+    ```bash
+    php artisan serve
+    ```
+
