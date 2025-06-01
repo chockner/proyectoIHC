@@ -321,13 +321,16 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let departamentos = [];
-        let provincias = [];
-        let distritos = [];
 
         const regionSelect = document.getElementById('region');
         const provinceSelect = document.getElementById('province');
         const districtSelect = document.getElementById('district');
+        
+        if (!regionSelect || !provinceSelect || !districtSelect) return;
+
+        let departamentos = [];
+        let provincias = [];
+        let distritos = [];
 
         Promise.all([
             fetch('/js/ubigeo_peru_2016_departamentos.json').then(res => res.json()),
