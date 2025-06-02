@@ -10,6 +10,7 @@ class HistorialMedicoController extends Controller
 {
     public function index () 
     {
+        
         $historiales=MedicalRecord::all();
         return view('admin.historialMedico.index',compact('historiales'));
     }
