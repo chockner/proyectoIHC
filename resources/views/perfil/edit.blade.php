@@ -22,9 +22,9 @@
             <div class="col-md-4">
                 <label>Foto de perfil</label>
                 <input type="file" class="form-control" name="photo">
-                {{-- @if($profile->photo) --}}
+                <!-- {{-- @if($profile->photo) --}} -->
                     <img src="{{ asset('storage/'.$profile->photo) }}" alt="{{ 'foto de '.$profile->last_name }}" class="img-thumbnail mt-2" width="100">
-               {{--  @endif --}}
+               <!-- {{--  @endif --}} -->
 
             </div>
             <div class="col-md-4">
