@@ -20,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($historialMedico as $index => $historial)
+                @foreach ($historiales as $index => $historial)
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $historial->patient->user->profile->first_name}}</td>
@@ -38,7 +38,7 @@
                     </tr>
                 @endforeach
 
-                @if ($historialMedico->isEmpty())
+                @if ($historiales->isEmpty())
                     <tr>
                         <td colspan="6" class="text-center">No hay doctores registrados.</td>
                     </tr>
