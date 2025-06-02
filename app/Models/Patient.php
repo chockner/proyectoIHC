@@ -13,7 +13,7 @@ class Patient extends Model
         'user_id',
         'blood_type',
         'allergies',
-        'vaccines_received',
+        'vaccination_received'
     ];
 
     public function user()

@@ -7,6 +7,8 @@ use App\Models\Profile;
 use App\Models\User;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProfileController extends Controller
 {
@@ -27,10 +29,8 @@ class ProfileController extends Controller
                 'user_id' => $user->id,
             ]);
         }
-        
-        $profile = $user->profile;
 
-        return view('perfil.edit', compact('profile'));
+        return view('perfil.edit');
     }
 
     public function update(Request $request)
