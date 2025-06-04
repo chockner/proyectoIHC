@@ -70,6 +70,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     /* admin -> paciente */
     Route::get('/pacientes', [PacienteController::class, 'index'])->name('admin.paciente.index');
     Route::get('/pacientes/create', [PacienteController::class, 'create'])->name('admin.paciente.create');
+    Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy'])->name('admin.paciente.destroy');
 
     /* admin -> historial Medico */
     Route::get('/historiales', [HistorialMedicoController::class, 'index'])->name('admin.historialMedico.index');
