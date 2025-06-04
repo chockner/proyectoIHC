@@ -48,27 +48,14 @@ class ProfileController extends Controller
             'region' => 'nullable|string|max:100',
             'province' => 'nullable|string|max:100',
             'district' => 'nullable|string|max:100',
-            'country' => 'nullable|string|max:100',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
     
         $profile = Auth::user()->profile;
     
         // Recoge los nombres de la región, provincia y distrito desde los campos ocultos
-        $data = $request->except('photo'); // menos la foto
         $data['region'] = $request->input('region_nombre');
         $data['province'] = $request->input('province_nombre');
         $data['district'] = $request->input('district_nombre');
-    
-        if ($request->hasFile('photo')) {
-            // Elimina la foto anterior si existe
-            if ($profile->photo && Storage::disk('public')->exists($profile->photo)) {
-                Storage::disk('public')->delete($profile->photo);
-            }
-            // Guarda la nueva foto
-            $path = $request->file('photo')->store('profiles', 'public');
-            $data['photo'] = $path;
-        }
     
         $profile->update($data);
     
