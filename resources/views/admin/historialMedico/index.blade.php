@@ -12,7 +12,6 @@
                     <th>#</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>Especialidad</th>
                     <th>Correo</th>
                     <th>Teléfono</th>
                     <th>Acciones</th>
@@ -26,10 +25,21 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $historial->patient->user->profile->first_name}}</td>
                             <td>{{ $historial->patient->user->profile->last_name}}</td>
+                            <td>{{ $historial->patient->user->profile->email}}</td>
+                            <td>{{ $historial->patient->user->profile->phone}}</td>
 
                             <td>
                                 <a href="" class="btn btn-sm btn-info">Ver</a> {{-- {{ route('admin.doctor.show', $doctor->id) }} --}}
-
+                                <a href="" class="btn btn-sm btn-warning">Editar</a> {{-- {{ route('admin.doctor.edit', $doctor->id) }} --}}
+                                <form action="" method="POST" class="d-inline"> {{-- {{ route('admin.doctor.destroy', $doctor->id) }} --}}
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
+                                </form>
+                            </td>
+                        @endif
+                    </tr>
+                @endforeach
 
                 @if ($historiales->isEmpty())
                     <tr>

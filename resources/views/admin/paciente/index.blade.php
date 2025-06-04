@@ -25,7 +25,7 @@
                     <td>{{ $paciente->user->profile->phone }}</td>
                     <td>
                         <a href="#" class="btn btn-sm btn-warning">Editar</a> {{-- {{ route('admin.doctor.edit', $doctor->id) }} --}}
-                        <form action="{{route('admin.paciente.destroy',$paciente->id)}}" method="POST" class="d-inline"> {{-- {{ route('admin.doctor.destroy', $doctor->id) }} --}}
+                        <form action="{{ route('admin.paciente.destroy', $paciente->id) }}" method="POST" class="d-inline"> {{-- {{ route('admin.doctor.destroy', $doctor->id) }} --}}
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
