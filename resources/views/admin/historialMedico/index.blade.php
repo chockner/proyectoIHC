@@ -16,27 +16,20 @@
                     <th>Correo</th>
                     <th>Teléfono</th>
                     <th>Acciones</th>
-                    
                 </tr>
             </thead>
             <tbody>
                 @foreach ($historiales as $index => $historial)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $historial->patient->user->profile->first_name}}</td>
-                        <td>{{ $historial->patient->user->profile->last_name}}</td>
                         
-                        <td>
-                            <a href="" class="btn btn-sm btn-info">Ver</a> {{-- {{ route('admin.doctor.show', $doctor->id) }} --}}
-                            <a href="" class="btn btn-sm btn-warning">Editar</a> {{-- {{ route('admin.doctor.edit', $doctor->id) }} --}}
-                            <form action="" method="POST" class="d-inline"> {{-- {{ route('admin.doctor.destroy', $doctor->id) }} --}}
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
+                        @if (isset($historial->patient->user))
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $historial->patient->user->profile->first_name}}</td>
+                            <td>{{ $historial->patient->user->profile->last_name}}</td>
+
+                            <td>
+                                <a href="" class="btn btn-sm btn-info">Ver</a> {{-- {{ route('admin.doctor.show', $doctor->id) }} --}}
+
 
                 @if ($historiales->isEmpty())
                     <tr>

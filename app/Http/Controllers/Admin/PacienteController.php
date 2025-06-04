@@ -17,4 +17,10 @@ class PacienteController extends Controller
     {
         return view('admin.paciente.create');
     }
+    public function destroy($id)
+    {
+        $paciente = Patient::findOrFail($id);
+        $paciente->delete();
+        return redirect()->route('admin.paciente.index')->with('success', 'Paciente eliminado correctamente.');
+    }
 }

@@ -194,7 +194,7 @@
                             <div class="accordion-item bg-primary">
                                 <h2 class="accordion-header" id="headingHistiasMedicas">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHistiasMedicas" aria-expanded="false" aria-controls="collapseHistiasMedicas">
-                                        Histias Medicas
+                                        Historias Médicas
                                     </button>
                                 </h2>
                                 <div id="collapseHistiasMedicas" class="accordion-collapse collapse" aria-labelledby="headingHistiasMedicas" data-bs-parent="#accordionHistiasMedicas">
