@@ -62,7 +62,7 @@ class DoctorController extends Controller
 
     public function show($id)
     {
-        $doctor = Doctor::findOrFail($id);
+        $doctor = Doctor::findOrFail($id); //
         return view('admin.doctor.show', compact('doctor'));
     }
 
@@ -70,7 +70,6 @@ class DoctorController extends Controller
     {
         $doctor = Doctor::findOrFail($id);
         $specialty =  Specialty::all(); // Assuming you have a Specialty model  
-        /* return view('admin.doctor.edit', compact('doctor')); */
         return view('admin.doctor.edit', compact('doctor', 'specialty'));
     }
 
