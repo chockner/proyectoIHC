@@ -20,17 +20,6 @@
         <div class="row mt-2">
             <h5>INFORMACION BASICA</h5>
             <div class="col-md-4">
-                <label>Foto de perfil</label>
-                <input type="file" class="form-control" name="photo">
-
-                {{-- Mostrar foto actual si existe -> para que funcione esto debes ejecutar "php artisan storage:link" en la terminal
- --}}
-                @if(Auth::user()->profile && Auth::user()->profile->photo)
-                    <img src="{{ asset('storage/' . Auth::user()->profile->photo) }}" alt="Foto de perfil" class="img-thumbnail mt-2" style="max-width: 150px; max-height: 150px;">
-               @endif
-
-            </div>
-            <div class="col-md-4">
                 {{-- DNI --}}
                 <div class="md-3 mb-3">
                     <label>DNI</label>
@@ -65,6 +54,10 @@
                         value="{{ old('first_name', Auth::user()->profile->first_name ?? '') }}"
                         required>
                 </div>
+
+            </div>
+            <div class="col-md-4">
+                
                 {{-- APELLIDO --}}
                 <div class="md-3 mb-3">
                     <label>Apellidos</label>

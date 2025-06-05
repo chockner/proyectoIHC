@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ScheduleSeeder::class,
             SecretariesSeeder::class,
             PatientsSeeder::class,
+            AppointmentsSeeder::class,
             // Otros seeders...
         ]);
     }

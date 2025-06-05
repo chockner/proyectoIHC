@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->date('appointment_date'); // fecha de la cita
             $table->time('appointment_time'); // hora de la cita
-            $table->enum('status', ['scheduled', 'canceled', 'completed'])->default('scheduled'); // estado de la cita (programada, cancelada, completada)
+            $table->enum('status', ['programada', 'cancelada', 'completada'])->default('programada'); // estado de la cita (programada, cancelada, completada)
             $table->timestamps(0);
             $table->softDeletes(); // opcional, pero útil para eliminar citas sin borrarlas de la base de datos
         });

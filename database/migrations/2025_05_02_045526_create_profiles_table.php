@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('phone',12)->nullable();
             $table->date('birthdate')->nullable();
             $table->string('gender',1)->nullable(); // 0= masculino, 1= femenino
-            $table->string('photo')->nullable(); // ruta de la foto
+            /* $table->string('photo')->nullable(); // ruta de la foto */
             $table->string('civil_status',1)->nullable(); // estado civil 0= soltero, 1= casado, 2= viudo, 3= divorciado
             $table->string('region')->nullable();
             $table->string('province')->nullable();
