@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     
 
@@ -109,29 +109,17 @@
                 </div>
             @else
 
-                <a href="/dashboard">Dashboard</a>
+                <a href="/dashboard">Inicio</a>
                 
                 {{-- ADMINISTRADOR --}}
                 @if (Auth::user()->role->name == 'admin') {{-- Admin --}}
                     <div class="mb-2">
                         <strong>Gestión</strong>
                         {{-- DOCTORES --}}
-                        <div class="accordion" id="accordionDoctores">
-                            <div class="accordion-item bg-primary">
-                                <h2 class="accordion-header" id="headingDoctores">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDoctores" aria-expanded="false" aria-controls="collapseDoctores">
-                                        Doctores
-                                    </button>
-                                </h2>
-                                <div id="collapseDoctores" class="accordion-collapse collapse" aria-labelledby="headingDoctores" data-bs-parent="#accordionDoctores">
-                                    <div class="accordion-body">
-                                        <ul class="list-unstyled ps-3">
-                                            <a href="{{ route('admin.doctor.index') }}">Ver todos</a>   
-                                            <a href="{{ route('admin.doctor.create') }}">Agregar nuevo</a>  
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="accordion">
+                            <a href="{{ route('admin.doctor.index') }}" class="accordion-header text-white text-decoration-none d-block p-3" style="font-size: 1rem;">
+                            Doctores
+                            </a>
                         </div>
 
                         {{-- SECRETARIAS --}}

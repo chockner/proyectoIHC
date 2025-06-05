@@ -4,7 +4,7 @@
 <div class="container mt-4">
     <h2>Lista de Doctores</h2>
     <div class="mb-3">
-        <a href="{{ route('admin.doctor.create') }}" class="btn btn-primary">Agregar Doctor</a>
+        <a href="{{ route('admin.doctor.create') }}" class="btn btn-primary" title="Agregar Doctor"><img src="/imagenes/image.png" alt="Agregar Doctor" style="width: 50px; height: 50px;">     Agregar Doctor</a>
     </div>
     <table class="table table-bordered table-striped">
         <thead class="table-primary">
@@ -29,12 +29,12 @@
                     <td>{{ $doctor->user->profile->email }}</td>
                     <td>{{ $doctor->user->profile->phone }}</td>
                     <td>
-                        <a href="{{ route('admin.doctor.show', $doctor->id) }}" class="btn btn-sm btn-info">Ver</a> {{-- {{ route('admin.doctor.show', $doctor->id) }} --}}
-                        <a href="{{ route('admin.doctor.edit', $doctor->id) }}" class="btn btn-sm btn-warning">Editar</a> {{-- {{ route('admin.doctor.edit', $doctor->id) }} --}}
+                        <a href="{{ route('admin.doctor.show', $doctor->id) }}" class="btn btn-sm btn-info" title="Ver"><i class="fas fa-eye"></i></a> {{-- {{ route('admin.doctor.show', $doctor->id) }} --}}
+                        <a href="{{ route('admin.doctor.edit', $doctor->id) }}" class="btn btn-sm btn-warning" title="Editar"><i class="fas fa-pencil-alt"></i></a> {{-- {{ route('admin.doctor.edit', $doctor->id) }} --}}
                         <form action="{{ route('admin.doctor.destroy', $doctor->id) }}" method="POST" class="d-inline"> {{-- {{ route('admin.doctor.destroy', $doctor->id) }} --}}
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
+                            <button class="btn btn-sm btn-danger" title="Eliminar" onclick="return confirm('¿Estás seguro?')"><i class="fas fa-trash"></i></button>
                         </form>
                     </td>
                 </tr>
