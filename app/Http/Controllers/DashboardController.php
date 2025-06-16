@@ -57,8 +57,12 @@ class DashboardController extends Controller
 
     public function pacienteDashboard()
     {
+        $patientId = Auth::user()->patient->id;
+        
         return view('dashboard.paciente', [
-            'totalCitas' => 0, // Cambia esto por la lógica real para contar citas
+            'totalCitas' => Appointment::where('patient_id', $patientId)->count(),
+            'totalCitasProgramadas' => Appointment::where('patient_id', $patientId)->where('status', 'programada')->count(),
+            'totalCitasCompletadas' => Appointment::where('patient_id', $patientId)->where('status', 'completada')->count(),
         ]);
     }
 }

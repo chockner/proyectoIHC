@@ -257,7 +257,7 @@
                     <div class="mb-2">
                         <strong>Gestión</strong>
                         <a href="#">Histias Medicas</a>
-                        <a href="#">Citas</a>
+                        <a href="{{ route('paciente.agendarCita.create') }}">Agendar Cita</a>
                     </div>
                 @endif
 

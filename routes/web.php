@@ -17,6 +17,9 @@ use App\Http\Controllers\Admin\HorarioController;
 /* SECRETARIA CONTROLLERS */
 use App\Http\Controllers\Secretaria\CitaController;
 
+/* PACIENTE CONTROLLERS */
+use App\Http\Controllers\Paciente\AgendarCitaController;
+
 Route::view('/', 'home')->name('home');
 Route::view('/login', 'auth.login')->name('login');
 
@@ -99,3 +102,11 @@ Route::prefix('secretaria')->middleware(['auth'])->group(function () {
     Route::get('/citas', [CitaController::class, 'index'])->name('secretaria.citas.index');
 
 });
+
+/* PACIENTE ROUTES */
+Route::prefix('paciente')->middleware(['auth'])->group(function () {
+    /* paciente -> agendar cita */
+    Route::get('/agendar-cita', [AgendarCitaController::class, 'create'])->name('paciente.agendarCita.create');
+    Route::post('/agendar-cita', [AgendarCitaController::class, 'store'])->name('paciente.agendarCita.store');
+});
+
