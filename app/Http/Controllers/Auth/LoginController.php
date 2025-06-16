@@ -26,10 +26,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
             return redirect('/dashboard');
         }
-
-        /* return back()->withErrors([
-            'email' => 'Credenciales inválidas.',
-        ]); */
+        
         return back()->with('error', 'Credenciales incorrectas.')->withInput();
     }
 
@@ -40,5 +37,37 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+
+    public function showLoginPersonalForm()
+    {
+        return view('auth.loginPersonal');
+    }
+
+    public function loginPersonal(Request $request)
+    {
+        $credentials = $request->validate([
+            'document_id' => 'required|string|size:8', // DNI como identificador único
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            switch (Auth::user()->role->name) {
+                case 'admin':
+                    return redirect('/dashboard');
+                case 'secretaria':
+                    return redirect('/dashboard');
+                case 'doctor':
+                    return redirect('/dashboard');
+                default:
+                    return back()->with('error', 'Acceso no autorizado.')->withInput();
+            }
+
+            return redirect('/dashboard');
+        }
+
+        return back()->with('error', 'Credenciales incorrectas.')->withInput();
     }
 }

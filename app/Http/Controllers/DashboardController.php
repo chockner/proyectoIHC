@@ -42,7 +42,9 @@ class DashboardController extends Controller
     public function secretariaDashboard()
     {
         return view('dashboard.secretaria', [
-            'totalPacientes' => Patient::count(),
+            'totalCitas' => Appointment::count(),
+            'totalCitasProgramadas' => Appointment::where('status', 'programada')->count(),
+            'totalCitasCompletadas' => Appointment::where('status', 'completada')->count(),
         ]);
     }
 
@@ -55,8 +57,12 @@ class DashboardController extends Controller
 
     public function pacienteDashboard()
     {
+        $patientId = Auth::user()->patient->id;
+        
         return view('dashboard.paciente', [
-            'totalCitas' => 0, // Cambia esto por la lógica real para contar citas
+            'totalCitas' => Appointment::where('patient_id', $patientId)->count(),
+            'totalCitasProgramadas' => Appointment::where('patient_id', $patientId)->where('status', 'programada')->count(),
+            'totalCitasCompletadas' => Appointment::where('patient_id', $patientId)->where('status', 'completada')->count(),
         ]);
     }
 }

@@ -249,7 +249,7 @@
                     <div class="mb-2">
                         <strong>Gestión</strong>
                         <a href="#">Histias Medicas</a>
-                        <a href="#">Citas</a>
+                        <a href="{{ route('paciente.agendarCita.create') }}">Agendar Cita</a>
                     </div>
                 @endif
 
@@ -257,7 +257,7 @@
                 @if (Auth::user()->role->name == 'secretaria') {{-- Secretaria --}}
                     <div class="mb-2">
                         <strong>Gestión</strong>
-                        <a href="#">Citas</a>
+                        <a href="{{ route('secretaria.citas.index') }}">Citas</a> {{-- {{ route('secretaria.citas.index') }} --}}
                         <a href="#">Reportes</a>
                     </div>
                 @endif
@@ -300,7 +300,15 @@
             </div>
 
             <div class="main-content p-4">
-                @yield('content')
+                
+                @hasSection('content')
+                    @yield('content')
+                @else
+                    <div class="alert alert-warning">
+                        No hay contenido definido para esta vista
+                    </div>
+                @endif
+                
             </div>
         </div>
 

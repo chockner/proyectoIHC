@@ -3,25 +3,33 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+
+/* ADMIN CONTROLLERS */
 use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\SecretariaController;
 use App\Http\Controllers\Admin\EspecialidadController;
 use App\Http\Controllers\Admin\PacienteController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\HistorialMedicoController;
 use App\Http\Controllers\Admin\HorarioController;
 
+/* SECRETARIA CONTROLLERS */
+use App\Http\Controllers\Secretaria\CitaController;
 
+/* PACIENTE CONTROLLERS */
+use App\Http\Controllers\Paciente\AgendarCitaController;
 
 Route::view('/', 'home')->name('home');
 Route::view('/login', 'auth.login')->name('login');
-
 
 // Login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/login/personal', [LoginController::class, 'showLoginPersonalForm'])->name('login.personal');
+Route::post('/login/personal', [LoginController::class, 'loginPersonal'])/* ->name('login.personal.store') */;
 
 // Register
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
@@ -32,7 +40,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('perfil.edit');
     Route::put('/perfil/actualizar', [ProfileController::class, 'update'])->name('perfil.update');
 });
-
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -47,6 +54,8 @@ Route::get('/dashboard', function () {
         default => abort(403),
     };
 })->middleware('auth')->name('dashboard');
+
+/* Admin Routes */
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     
@@ -86,4 +95,18 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
 });
 
+/* Secretaria Routes */
+Route::prefix('secretaria')->middleware(['auth'])->group(function () {
+    
+    /* secretaria -> citas */
+    Route::get('/citas', [CitaController::class, 'index'])->name('secretaria.citas.index');
+
+});
+
+/* PACIENTE ROUTES */
+Route::prefix('paciente')->middleware(['auth'])->group(function () {
+    /* paciente -> agendar cita */
+    Route::get('/agendar-cita', [AgendarCitaController::class, 'create'])->name('paciente.agendarCita.create');
+    Route::post('/agendar-cita', [AgendarCitaController::class, 'store'])->name('paciente.agendarCita.store');
+});
 
