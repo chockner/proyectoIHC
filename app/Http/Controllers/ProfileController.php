@@ -49,6 +49,8 @@ class ProfileController extends Controller
             'province' => 'nullable|string|max:100',
             'district' => 'nullable|string|max:100',
         ]);
+
+        // si el usuario es rapido puede guardar datos en minusculas
     
         $profile = Auth::user()->profile;
     
@@ -57,7 +59,7 @@ class ProfileController extends Controller
         $data['province'] = $request->input('province_nombre');
         $data['district'] = $request->input('district_nombre');
     
-        $profile->update($data);
+        $profile->update($request->all() + $data);
     
         return redirect()->route('dashboard')->with('success', 'Perfil actualizado correctamente.');
     }

@@ -7,10 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
-    
-    
-
-
     <style>
         body {
             background-color: #f8f9fa;
@@ -269,7 +265,7 @@
                 @if (Auth::user()->role->name == 'secretaria') {{-- Secretaria --}}
                     <div class="mb-2">
                         <strong>Gestión</strong>
-                        <a href="#">Citas</a>
+                        <a href="{{ route('secretaria.citas.index') }}">Citas</a> {{-- {{ route('secretaria.citas.index') }} --}}
                         <a href="#">Reportes</a>
                     </div>
                 @endif
@@ -312,7 +308,15 @@
             </div>
 
             <div class="main-content p-4">
-                @yield('content')
+                
+                @hasSection('content')
+                    @yield('content')
+                @else
+                    <div class="alert alert-warning">
+                        No hay contenido definido para esta vista
+                    </div>
+                @endif
+                
             </div>
         </div>
 

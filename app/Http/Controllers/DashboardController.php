@@ -42,7 +42,9 @@ class DashboardController extends Controller
     public function secretariaDashboard()
     {
         return view('dashboard.secretaria', [
-            'totalPacientes' => Patient::count(),
+            'totalCitas' => Appointment::count(),
+            'totalCitasProgramadas' => Appointment::where('status', 'programada')->count(),
+            'totalCitasCompletadas' => Appointment::where('status', 'completada')->count(),
         ]);
     }
 
