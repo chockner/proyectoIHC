@@ -4,8 +4,36 @@
 <div class="container mt-4">
     <h2>Lista de Doctores</h2>
     <div class="mb-3">
-        <a href="{{ route('admin.doctor.create') }}" class="btn btn-primary" title="Agregar Doctor"><img src="/imagenes/image.png" alt="Agregar Doctor" style="width: 50px; height: 50px;">     Agregar Doctor</a>
+        <a href="{{ route('admin.doctor.create') }}" class="btn custom-btn" title="Agregar Doctor">
+            <img src="/imagenes/image.png" alt="Agregar Doctor" style="width: 40px; height: 40px; vertical-align: middle;">
+            Agregar Doctor
+        </a>
     </div>
+
+    <style>
+        .custom-btn {
+            background-color: #f8f9fa; /* Fondo gris claro por defecto */
+            border: 2px solid #ccc; /* Borde para dar forma de cajita */
+            color: #000; /* Texto negro por defecto */
+            text-decoration: none;
+            padding: 5px 15px;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease; /* Transición suave para los efectos */
+        }
+
+        .custom-btn:hover {
+            background-color: #0d6efd; /* Azul al pasar el mouse */
+            color: #fff; /* Texto blanco al pasar el mouse */
+            border-color: #0d6efd; /* Borde azul al pasar el mouse */
+            transform: translateY(-2px); /* Eleva el botón un poco */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para efecto de elevación */
+        }
+
+        .custom-btn img {
+            margin-right: 10px; /* Espacio entre la imagen y el texto */
+        }
+    </style>
     <table class="table table-bordered table-striped">
         <thead class="table-primary">
             <tr>
