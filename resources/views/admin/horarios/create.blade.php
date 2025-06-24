@@ -4,30 +4,33 @@
 <div class="container">
     <h2>Crear Horario de Médico</h2>
 
-    <form method="POST" action="{{ route('admin.horarios.store') }}">
+    <form method="POST" action="{{ route('admin.horarios.store') }}" id="scheduleForm">
         @csrf
 
-        <div class="form-group">
-            <label for="doctor_id">Médico:</label>
-            <select name="doctor_id" id="doctor_id" class="form-control">
-                @foreach($doctors as $doctor)
-                    <option value="{{ $doctor->id }}">{{ $doctor->user->profile->last_name }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="specialty_id">Especialidad:</label>
-            <select name="specialty_id" id="specialty_id" class="form-control">
+        <!-- Especialidad -->
+        <div class="form-group mb-3">
+            <label for="specialty_id" class="form-label">Especialidad:</label>
+            <select name="specialty_id" id="specialty_id" class="form-select" required>
+                <option value="">Seleccione una especialidad</option>
                 @foreach($specialties as $specialty)
                     <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
                 @endforeach
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="day_of_week">Día de la Semana:</label>
-            <select name="day_of_week" id="day_of_week" class="form-control">
+        <!-- Médico -->
+        <div class="form-group mb-3 doctor-field" style="display: none;">
+            <label for="doctor_id" class="form-label">Médico:</label>
+            <select name="doctor_id" id="doctor_id" class="form-select" required disabled>
+                <option value="">Primero seleccione una especialidad</option>
+            </select>
+        </div>
+
+        <!-- Día -->
+        <div class="form-group mb-3 day-field" style="display: none;">
+            <label for="day_of_week" class="form-label">Día de la Semana:</label>
+            <select name="day_of_week" id="day_of_week" class="form-select" required disabled>
+                <option value="">Primero seleccione un médico</option>
                 <option value="Lunes">Lunes</option>
                 <option value="Martes">Martes</option>
                 <option value="Miércoles">Miércoles</option>
@@ -36,17 +39,81 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="start_time">Hora de Inicio:</label>
-            <input type="time" name="start_time" id="start_time" class="form-control" required>
+        <!-- Horario -->
+        <div class="row mb-3 time-fields" style="display: none;">
+            <div class="col-md-6">
+                <label for="start_time" class="form-label">Hora de Inicio:</label>
+                <input type="time" name="start_time" id="start_time" class="form-control" required disabled>
+            </div>
+            <div class="col-md-6">
+                <label for="end_time" class="form-label">Hora de Salida:</label>
+                <input type="time" name="end_time" id="end_time" class="form-control" required disabled>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="end_time">Hora de Salida:</label>
-            <input type="time" name="end_time" id="end_time" class="form-control" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary submit-btn" style="display: none;" disabled>Guardar</button>
     </form>
 </div>
+@endsection
+@section('scripts')
+<script>
+$(document).ready(function() {
+    // Verificar si jQuery está cargado
+    if (typeof jQuery == 'undefined') {
+        console.error('jQuery no está cargado');
+        alert('Error: jQuery es requerido. Por favor recarga la página.');
+        return;
+    }
+
+    // 1. Cuando cambia la especialidad
+    $('#specialty_id').change(function() {
+        const specialtyId = $(this).val();
+        $('.doctor-field, .day-field, .time-fields').hide();
+        $('#doctor_id, #day_of_week, #start_time, #end_time').prop('disabled', true);
+        $('.submit-btn').hide().prop('disabled', true);
+
+        if (!specialtyId) return;
+
+        console.log('Especialidad seleccionada:', specialtyId);
+        
+        $.ajax({
+            url: '/admin/horarios/get-doctors/' + specialtyId,
+            type: 'GET',
+            success: function(data) {
+                console.log('Médicos recibidos:', data);
+                $('#doctor_id').empty().append('<option value="">Seleccione un médico</option>');
+                
+                $.each(data, function(key, doctor) {
+                    const fullName = doctor.user?.profile?.last_name || 'Nombre no disponible';
+                    $('#doctor_id').append(`<option value="${doctor.id}">${fullName}</option>`);
+                });
+                
+                $('.doctor-field').show();
+                $('#doctor_id').prop('disabled', false);
+            },
+            error: function(xhr) {
+                console.error('Error al obtener médicos:', xhr.responseText);
+                alert('Error al cargar los médicos. Por favor recarga la página.');
+            }
+        });
+    });
+
+    // 2. Cuando cambia el médico
+    $('#doctor_id').change(function() {
+        $('.day-field').toggle($(this).val() !== '');
+        $('#day_of_week').prop('disabled', $(this).val() === '');
+        $('.time-fields, .submit-btn').hide();
+        $('#start_time, #end_time').prop('disabled', true);
+        $('.submit-btn').prop('disabled', true);
+    });
+
+    // 3. Cuando cambia el día
+    $('#day_of_week').change(function() {
+        $('.time-fields').toggle($(this).val() !== '');
+        $('#start_time, #end_time').prop('disabled', $(this).val() === '');
+        $('.submit-btn').toggle($(this).val() !== '').prop('disabled', $(this).val() === '');
+    });
+});
+</script>
+
 @endsection

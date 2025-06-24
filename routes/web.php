@@ -92,6 +92,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/horarios/{id}/edit', [HorarioController::class, 'edit'])->name('admin.horarios.edit');
     Route::put('/horarios/{id}', [HorarioController::class, 'update'])->name('admin.horarios.update');
     Route::delete('/horarios/{id}', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
+    Route::get('/horarios/get-doctors/{specialty}', [HorarioController::class, 'getDoctors'])
+        ->name('admin.horarios.get-doctors');
 
 });
 
@@ -110,3 +112,8 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
     Route::post('/agendar-cita', [AgendarCitaController::class, 'store'])->name('paciente.agendarCita.store');
 });
 
+
+
+
+/* Route::get('/admin/horarios/get-doctors/{specialty}', [HorarioController::class, 'getDoctors'])
+    ->name('admin.horarios.get-doctors'); */
