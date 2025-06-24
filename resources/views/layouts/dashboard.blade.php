@@ -105,7 +105,7 @@
                 </div>
             @else
 
-                <a href="/dashboard">Dashboard</a>
+                <a href="/dashboard">Inicio</a>
                 
                 {{-- ADMINISTRADOR --}}
                 @if (Auth::user()->role->name == 'admin') {{-- Admin --}}
