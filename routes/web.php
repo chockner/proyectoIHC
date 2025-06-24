@@ -111,9 +111,3 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
     Route::get('/agendar-cita', [AgendarCitaController::class, 'create'])->name('paciente.agendarCita.create');
     Route::post('/agendar-cita', [AgendarCitaController::class, 'store'])->name('paciente.agendarCita.store');
 });
-
-
-
-
-/* Route::get('/admin/horarios/get-doctors/{specialty}', [HorarioController::class, 'getDoctors'])
-    ->name('admin.horarios.get-doctors'); */
