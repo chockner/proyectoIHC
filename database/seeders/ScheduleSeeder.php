@@ -19,32 +19,37 @@ class ScheduleSeeder extends Seeder
             Schedule::create([
                 'doctor_id' => $i,
                 'day_of_week' => 'LUNES',
-                'start_time' => sprintf('%02d:00:00', rand(8, 11)), // Horas entre 08:00 y 17:00
-                'end_time' => sprintf('%02d:00:00', rand(12, 18)), // Horas entre 09:00 y 18:00
+                'shift' => 'MAÑANA', // Turno de la mañana
+                'start_time' => sprintf('%02d:00:00', rand(8, 9)), // Horas entre 08:00 y 17:00
+                'end_time' => sprintf('%02d:00:00', rand(12, 13)), // Horas entre 09:00 y 18:00
             ]);
             Schedule::create([
                 'doctor_id' => $i,
                 'day_of_week' => 'MARTES',
-                'start_time' => sprintf('%02d:00:00', rand(8, 11)), // Horas entre 08:00 y 17:00
-                'end_time' => sprintf('%02d:00:00', rand(12, 18)), // Horas entre 09:00 y 18:00
+                'shift' => 'TARDE', // Turno de la tarde
+                'start_time' => sprintf('%02d:00:00', rand(13, 14)), // Horas entre 08:00 y 17:00
+                'end_time' => sprintf('%02d:00:00', rand(18, 19)), // Horas entre 09:00 y 18:00
             ]);
             Schedule::create([
                 'doctor_id' => $i,
                 'day_of_week' => 'MIERCOLES',
-                'start_time' => sprintf('%02d:00:00', rand(8, 11)), // Horas entre 08:00 y 17:00
-                'end_time' => sprintf('%02d:00:00', rand(12, 18)), // Horas entre 09:00 y 18:00
+                'shift' => 'MAÑANA', // Turno de la mañana
+                'start_time' => sprintf('%02d:00:00', rand(8, 9)), // Horas entre 08:00 y 17:00
+                'end_time' => sprintf('%02d:00:00', rand(12, 13)), // Horas entre 09:00 y 18:00
             ]);
             Schedule::create([
                 'doctor_id' => $i,
                 'day_of_week' => 'JUEVES',
-                'start_time' => sprintf('%02d:00:00', rand(8, 11)), // Horas entre 08:00 y 17:00
-                'end_time' => sprintf('%02d:00:00', rand(12, 18)), // Horas entre 09:00 y 18:00
+                'shift' => 'TARDE', // Turno de la tarde
+                'start_time' => sprintf('%02d:00:00', rand(13, 14)), // Horas entre 08:00 y 17:00
+                'end_time' => sprintf('%02d:00:00', rand(18, 19)), // Horas entre 09:00 y 18:00
             ]);
             Schedule::create([
                 'doctor_id' => $i,
                 'day_of_week' => 'VIERNES',
-                'start_time' => sprintf('%02d:00:00', rand(8, 11)), // Horas entre 08:00 y 17:00
-                'end_time' => sprintf('%02d:00:00', rand(12, 18)), // Horas entre 09:00 y 18:00
+                'shift' => 'MAÑANA', // Turno de la mañana
+                'start_time' => sprintf('%02d:00:00', rand(8, 9)), // Horas entre 08:00 y 17:00
+                'end_time' => sprintf('%02d:00:00', rand(12, 13)), // Horas entre 09:00 y 18:00
             ]);
         }
     }
