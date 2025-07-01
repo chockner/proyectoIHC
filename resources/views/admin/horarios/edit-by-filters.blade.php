@@ -176,12 +176,12 @@ $(document).ready(function() {
                                 <td>${horario.day_of_week}</td>
                                 <td>
                                     <input type="time" name="horarios[${horario.day_of_week}][start_time]" 
-                                        class="form-control" value="${horario.start_time}" required>
+                                        class="form-control" value="${horario.start_time}" required step="3600">
                                     <input type="hidden" name="horarios[${horario.day_of_week}][day_of_week]" value="${horario.day_of_week}">
                                 </td>
                                 <td>
                                     <input type="time" name="horarios[${horario.day_of_week}][end_time]" 
-                                        class="form-control" value="${horario.end_time}" required>
+                                        class="form-control" value="${horario.end_time}" required step="3600">
                                 </td>
                                 
                             </tr>
@@ -198,6 +198,14 @@ $(document).ready(function() {
             }
         });
     });;
+
+    //al enviar el formulario de edición
+    $('#editHorariosForm').submit(function(e){
+        //confirmar con el usuario
+        if (!confirm('¿Está seguro de que desea guardar los cambios?')) {
+            e.preventDefault();
+        }
+    });
 });
 </script>
 @endsection

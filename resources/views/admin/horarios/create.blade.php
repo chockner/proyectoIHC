@@ -54,11 +54,11 @@
         <div class="row mb-3 time-fields" style="display: none;">
             <div class="col-md-6">
                 <label for="start_time" class="form-label">Hora de Inicio:</label>
-                <input type="time" name="start_time" id="start_time" class="form-control" required disabled>
+                <input type="time" name="start_time" id="start_time" class="form-control" required step="3600">
             </div>
             <div class="col-md-6">
                 <label for="end_time" class="form-label">Hora de Salida:</label>
-                <input type="time" name="end_time" id="end_time" class="form-control" required disabled>
+                <input type="time" name="end_time" id="end_time" class="form-control" required step="3600">
             </div>
         </div>
 
