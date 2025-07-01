@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container">
-    <h2>Editar Horarios por Turno</h2>
+    <h2>Eliminar Horarios por Turno</h2>
 
-    <form id="editFiltersForm">
+    <form id="deleteFiltersForm">
         @csrf
         <div class="row mb-4">
             <!-- Especialidad -->
@@ -50,17 +50,22 @@
         </div>
     </form>
 
-    <!-- Formulario de edición (se muestra dinámicamente) -->
-    <form id="editHorariosForm" method="POST" action="{{ route('admin.horarios.bulk-update') }}" style="display: none;">
+    <!-- Formulario de eliminación -->
+    <form id="deleteHorariosForm" method="POST" action="{{ route('admin.horarios.bulk-delete') }}" style="display: none;">
         @csrf
-        <input type="hidden" name="doctor_id" id="edit_doctor_id">
-        <input type="hidden" name="shift" id="edit_shift">
+        <input type="hidden" name="doctor_id" id="delete_doctor_id">
+        <input type="hidden" name="shift" id="delete_shift">
 
         <div class="card mt-4">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-danger text-white">
                 <h5 class="mb-0" id="tituloHorarios"></h5>
             </div>
             <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Seleccione los horarios que desea eliminar. Esta acción no se puede deshacer.
+                </div>
+
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -68,6 +73,7 @@
                                 <th>Día</th>
                                 <th>Hora de Entrada</th>
                                 <th>Hora de Salida</th>
+                                <th class="text-center">Eliminar</th>
                             </tr>
                         </thead>
                         <tbody id="horariosContainer">
@@ -80,8 +86,8 @@
                     <a href="{{ route('admin.horarios.index') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-2"></i> Cancelar
                     </a>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-save me-2"></i> Guardar Cambios
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i> Eliminar Seleccionados
                     </button>
                 </div>
             </div>
@@ -136,50 +142,51 @@ $(document).ready(function() {
 
     // Buscar horarios existentes
     $('#btnBuscar').click(function() {
-        const formData = $('#editFiltersForm').serialize();
+        const formData = $('#deleteFiltersForm').serialize();
         
         $.ajax({
-            url: '/admin/horarios/get-edit-data',
+            url: '/admin/horarios/get-delete-data',
             type: 'POST',
             data: formData,
             success: function(response) {
-                $('#edit_doctor_id').val($('#doctor_id').val());
-                $('#edit_shift').val($('#shift').val());
+                $('#delete_doctor_id').val($('#doctor_id').val());
+                $('#delete_shift').val($('#shift').val());
                 
                 // Construir título
                 const doctorName = $('#doctor_id option:selected').text();
                 const shift = $('#shift').val();
-                $('#tituloHorarios').text(`Editar horarios de ${doctorName} - Turno ${shift}`);
+                $('#tituloHorarios').text(`Eliminar horarios de ${doctorName} - Turno ${shift}`);
                 
                 // Construir tabla de horarios
                 $('#horariosContainer').empty();
                 
-                response.days.forEach(day => {
-                    // Buscar si ya existe un horario para este día
-                    const horario = response.horarios.find(h => h.day_of_week === day) || {
-                        day_of_week: day,
-                        start_time: shift === 'MAÑANA' ? '08:00' : '13:00',
-                        end_time: shift === 'MAÑANA' ? '12:00' : '18:00'
-                    };
-                    
-                    const row = `
+                if (response.horarios.length === 0) {
+                    $('#horariosContainer').append(`
                         <tr>
-                            <td>${day}</td>
-                            <td>
-                                <input type="time" name="horarios[${day}][start_time]" 
-                                       class="form-control" value="${horario.start_time}" required>
-                                <input type="hidden" name="horarios[${day}][day_of_week]" value="${day}">
-                            </td>
-                            <td>
-                                <input type="time" name="horarios[${day}][end_time]" 
-                                       class="form-control" value="${horario.end_time}" required>
+                            <td colspan="4" class="text-center py-4">
+                                <div class="alert alert-info">
+                                    No hay horarios registrados para este médico y turno.
+                                </div>
                             </td>
                         </tr>
-                    `;
-                    $('#horariosContainer').append(row);
-                });
+                    `);
+                } else {
+                    response.horarios.forEach(horario => {
+                        const row = `
+                            <tr>
+                                <td>${horario.day_of_week}</td>
+                                <td>${horario.start_time}</td>
+                                <td>${horario.end_time}</td>
+                                <td class="text-center">
+                                    <input type="checkbox" name="horarios[]" value="${horario.id}" class="form-check-input">
+                                </td>
+                            </tr>
+                        `;
+                        $('#horariosContainer').append(row);
+                    });
+                }
                 
-                $('#editHorariosForm').show();
+                $('#deleteHorariosForm').show();
             },
             error: function(xhr) {
                 alert('Error al cargar los horarios. Por favor intente nuevamente.');
@@ -187,6 +194,23 @@ $(document).ready(function() {
             }
         });
     });
+
+    // Al enviar el formulario de eliminación
+    $('#deleteHorariosForm').submit(function(e) {
+        // Verificar si hay horarios seleccionados
+        const selectedCount = $('input[name="horarios[]"]:checked').length;
+        
+        if (selectedCount === 0) {
+            alert('Por favor seleccione al menos un horario para eliminar.');
+            e.preventDefault();
+            return;
+        }
+
+        // Confirmar con el usuario
+        if (!confirm('¿Está seguro que desea eliminar los ' + selectedCount + ' horarios seleccionados? Esta acción no se puede deshacer.')) {
+            e.preventDefault();
+        }
+    });    
 });
 </script>
 @endsection

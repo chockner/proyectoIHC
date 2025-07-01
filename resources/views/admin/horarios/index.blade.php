@@ -48,10 +48,13 @@
         <div class="col-md-4 text-end">
             <div class="btn-group">
                 <a href="{{ route('admin.horarios.create') }}" class="btn btn-success">
-                    <i class="fas fa-plus"></i> Agregar Horario
+                    <i class="fas fa-plus"></i> Agregar
                 </a>
                 <a href="{{ route('admin.horarios.edit-by-filters') }}" class="btn btn-warning text-white">
-                    <i class="fas fa-edit"></i> Editar por Turno
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a href="{{ route('admin.horarios.delete-by-filters') }}" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Eliminar
                 </a>
             </div>
         </div>

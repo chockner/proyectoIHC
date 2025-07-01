@@ -208,16 +208,49 @@ class HorarioController extends Controller
             ->with('success', 'Horarios actualizados exitosamente.');
     }
 
-    public function destroy($id)
+    public function deleteByFilters()
     {
-        $horario = Schedule::findOrFail($id);
-        $horario->delete();
-
-        return redirect()->route('admin.horarios.index')->with('success', 'Horario eliminado exitosamente.');
+        $specialties = Specialty::all();
+        return view('admin.horarios.delete-by-filters', compact('specialties'));
     }
-    public function show($id)
+
+    public function getDeleteData(Request $request)
     {
-        $horario = Schedule::findOrFail($id);
-        return view('admin.horarios.show', compact('horario'));
+        $request->validate([
+            'specialty_id' => 'required|exists:specialties,id',
+            'doctor_id' => 'required|exists:doctors,id',
+            'shift' => 'required|in:MAÑANA,TARDE'
+        ]);
+
+        $horarios = Schedule::where('doctor_id', $request->doctor_id)
+                    ->where('shift', $request->shift)
+                    ->orderBy('day_of_week')
+                    ->get();
+
+        return response()->json([
+            'horarios' => $horarios
+        ]);
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'doctor_id' => 'required|exists:doctors,id',
+            'shift' => 'required|in:MAÑANA,TARDE',
+            'horarios' => 'sometimes|array',
+            'horarios.*' => 'exists:schedules,id'
+        ]);
+
+        // Verificar si hay horarios para eliminar
+        if (empty($request->horarios)) {
+            return redirect()->route('admin.horarios.delete-by-filters')
+                ->with('warning', 'No se seleccionó ningún horario para eliminar.');
+        }
+
+        // Eliminar los horarios seleccionados
+        Schedule::whereIn('id', $request->horarios)->delete();
+
+        return redirect()->route('admin.horarios.index')
+            ->with('success', 'Horarios eliminados exitosamente.');
     }
 }

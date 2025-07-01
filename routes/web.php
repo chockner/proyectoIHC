@@ -89,17 +89,13 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/horarios', [HorarioController::class, 'index'])->name('admin.horarios.index');
     Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
     Route::post('/horarios', [HorarioController::class, 'store'])->name('admin.horarios.store');
-    Route::get('/horarios/{id}/edit', [HorarioController::class, 'edit'])->name('admin.horarios.edit');
-    Route::put('/horarios/{id}', [HorarioController::class, 'update'])->name('admin.horarios.update');
-    Route::delete('/horarios/{id}', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
-    Route::get('/horarios/get-doctors/{specialty}', [HorarioController::class, 'getDoctors'])
-        ->name('admin.horarios.get-doctors');
-    Route::get('/horarios/editar-por-filtros', [HorarioController::class, 'editByFilters'])
-        ->name('admin.horarios.edit-by-filters');
-    Route::post('/horarios/get-edit-data', [HorarioController::class, 'getEditData'])
-        ->name('admin.horarios.get-edit-data');
-    Route::post('/horarios/bulk-update', [HorarioController::class, 'bulkUpdate'])
-        ->name('admin.horarios.bulk-update');
+    Route::get('/horarios/get-doctors/{specialty}', [HorarioController::class, 'getDoctors'])->name('admin.horarios.get-doctors');
+    Route::get('/horarios/editar-por-filtros', [HorarioController::class, 'editByFilters'])->name('admin.horarios.edit-by-filters');
+    Route::post('/horarios/get-edit-data', [HorarioController::class, 'getEditData'])->name('admin.horarios.get-edit-data');
+    Route::post('/horarios/bulk-update', [HorarioController::class, 'bulkUpdate'])->name('admin.horarios.bulk-update');
+    Route::get('/horarios/eliminar-por-filtros', [HorarioController::class, 'deleteByFilters'])->name('admin.horarios.delete-by-filters');
+    Route::post('/horarios/get-delete-data', [HorarioController::class, 'getDeleteData'])->name('admin.horarios.get-delete-data');
+    Route::post('/horarios/bulk-delete', [HorarioController::class, 'bulkDelete'])->name('admin.horarios.bulk-delete');
 });
 
 /* Secretaria Routes */
