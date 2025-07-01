@@ -31,11 +31,22 @@
             <label for="day_of_week" class="form-label">Día de la Semana:</label>
             <select name="day_of_week" id="day_of_week" class="form-select" required disabled>
                 <option value="">Primero seleccione un médico</option>
-                <option value="Lunes">Lunes</option>
-                <option value="Martes">Martes</option>
-                <option value="Miércoles">Miércoles</option>
-                <option value="Jueves">Jueves</option>
-                <option value="Viernes">Viernes</option>
+                <option value="LUNES">Lunes</option>
+                <option value="MARTES">Martes</option>
+                <option value="MIERCOLES">Miércoles</option>
+                <option value="JUEVES">Jueves</option>
+                <option value="VIERNES">Viernes</option>
+                <option value="SABADO">Sabado</option>
+            </select>
+        </div>
+
+        <!-- Turno -->
+        <div class="form-group mb-3 shift-field" style="display: none;">
+            <label for="shift" class="form-label">Turno:</label>
+            <select name="shift" id="shift" class="form-select" required disabled>
+                <option value="">Seleccione un turno</option>
+                <option value="MAÑANA">Mañana</option>
+                <option value="TARDE">Tarde</option>
             </select>
         </div>
 
@@ -55,6 +66,7 @@
     </form>
 </div>
 @endsection
+
 @section('scripts')
 <script>
 $(document).ready(function() {
@@ -68,8 +80,8 @@ $(document).ready(function() {
     // 1. Cuando cambia la especialidad
     $('#specialty_id').change(function() {
         const specialtyId = $(this).val();
-        $('.doctor-field, .day-field, .time-fields').hide();
-        $('#doctor_id, #day_of_week, #start_time, #end_time').prop('disabled', true);
+        $('.doctor-field, .day-field, .shift-field, .time-fields').hide();
+        $('#doctor_id, #day_of_week, #shift, #start_time, #end_time').prop('disabled', true);
         $('.submit-btn').hide().prop('disabled', true);
 
         if (!specialtyId) return;
@@ -102,18 +114,35 @@ $(document).ready(function() {
     $('#doctor_id').change(function() {
         $('.day-field').toggle($(this).val() !== '');
         $('#day_of_week').prop('disabled', $(this).val() === '');
-        $('.time-fields, .submit-btn').hide();
-        $('#start_time, #end_time').prop('disabled', true);
+        $('.shift-field, .time-fields, .submit-btn').hide();
+        $('#shift, #start_time, #end_time').prop('disabled', true);
         $('.submit-btn').prop('disabled', true);
     });
 
     // 3. Cuando cambia el día
     $('#day_of_week').change(function() {
+        $('.shift-field').toggle($(this).val() !== '');
+        $('#shift').prop('disabled', $(this).val() === '');
+        $('.time-fields, .submit-btn').hide();
+        $('#start_time, #end_time').prop('disabled', true);
+        $('.submit-btn').prop('disabled', true);
+    });
+
+    // 4. Cuando cambia el turno
+    $('#shift').change(function() {
         $('.time-fields').toggle($(this).val() !== '');
         $('#start_time, #end_time').prop('disabled', $(this).val() === '');
         $('.submit-btn').toggle($(this).val() !== '').prop('disabled', $(this).val() === '');
+        
+        // Sugerir horarios según el turno
+        if ($(this).val() === 'MAÑANA') {
+            $('#start_time').val('08:00');
+            $('#end_time').val('13:00');
+        } else if ($(this).val() === 'TARDE') {
+            $('#start_time').val('14:00');
+            $('#end_time').val('19:00');
+        }
     });
 });
 </script>
-
 @endsection

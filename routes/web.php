@@ -94,7 +94,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::delete('/horarios/{id}', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
     Route::get('/horarios/get-doctors/{specialty}', [HorarioController::class, 'getDoctors'])
         ->name('admin.horarios.get-doctors');
-
+    Route::get('/horarios/editar-por-filtros', [HorarioController::class, 'editByFilters'])
+        ->name('admin.horarios.edit-by-filters');
+    Route::post('/horarios/get-edit-data', [HorarioController::class, 'getEditData'])
+        ->name('admin.horarios.get-edit-data');
+    Route::post('/horarios/bulk-update', [HorarioController::class, 'bulkUpdate'])
+        ->name('admin.horarios.bulk-update');
 });
 
 /* Secretaria Routes */

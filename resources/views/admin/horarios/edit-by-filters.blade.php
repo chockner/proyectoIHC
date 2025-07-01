@@ -154,30 +154,41 @@ $(document).ready(function() {
                 // Construir tabla de horarios
                 $('#horariosContainer').empty();
                 
-                response.days.forEach(day => {
-                    // Buscar si ya existe un horario para este día
-                    const horario = response.horarios.find(h => h.day_of_week === day) || {
-                        day_of_week: day,
-                        start_time: shift === 'MAÑANA' ? '08:00' : '13:00',
-                        end_time: shift === 'MAÑANA' ? '12:00' : '18:00'
-                    };
-                    
-                    const row = `
+                // Verificar si hay horarios
+                if (response.horarios.length === 0) {
+                    $('#horariosContainer').append(`
                         <tr>
-                            <td>${day}</td>
-                            <td>
-                                <input type="time" name="horarios[${day}][start_time]" 
-                                       class="form-control" value="${horario.start_time}" required>
-                                <input type="hidden" name="horarios[${day}][day_of_week]" value="${day}">
-                            </td>
-                            <td>
-                                <input type="time" name="horarios[${day}][end_time]" 
-                                       class="form-control" value="${horario.end_time}" required>
+                            <td colspan="3" class="text-center py-4">
+                                <div class="alert alert-info">
+                                    No hay horarios registrados para este médico y turno.
+                                    <a href="{{ route('admin.horarios.create') }}" class="alert-link">
+                                        ¿Desea crear nuevos horarios?
+                                    </a>
+                                </div>
                             </td>
                         </tr>
-                    `;
-                    $('#horariosContainer').append(row);
-                });
+                    `);
+                } else {
+                    // Solo mostrar días con horarios existentes
+                    response.horarios.forEach(horario => {
+                        const row = `
+                            <tr>
+                                <td>${horario.day_of_week}</td>
+                                <td>
+                                    <input type="time" name="horarios[${horario.day_of_week}][start_time]" 
+                                        class="form-control" value="${horario.start_time}" required>
+                                    <input type="hidden" name="horarios[${horario.day_of_week}][day_of_week]" value="${horario.day_of_week}">
+                                </td>
+                                <td>
+                                    <input type="time" name="horarios[${horario.day_of_week}][end_time]" 
+                                        class="form-control" value="${horario.end_time}" required>
+                                </td>
+                                
+                            </tr>
+                        `;
+                        $('#horariosContainer').append(row);
+                    });
+                }
                 
                 $('#editHorariosForm').show();
             },
@@ -186,7 +197,7 @@ $(document).ready(function() {
                 console.error(xhr.responseText);
             }
         });
-    });
+    });;
 });
 </script>
 @endsection
