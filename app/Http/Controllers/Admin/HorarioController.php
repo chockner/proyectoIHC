@@ -9,8 +9,6 @@ use App\Models\Doctor;
 use App\Models\Specialty;
 use Illuminate\Support\Facades\DB;
 
-
-
 class HorarioController extends Controller
 {
     public function index(Request $request)
@@ -179,10 +177,10 @@ class HorarioController extends Controller
                     $hora = (int) explode(':', $value)[0];
                     
                     if ($shift == 'MAÑANA' && ($hora < 8 || $hora > 13)) {
-                        $fail('La hora de fin no corresponde al turno de la mañana (8:00 - 12:00)');
+                        $fail('La hora de fin no corresponde al turno de la mañana (8:00 - 13:00)');
                     }
                     if ($shift == 'TARDE' && ($hora < 14 || $hora > 19)) {
-                        $fail('La hora de fin no corresponde al turno de la tarde (13:00 - 18:00)');
+                        $fail('La hora de fin no corresponde al turno de la tarde (14:00 - 19:00)');
                     }
                 }
             ]
