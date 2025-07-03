@@ -6,90 +6,102 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+    <link crossorigin href="https://fonts.gstatic.com/" rel="preconnect" />
+    <link
+      as="style"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+      onload="this.rel='stylesheet'"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet" />
+    <!-- <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" /> -->
+    <link href="ico-secre.ico" rel="icon" type="image/x-icon" />
 
+    @stack('scripts')
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #e7e8eb;
         }
         .sidebar {
             min-height: 100vh;
-            background-color: #004080;
-            color: white;
+            background-color: #ffffff;
+            /* color: #eae9f0; */
+            border: #ddd 2px solid;
         }
         .sidebar a {
-            color: white;
+            /* color: white; */
             text-decoration: none;
             padding: 12px;
             display: block;
         }
         .sidebar a:hover {
-            background-color: #0059b3;
+            /* background-color: #0059b3; */
         }
         .topbar {
             background-color: #ffffff;
             padding: 15px;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 2px solid #ddd;
         }
         .main-content {
             padding: 25px;
         }
-        .btn-warning {
-            background-color: #007bff;
-            border: none;
+
+        .active-link {
+            background-color: #0d6efd; /* azul Bootstrap */
             color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            text-decoration: none;
         }
-        .btn-warning:hover {
-            background-color: #0056b3;
-        }
-
-        .accordion-item {
-        background-color: #004080; /* Cambia el color de fondo del acordeón */
-        border: none; /* Elimina el borde del acordeón */
-        }
-
-        .accordion-button {
-            background-color: #004080; /* Cambia el color de fondo del botón del acordeón */
-            color: white; /* Cambia el color del texto del botón */
-            border: none; /* Elimina el borde del botón */
-            transition: box-shadow 0.3s ease, transform 0.3s ease; /* Transición suave */
-            position: relative; /* Necesario para personalizar la flecha */
+        .active-link:hover {
+            background-color: #0b5ed7;
         }
 
-        .accordion-button::after {
-            content: '\25BC'; /* Define la flecha blanca (Unicode para flecha hacia abajo) */
-            color: white !important; /* Cambia el color de la flecha a blanco */
-            font-size: 1.2rem; /* Aumenta el tamaño de la flecha */
-            transition: transform 0.3s ease; /* Transición suave para la rotación */
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            -moz-osx-font-smoothing: grayscale;
+            font-feature-settings: 'liga';
         }
 
-        /* Cuando el acordeón está colapsado, rota la flecha hacia la derecha */
-        .accordion-button.collapsed::after {
-            transform: rotate(0deg); /* Gira la flecha hacia la derecha */
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333; /* Color predeterminado de texto */
         }
 
-        .accordion-button:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Agrega una sombra al pasar el mouse */
-            transform: scale(1.02); /* Aumenta ligeramente el tamaño */
-            cursor: pointer; /* Cambia el cursor a "pointer" */
+        .sidebar-link svg {
+            transition: color 0.3s ease;
+            color: #0d6efd; /* Color azul por defecto del ícono */
         }
 
-        .accordion-item:hover {
-            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2); /* Agrega una sombra al pasar el mouse */
-            transform: scale(1.02); /* Aumenta ligeramente el tamaño */
-            cursor: pointer; /* Cambia el cursor a "pointer" */
+        .sidebar-link.active-link svg {
+            color: #ffffff; /* Cambiar a blanco (o cualquier otro color que resalte) cuando está activo */
         }
 
-        .accordion-body a {
-            display: block;
-            padding: 5px 10px; /* Reduce el relleno */
-            margin: 2px 0; /* Reduce el margen */
-            font-size: 14px; /* Ajusta el tamaño de la fuente si es necesario */
+        .sidebar-link.active-link {
+            background-color: #0d6efd; /* Fondo azul cuando está activo */
+            color: #ffffff; /* Color del texto cuando está activo */
         }
-
     </style>
 </head>
 <body>
@@ -109,128 +121,85 @@
                 </div>
             @else
 
-                <a href="/dashboard">Inicio</a>
+                <a href="/dashboard" class="{{ request()->routeIs('dashboard') ? 'active-link' : '' }}">Inicio</a>
                 
                 {{-- ADMINISTRADOR --}}
                 @if (Auth::user()->role->name == 'admin') {{-- Admin --}}
                     <div class="mb-2">
                         <strong>Gestión</strong>
                         {{-- DOCTORES --}}
-                        <div class="accordion">
-                            <a href="{{ route('admin.doctor.index') }}" class="accordion-header text-white text-decoration-none d-block p-3" style="font-size: 1rem;">
-                            Doctores
-                            </a>
-                        </div>
-
+                        <ul class="list-unstyled ps-3">
+                            <li>
+                                <a href="{{ route('admin.doctor.index') }}"
+                                    class="sidebar-link {{ request()->routeIs('admin.doctor.index') ? 'active-link' : '' }}"
+                                    style="display: flex; align-items: center; gap: 10px;">
+                                    <!-- Icono SVG (Doctores) -->
+                                    <svg viewBox="0 0 256 256"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor"
+                                        style="width: 20px; height: 20px; flex-shrink: 0;">
+                                        <path d="M212,152a12,12,0,1,1-12-12A12,12,0,0,1,212,152Zm-4.55,39.29A48.08,48.08,0,0,1,160,232H136a48.05,48.05,0,0,1-48-48V143.49A64,64,0,0,1,32,80V40A16,16,0,0,1,48,24H64a8,8,0,0,1,0,16H48V80a48,48,0,0,0,48.64,48c26.11-.34,47.36-22.25,47.36-48.83V40H128a8,8,0,0,1,0-16h16a16,16,0,0,1,16,16V79.17c0,32.84-24.53,60.29-56,64.31V184a32,32,0,0,0,32,32h24a32.06,32.06,0,0,0,31.22-25,40,40,0,1,1,16.23.27ZM224,152a24,24,0,1,0-24,24A24,24,0,0,0,224,152Z"/>
+                                    </svg>
+                                    <span>Doctores</span>
+                                </a>
+                            </li>
+                        </ul>
                         {{-- SECRETARIAS --}}
-                        <div class="accordion" id="accordionSecretarias">
-                            <div class="accordion-item bg-primary">
-                                <h2 class="accordion-header" id="headingSecretarias">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSecretarias" aria-expanded="false" aria-controls="collapseSecretarias">
-                                        Secretarias
-                                    </button>
-                                </h2>
-                                <div id="collapseSecretarias" class="accordion-collapse collapse" aria-labelledby="headingSecretarias" data-bs-parent="#accordionSecretarias">
-                                    <div class="accordion-body">
-                                        <ul class="list-unstyled ps-3">
-                                            <a href="{{ route('admin.secretaria.index') }}">Ver todos</a>   
-                                            <a href="{{ route('admin.secretaria.create') }}">Agregar nuevo</a>  
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        <ul class="list-unstyled ps-3">
+                            <li>
+                                <a href="{{ route('admin.secretaria.index') }}"
+                                class="{{ request()->routeIs('admin.secretaria.index') ? 'active-link' : '' }}">
+                                    Secretarias
+                                </a>
+                            </li>
+                        </ul>
                         {{-- ESPECIALIDADES --}}
-                        <div class="accordion" id="accordionEspecialidades">
-                            <div class="accordion-item bg-primary">
-                                <h2 class="accordion-header" id="headingEspecialidades">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEspecialidades" aria-expanded="false" aria-controls="collapseEspecialidades">
-                                        Especialidades
-                                    </button>
-                                </h2>
-                                <div id="collapseEspecialidades" class="accordion-collapse collapse" aria-labelledby="headingEspecialidades" data-bs-parent="#accordionEspecialidades">
-                                    <div class="accordion-body">
-                                        <ul class="list-unstyled ps-3">
-                                            <a href="{{ route('admin.especialidad.index') }}">Ver todos</a> 
-                                            <a href="{{ route('admin.especialidad.create') }}">Agregar nuevo</a>    
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <ul class="list-unstyled ps-3">
+                            <li>
+                                <a href="{{ route('admin.especialidad.index') }}"
+                                class="{{ request()->routeIs('admin.especialidad.index') ? 'active-link' : '' }}">
+                                    Especialidades
+                                </a>
+                            </li>
+                        </ul>
                         {{-- PACIENTES --}}
-                        <div class="accordion" id="accordionPacientes">
-                            <div class="accordion-item bg-primary">
-                                <h2 class="accordion-header" id="headingPacientes">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePacientes" aria-expanded="false" aria-controls="collapsePacientes">
-                                        Pacientes
-                                    </button>
-                                </h2>
-                                <div id="collapsePacientes" class="accordion-collapse collapse" aria-labelledby="headingPacientes" data-bs-parent="#accordionPacientes">
-                                    <div class="accordion-body">
-                                        <ul class="list-unstyled ps-3">
-                                            <a href="{{ route('admin.paciente.index') }}">Ver todos</a>   
-                                            <a href="{{ route('admin.paciente.create') }}">Agregar nuevo</a>  
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <ul class="list-unstyled ps-3">
+                            <li>
+                                <a href="{{ route('admin.paciente.index') }}"
+                                class="{{ request()->routeIs('admin.paciente.index') ? 'active-link' : '' }}">
+                                    Pacientes
+                                </a>
+                            </li>
+                        </ul>
                         {{-- Histias Medicas --}}
-                        <div class="accordion" id="accordionHistiasMedicas">
-                            <div class="accordion-item bg-primary">
-                                <h2 class="accordion-header" id="headingHistiasMedicas">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHistiasMedicas" aria-expanded="false" aria-controls="collapseHistiasMedicas">
-                                        Historias Médicas
-                                    </button>
-                                </h2>
-                                <div id="collapseHistiasMedicas" class="accordion-collapse collapse" aria-labelledby="headingHistiasMedicas" data-bs-parent="#accordionHistiasMedicas">
-                                    <div class="accordion-body">
-                                        <ul class="list-unstyled ps-3">
-                                            <a href="{{ route('admin.historialMedico.index') }}">Ver todos</a>   
-                                            <a href="#">Agregar nuevo</a>  
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <ul class="list-unstyled ps-3">
+                            <li>
+                                <a href="{{ route('admin.historialMedico.index') }}"
+                                class="{{ request()->routeIs('admin.historialMedico.index') ? 'active-link' : '' }}">
+                                    Historias Medicas
+                                </a>
+                            </li>
+
+                        </ul>
                         {{-- Horarios --}}
-                        <div class="accordion" id="accordionHorarios">
-                            <div class="accordion-item bg-primary">
-                                <h2 class="accordion-header" id="headingHorarios">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHorarios" aria-expanded="false" aria-controls="collapseHorarios">
-                                        Horarios
-                                    </button>
-                                </h2>
-                                <div id="collapseHorarios" class="accordion-collapse collapse" aria-labelledby="headingHorarios" data-bs-parent="#accordionHorarios">
-                                    <div class="accordion-body">
-                                        <ul class="list-unstyled ps-3">
-                                            <a href="{{ route('admin.horarios.index') }}">Ver todos</a>   
-                                            <a href="#">Agregar nuevo</a>  
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <ul class="list-unstyled ps-3">
+                            <li>
+                                <a href="{{ route('admin.horarios.index') }}"
+                                class="{{ request()->routeIs('admin.horarios.index') ? 'active-link' : '' }}">
+                                    Horarios
+                                </a>
+                            </li>
+                        </ul>
                         {{-- Citas --}}
-                        <div class="accordion" id="accordionCitas">
-                            <div class="accordion-item bg-primary">
-                                <h2 class="accordion-header" id="headingCitas">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCitas" aria-expanded="false" aria-controls="collapseCitas">
-                                        Citas
-                                    </button>
-                                </h2>
-                                <div id="collapseCitas" class="accordion-collapse collapse" aria-labelledby="headingCitas" data-bs-parent="#accordionCitas">
-                                    <div class="accordion-body">
-                                        <ul class="list-unstyled ps-3">
-                                            <a href="#">Ver todos</a>   
-                                            <a href="#">Agregar nuevo</a>  
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <ul class="list-unstyled ps-3">
+                            <li>
+                                <a href="#" {{-- <a href="{{ route('admin.citas.index') }}" --}}
+                                {{-- class="{{ request()->routeIs('admin.citas.index') ? 'active-link' : '' }}" --}}>
+                                    Citas
+                                </a>
+                            </li>
+
+                        </ul>
                     </div>
                 @endif
 
@@ -315,6 +284,10 @@
     </div>
 
 </body>
+@yield('scripts')
+
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -395,5 +368,7 @@
     });
 
 </script>
+
+
 
 </html>
