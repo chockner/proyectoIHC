@@ -80,7 +80,7 @@
                     <a href="{{ route('admin.horarios.index') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-2"></i> Cancelar
                     </a>
-                    <button type="submit" class="btn btn-success">
+                    <button type="button" class="btn btn-success" id="btnEdit">
                         <i class="fas fa-save me-2"></i> Guardar Cambios
                     </button>
                 </div>
@@ -88,6 +88,41 @@
         </div>
     </form>
 </div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="confirmEditModal" tabindex="-1" aria-labelledby="confirmEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="confirmEditModalLabel">Confirmar Edición</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
+                    <p id="confirmMessage"></p>
+                    <div class="alert alert-warning mt-2">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Esta acción puede afectar la consistencia de los datos.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i> Cancelar
+                </button>
+                <button type="button" id="btnConfirmEdit" class="btn btn-warning">
+                    <i class="fas fa-edit me-2"></i> Confirmar Edición
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Audio para el sonido de alerta -->
+<audio id="alertSound" preload="auto">
+    <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
+</audio>
 @endsection
 
 @section('scripts')
@@ -176,17 +211,23 @@ $(document).ready(function() {
                                 <td>${horario.day_of_week}</td>
                                 <td>
                                     <input type="time" name="horarios[${horario.day_of_week}][start_time]" 
-                                        class="form-control" value="${horario.start_time}" required step="3600">
+                                        class="form-control time-input" value="${horario.start_time}" required>
                                     <input type="hidden" name="horarios[${horario.day_of_week}][day_of_week]" value="${horario.day_of_week}">
+                                    <div class="invalid-feedback">Los minutos deben ser 00</div>
                                 </td>
                                 <td>
                                     <input type="time" name="horarios[${horario.day_of_week}][end_time]" 
-                                        class="form-control" value="${horario.end_time}" required step="3600">
+                                        class="form-control time-input" value="${horario.end_time}" required>
+                                    <div class="invalid-feedback">Los minutos deben ser 00</div>
                                 </td>
-                                
                             </tr>
                         `;
                         $('#horariosContainer').append(row);
+                    });
+                    
+                    // Agregar validación en tiempo real para los campos de tiempo
+                    $('.time-input').on('change', function() {
+                        validateTimeInput(this);
                     });
                 }
                 
@@ -197,14 +238,58 @@ $(document).ready(function() {
                 console.error(xhr.responseText);
             }
         });
-    });;
+    });
 
-    //al enviar el formulario de edición
-    $('#editHorariosForm').submit(function(e){
-        //confirmar con el usuario
-        if (!confirm('¿Está seguro de que desea guardar los cambios?')) {
-            e.preventDefault();
+    // Función para validar campos de tiempo (minutos deben ser 00)
+    function validateTimeInput(input) {
+        const timeValue = $(input).val();
+        if (timeValue) {
+            const minutes = timeValue.split(':')[1];
+            if (minutes !== '00') {
+                $(input).addClass('is-invalid');
+                return false;
+            } else {
+                $(input).removeClass('is-invalid');
+                return true;
+            }
         }
+        return false;
+    }
+
+    // Al hacer clic en el botón Guardar Cambios
+    $('#btnEdit').click(function() {
+        // Validar todos los campos de tiempo
+        let isValid = true;
+        $('.time-input').each(function() {
+            if (!validateTimeInput(this)) {
+                isValid = false;
+            }
+        });
+
+        if (!isValid) {
+            alert('Por favor corrija los campos de tiempo. Los minutos deben ser 00.');
+            return;
+        }
+
+        // Configurar mensaje en el modal
+        const message = '¿Está seguro de que desea editar los horarios de este médico?';
+        $('#confirmMessage').text(message);
+
+        // Mostrar modal de confirmación
+        const modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
+        modal.show();
+
+        // Reproducir sonido de alerta
+        const alertSound = document.getElementById('alertSound');
+        if (alertSound){
+            alertSound.play().catch(e => console.log('Error al reproducir el sonido:', e));
+        }
+    });
+
+    // Confirmar edición desde el modal
+    $('#btnConfirmEdit').click(function() {
+        // Enviar el formulario
+        $('#editHorariosForm').submit();
     });
 });
 </script>

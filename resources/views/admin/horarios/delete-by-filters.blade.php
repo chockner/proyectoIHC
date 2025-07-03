@@ -86,7 +86,7 @@
                     <a href="{{ route('admin.horarios.index') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-2"></i> Cancelar
                     </a>
-                    <button type="submit" class="btn btn-danger">
+                    <button type="button" id="btnEliminar" class="btn btn-danger">
                         <i class="fas fa-trash me-2"></i> Eliminar Seleccionados
                     </button>
                 </div>
@@ -94,6 +94,41 @@
         </div>
     </form>
 </div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <i class="fas fa-exclamation-circle fa-3x text-danger mb-3"></i>
+                    <p id="confirmMessage"></p>
+                    <div class="alert alert-danger mt-2">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Esta acción no se puede deshacer
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i> Cancelar
+                </button>
+                <button type="button" id="btnConfirmDelete" class="btn btn-danger">
+                    <i class="fas fa-trash me-2"></i> Confirmar Eliminación
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Audio para el sonido de alerta -->
+<audio id="alertSound" preload="auto">
+    <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
+</audio>
 @endsection
 
 @section('scripts')
@@ -195,22 +230,35 @@ $(document).ready(function() {
         });
     });
 
-    // Al enviar el formulario de eliminación
-    $('#deleteHorariosForm').submit(function(e) {
-        // Verificar si hay horarios seleccionados
+    // Al hacer clic en el botón Eliminar Seleccionados
+    $('#btnEliminar').click(function() {
         const selectedCount = $('input[name="horarios[]"]:checked').length;
         
         if (selectedCount === 0) {
             alert('Por favor seleccione al menos un horario para eliminar.');
-            e.preventDefault();
             return;
         }
 
-        // Confirmar con el usuario
-        if (!confirm('¿Está seguro que desea eliminar los ' + selectedCount + ' horarios seleccionados? Esta acción no se puede deshacer.')) {
-            e.preventDefault();
+        // Configurar mensaje en el modal
+        const message = `¿Está seguro que desea eliminar los ${selectedCount} horarios seleccionados?`;
+        $('#confirmMessage').text(message);
+        
+        // Mostrar el modal
+        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        modal.show();
+        
+        // Reproducir sonido de alerta
+        const alertSound = document.getElementById('alertSound');
+        if (alertSound) {
+            alertSound.play().catch(e => console.log("Error al reproducir sonido: ", e));
         }
-    });    
+    });
+
+    // Confirmar eliminación desde el modal
+    $('#btnConfirmDelete').click(function() {
+        // Enviar el formulario
+        $('#deleteHorariosForm').submit();
+    });
 });
 </script>
 @endsection

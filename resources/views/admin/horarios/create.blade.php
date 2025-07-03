@@ -55,15 +55,47 @@
             <div class="col-md-6">
                 <label for="start_time" class="form-label">Hora de Inicio:</label>
                 <input type="time" name="start_time" id="start_time" class="form-control" required step="3600">
+                <div class="invalid-feedback">Los minutos deben ser 00</div>
             </div>
             <div class="col-md-6">
                 <label for="end_time" class="form-label">Hora de Salida:</label>
                 <input type="time" name="end_time" id="end_time" class="form-control" required step="3600">
+                <div class="invalid-feedback">Los minutos deben ser 00</div>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary submit-btn" style="display: none;" disabled>Guardar</button>
+        <button type="button" class="btn btn-primary submit-btn" style="display: none;" id="btnShowModal">Guardar</button>
     </form>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="confirmCreateModal" tabindex="-1" aria-labelledby="confirmCreateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="confirmCreateModalLabel">Confirmar Creación de Horario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <i class="fas fa-calendar-plus fa-3x text-primary mb-3"></i>
+                    <p id="confirmMessage">¿Está seguro que desea crear este nuevo horario?</p>
+                    <div class="alert alert-primary mt-2">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Se creará un nuevo horario para el médico seleccionado.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i> Cancelar
+                </button>
+                <button type="button" id="btnConfirmCreate" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i> Crear Horario
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -82,7 +114,7 @@ $(document).ready(function() {
         const specialtyId = $(this).val();
         $('.doctor-field, .day-field, .shift-field, .time-fields').hide();
         $('#doctor_id, #day_of_week, #shift, #start_time, #end_time').prop('disabled', true);
-        $('.submit-btn').hide().prop('disabled', true);
+        $('#btnShowModal').hide().prop('disabled', true);
 
         if (!specialtyId) return;
 
@@ -114,25 +146,25 @@ $(document).ready(function() {
     $('#doctor_id').change(function() {
         $('.day-field').toggle($(this).val() !== '');
         $('#day_of_week').prop('disabled', $(this).val() === '');
-        $('.shift-field, .time-fields, .submit-btn').hide();
+        $('.shift-field, .time-fields').hide();
         $('#shift, #start_time, #end_time').prop('disabled', true);
-        $('.submit-btn').prop('disabled', true);
+        $('#btnShowModal').prop('disabled', true).hide();
     });
 
     // 3. Cuando cambia el día
     $('#day_of_week').change(function() {
         $('.shift-field').toggle($(this).val() !== '');
         $('#shift').prop('disabled', $(this).val() === '');
-        $('.time-fields, .submit-btn').hide();
+        $('.time-fields').hide();
         $('#start_time, #end_time').prop('disabled', true);
-        $('.submit-btn').prop('disabled', true);
+        $('#btnShowModal').prop('disabled', true).hide();
     });
 
     // 4. Cuando cambia el turno
     $('#shift').change(function() {
         $('.time-fields').toggle($(this).val() !== '');
         $('#start_time, #end_time').prop('disabled', $(this).val() === '');
-        $('.submit-btn').toggle($(this).val() !== '').prop('disabled', $(this).val() === '');
+        $('#btnShowModal').toggle($(this).val() !== '').prop('disabled', $(this).val() === '');
         
         // Sugerir horarios según el turno
         if ($(this).val() === 'MAÑANA') {
@@ -142,6 +174,67 @@ $(document).ready(function() {
             $('#start_time').val('14:00');
             $('#end_time').val('19:00');
         }
+        
+        // Agregar validadores de tiempo
+        $('#start_time, #end_time').on('change', function() {
+            validateTimeInput(this);
+        });
+    });
+    
+    // Función para validar campos de tiempo (minutos deben ser 00)
+    function validateTimeInput(input) {
+        const timeValue = $(input).val();
+        if (timeValue) {
+            const minutes = timeValue.split(':')[1];
+            if (minutes !== '00') {
+                $(input).addClass('is-invalid');
+                return false;
+            } else {
+                $(input).removeClass('is-invalid');
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Al hacer clic en el botón Guardar (mostrar modal)
+    $('#btnShowModal').click(function() {
+        // Validar campos de tiempo
+        let isValid = true;
+        $('#start_time, #end_time').each(function() {
+            if (!validateTimeInput(this)) {
+                isValid = false;
+            }
+        });
+        
+        if (!isValid) {
+            alert('Por favor corrija los campos de tiempo. Los minutos deben ser 00.');
+            return;
+        }
+        
+        // Construir mensaje de confirmación
+        const doctor = $('#doctor_id option:selected').text();
+        const day = $('#day_of_week option:selected').text();
+        const shift = $('#shift option:selected').text();
+        const startTime = $('#start_time').val();
+        const endTime = $('#end_time').val();
+        
+        const message = `¿Crear horario para ${doctor}?<br>
+                         Día: ${day}<br>
+                         Turno: ${shift}<br>
+                         Horario: ${startTime} - ${endTime}`;
+        
+        $('#confirmMessage').html(message);
+        
+        // Mostrar modal
+        const modal = new bootstrap.Modal(document.getElementById('confirmCreateModal'));
+        modal.show();
+    });
+
+    // Confirmar creación desde el modal
+    $('#btnConfirmCreate').click(function() {
+        // Enviar el formulario
+        $('#scheduleForm').submit();
     });
 });
 </script>
