@@ -2,7 +2,7 @@
 
 @section('content')
     <h2>Agregar Doctor</h2>
-    <form action="{{ route('admin.doctor.store') }}" method="POST">
+    <form action="{{ route('admin.doctor.store') }}" method="POST" id="createDoctorForm">
         @csrf
         <div class="mb-3">
             <label for="document_id" class="form-label">DNI</label>
@@ -95,6 +95,70 @@
             @enderror
         </div>
 
-        <button class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-primary submit-btn" id="btnShowModal" >Guardar</button>
     </form>
+
+    <!-- Modal de confirmación -->
+<div class="modal fade" id="confirmCreateModal" tabindex="-1" aria-labelledby="confirmCreateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="confirmCreateModalLabel">Confirmar Registro de Doctor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <p id="confirmMessage">¿Está seguro que desea registrar este doctor?</p>
+                    <div class="alert alert-primary mt-2">
+                        Se registrara un nuevo dotor.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnConfirmCreate" class="btn btn-primary">Agregar Doctor</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+@section('scripts')
+    <script>
+        //al hacer clic en el botón "Guardar", mostrar el modal de confirmación
+        $('#btnShowModal').click(function() {
+            //validar el formulario
+            if (!$('#createDoctorForm')[0].checkValidity()) {
+                //mostrar errores de validación
+                $('#createDoctorForm')[0].reportValidity();
+                return;
+            }
+            //construir el mensaje de confirmación
+            const message = `
+                <strong>Datos del Doctor:</strong><br>
+                DNI: ${$('#document_id').val()}<br>
+                Nombres: ${$('#first_name').val()}<br>
+                Apellidos: ${$('#last_name').val()}<br>
+                Especialidad: ${$('#specialty_id option:selected').text()}<br>
+                Código de Licencia: ${$('#license_code').val()}<br>
+                Años de Experiencia: ${$('#experience_years').val()}
+            `;
+            //establecer el mensaje de confirmación
+            $('#confirmMessage').html(message);
+            //mostrar el modal
+            const modal = new bootstrap.Modal(document.getElementById('confirmCreateModal'));
+            modal.show();
+        });
+
+        // confirmar creaciopn desde modal
+        $('#btnConfirmCreate').click(function() {
+            //validar el formulario
+            if ($('#createDoctorForm')[0].checkValidity()) {
+                //enviar el formulario
+                $('#createDoctorForm').submit();
+            } else {
+                //mostrar errores de validación
+                $('#createDoctorForm')[0].reportValidity();
+            }
+        });
+    </script>
 @endsection

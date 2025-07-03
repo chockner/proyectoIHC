@@ -44,9 +44,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <button type="button" id="btnBuscar" class="btn btn-primary" disabled>
-                <i class="fas fa-search me-2"></i> Buscar Horarios
-            </button>
+            <button type="button" id="btnBuscar" class="btn btn-primary" disabled>Buscar Horarios</button>
         </div>
     </form>
 
@@ -62,7 +60,6 @@
             </div>
             <div class="card-body">
                 <div class="alert alert-warning">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
                     Seleccione los horarios que desea eliminar. Esta acción no se puede deshacer.
                 </div>
 
@@ -83,12 +80,8 @@
                 </div>
 
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ route('admin.horarios.index') }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left me-2"></i> Cancelar
-                    </a>
-                    <button type="button" id="btnEliminar" class="btn btn-danger">
-                        <i class="fas fa-trash me-2"></i> Eliminar Seleccionados
-                    </button>
+                    <a href="{{ route('admin.horarios.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                    <button type="button" id="btnEliminar" class="btn btn-danger">Eliminar Seleccionados</button>
                 </div>
             </div>
         </div>
@@ -108,18 +101,13 @@
                     <i class="fas fa-exclamation-circle fa-3x text-danger mb-3"></i>
                     <p id="confirmMessage"></p>
                     <div class="alert alert-danger mt-2">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
                         Esta acción no se puede deshacer
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times me-2"></i> Cancelar
-                </button>
-                <button type="button" id="btnConfirmDelete" class="btn btn-danger">
-                    <i class="fas fa-trash me-2"></i> Confirmar Eliminación
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnConfirmDelete" class="btn btn-danger">Confirmar Eliminación</button>
             </div>
         </div>
     </div>

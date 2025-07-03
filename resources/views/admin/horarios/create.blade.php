@@ -78,21 +78,15 @@
             </div>
             <div class="modal-body">
                 <div class="text-center mb-3">
-                    <i class="fas fa-calendar-plus fa-3x text-primary mb-3"></i>
                     <p id="confirmMessage">¿Está seguro que desea crear este nuevo horario?</p>
                     <div class="alert alert-primary mt-2">
-                        <i class="fas fa-info-circle me-2"></i>
                         Se creará un nuevo horario para el médico seleccionado.
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times me-2"></i> Cancelar
-                </button>
-                <button type="button" id="btnConfirmCreate" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i> Crear Horario
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnConfirmCreate" class="btn btn-primary">Crear Horario</button>
             </div>
         </div>
     </div>

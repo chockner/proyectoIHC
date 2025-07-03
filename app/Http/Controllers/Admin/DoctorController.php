@@ -76,13 +76,36 @@ class DoctorController extends Controller
     public function update(Request $request, $id)
     {
         $doctor = Doctor::findOrFail($id);
-        $doctor->update($request->all());
-        return redirect()->route('admin.doctor.index')->with('success', 'Doctor updated successfully.');
+        // datos del doctor
+        $doctor->update([
+            'specialty_id' => $request->specialty_id,
+            // recordar que en doctor no esta nombre eso esta en profile
+            // aqui solo los datos que estanen la tabla doctor
+        ]);
+        
+        if ($doctor->user && $doctor->user->profile) {
+            // datos del perfil
+            $doctor->user->profile->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+            ]);
+        }
+
+        return redirect()->route('admin.doctor.index')->with('success', 'Doctor actualizado correctamente.');
     }
 
     public function destroy($id)
     {
         $doctor = Doctor::findOrFail($id);
+        // Eliminar el usuario asociado al doctor
+        if ($doctor->user) {
+            // Eliminar el perfil asociado al usuario
+            if ($doctor->user->profile) {
+                $doctor->user->profile->delete();
+            }
+            // Eliminar el usuario
+            $doctor->user->delete();
+        }
         $doctor->delete();
         return redirect()->route('admin.doctor.index')->with('success', 'Doctor deleted successfully.');
     }

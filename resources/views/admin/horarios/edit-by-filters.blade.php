@@ -44,9 +44,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <button type="button" id="btnBuscar" class="btn btn-primary" disabled>
-                <i class="fas fa-search me-2"></i> Buscar Horarios
-            </button>
+            <button type="button" id="btnBuscar" class="btn btn-primary" disabled>Buscar Horarios</button>
         </div>
     </form>
 
@@ -77,12 +75,8 @@
                 </div>
 
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ route('admin.horarios.index') }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left me-2"></i> Cancelar
-                    </a>
-                    <button type="button" class="btn btn-success" id="btnEdit">
-                        <i class="fas fa-save me-2"></i> Guardar Cambios
-                    </button>
+                    <a href="{{ route('admin.horarios.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                    <button type="button" class="btn btn-success" id="btnEdit">Guardar Cambios</button>
                 </div>
             </div>
         </div>
@@ -102,7 +96,6 @@
                     <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
                     <p id="confirmMessage"></p>
                     <div class="alert alert-warning mt-2">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
                         Esta acción puede afectar la consistencia de los datos.
                     </div>
                 </div>
@@ -111,9 +104,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-times me-2"></i> Cancelar
                 </button>
-                <button type="button" id="btnConfirmEdit" class="btn btn-warning">
-                    <i class="fas fa-edit me-2"></i> Confirmar Edición
-                </button>
+                <button type="button" id="btnConfirmEdit" class="btn btn-warning">Confirmar Edición</button>
             </div>
         </div>
     </div>
