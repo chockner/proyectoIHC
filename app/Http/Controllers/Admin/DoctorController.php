@@ -107,6 +107,6 @@ class DoctorController extends Controller
             $doctor->user->delete();
         }
         $doctor->delete();
-        return redirect()->route('admin.doctor.index')->with('success', 'Doctor deleted successfully.');
+        return redirect()->route('admin.doctor.index')->with('success', 'Doctor eliminado correctamente.');
     }
 }

@@ -1,40 +1,31 @@
 @extends('layouts.dashboard')
 @section('content')
     <div class="container mt-4">
-        <h2>Editar Doctor</h2>
-        <form action="{{ route('admin.doctor.update', $doctor->id) }}" method="POST" id="editDoctorForm">
+        <h2>Editar Secretaria</h2>
+        <form action="{{ route('admin.secretaria.update', $secretaria->id) }}" method="POST" id="editSecretariaForm">
             @csrf
             @method('PUT')
             <div class="mb-3">
-                <label for="first_name" class="form-label">Nombre</label>
+                <label for="first_name" class="form-label">Nombres</label>
                 <input type="text" name="first_name" id="first_name" class="form-control"
-                    value="{{ $doctor->user->profile->first_name }}" required>
+                    onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
+                    value="{{ $secretaria->user->profile->first_name }}"required>
             </div>
             <div class="mb-3">
-                <label for="last_name" class="form-label">Apellido</label>
+                <label for="last_name" class="form-label">Apellidos</label>
                 <input type="text" name="last_name" id="last_name" class="form-control"
-                    value="{{ $doctor->user->profile->last_name }}" required>
+                    onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
+                    value="{{ $secretaria->user->profile->last_name }}" required>
             </div>
-            <div class="mb-3">
-                <label for="specialty_id" class="form-label">Especialidad</label>
-                <select name="specialty_id" id="specialty_id" class="form-select" required>
-                    @foreach ($specialty as $specialty)
-                        <option value="{{ $specialty->id }}"
-                            {{ $doctor->specialty_id == $specialty->id ? 'selected' : '' }}>
-                            {{ $specialty->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
             <div class="d-flex justify-content-between mt-4">
-                <a href="{{ route('admin.doctor.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                <a href="{{ route('admin.secretaria.index') }}" class="btn btn-outline-secondary">Cancelar</a>
                 <button type="button" class="btn btn-success" id="btnEdit">Guardar Cambios</button>
             </div>
 
         </form>
     </div>
-
     <!-- Modal de confirmación -->
     <div class="modal fade" id="confirmEditModal" tabindex="-1" aria-labelledby="confirmEditModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -67,9 +58,9 @@
     <script>
         $('#btnEdit').click(function() {
             //validar el formulario
-            if (!$('#editDoctorForm')[0].checkValidity()) {
+            if (!$('#editSecretariaForm')[0].checkValidity()) {
                 //si el formulario no es válido, mostrar los mensajes de error
-                $('#editDoctorForm')[0].reportValidity();
+                $('#editSecretariaForm')[0].reportValidity();
                 return;
             }
             //confirgurar el mensaje de confirmación
@@ -90,7 +81,7 @@
         //confirmar la edición
         $('#btnConfirmEdit').click(function() {
             //enviar el formulario
-            $('#editDoctorForm').submit();
+            $('#editSecretariaForm').submit();
         });
     </script>
 @endsection
