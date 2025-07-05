@@ -16,7 +16,7 @@ class DoctorController extends Controller
     {
     
         /* $doctores = Doctor::all(); */
-        $doctores = Doctor::with('user.profile')->paginate(5);
+        $doctores = Doctor::with('user.profile')->paginate(10);
         return view('admin.doctor.index', compact('doctores'));
     }
 

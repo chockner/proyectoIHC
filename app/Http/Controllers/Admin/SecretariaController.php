@@ -14,7 +14,7 @@ class SecretariaController extends Controller
     public function index()
     {
         //$secretarias = Secretary::all();
-        $secretarias = Secretary::with('user.profile')->paginate(5);
+        $secretarias = Secretary::with('user.profile')->paginate(10);
         return view('admin.secretaria.index', compact('secretarias'));
     }
 
