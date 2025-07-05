@@ -84,6 +84,10 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     /* admin -> paciente */
     Route::get('/pacientes', [PacienteController::class, 'index'])->name('admin.paciente.index');
     Route::get('/pacientes/create', [PacienteController::class, 'create'])->name('admin.paciente.create');
+    Route::post('/pacientes', [PacienteController::class, 'store'])->name('admin.paciente.store');
+    Route::get('/pacientes/{id}', [PacienteController::class, 'show'])->name('admin.paciente.show');
+    Route::get('/pacientes/{id}/edit', [PacienteController::class, 'edit'])->name('admin.paciente.edit');
+    Route::put('/pacientes/{id}', [PacienteController::class, 'update'])->name('admin.paciente.update');
     Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy'])->name('admin.paciente.destroy');
 
     /* admin -> historial Medico */
