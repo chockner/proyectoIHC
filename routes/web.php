@@ -71,6 +71,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     /* admin -> secreataria */
     Route::get('/secretarias', [SecretariaController::class, 'index'])->name('admin.secretaria.index');
     Route::get('/secretarias/create', [SecretariaController::class, 'create'])->name('admin.secretaria.create');
+    Route::post('/secretarias', [SecretariaController::class, 'store'])->name('admin.secretaria.store');
+    Route::get('/secretarias/{id}', [SecretariaController::class, 'show'])->name('admin.secretaria.show');
+    Route::get('/secretarias/{id}/edit', [SecretariaController::class, 'edit'])->name('admin.secretaria.edit');
+    Route::put('/secretarias/{id}', [SecretariaController::class, 'update'])->name('admin.secretaria.update');
+    Route::delete('/secretarias/{id}', [SecretariaController::class, 'destroy'])->name('admin.secretaria.destroy');
 
     /* admin -> especialidad */
     Route::get('/especialidades', [EspecialidadController::class, 'index'])->name('admin.especialidad.index');

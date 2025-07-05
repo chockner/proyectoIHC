@@ -3,9 +3,9 @@
     <h3>Panel de Historias Médicas</h3>
     <p>En esta sección podrás gestionar las historias médicas de tus pacientes.</p>
     <p>/*EN VER AHI DEBE APARECER LOS DETALLES DE LA CITAS O COSAS QUE SE LLENAN EN ELHISTORIAL/**</p>
-    
+
     <div class="mb -3">
-        
+
         <table class="table table-bordered table-striped">
             <thead class="table-primary">
                 <tr>
@@ -20,13 +20,13 @@
             <tbody>
                 @foreach ($historiales as $index => $historial)
                     <tr>
-                        
+
                         @if (isset($historial->patient->user))
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $historial->patient->user->profile->first_name}}</td>
-                            <td>{{ $historial->patient->user->profile->last_name}}</td>
-                            <td>{{ $historial->patient->user->profile->email}}</td>
-                            <td>{{ $historial->patient->user->profile->phone}}</td>
+                            <td>{{ $historial->patient->user->profile->first_name }}</td>
+                            <td>{{ $historial->patient->user->profile->last_name }}</td>
+                            <td>{{ $historial->patient->user->profile->email }}</td>
+                            <td>{{ $historial->patient->user->profile->phone }}</td>
 
                             <td>
                                 <a href="" class="btn btn-sm btn-info" title="Ver"><i class="fas fa-eye"></i></a> {{-- {{ route('admin.doctor.show', $doctor->id) }} --}}
@@ -34,7 +34,8 @@
                                 <form action="" method="POST" class="d-inline"> {{-- {{ route('admin.doctor.destroy', $doctor->id) }} --}}
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-danger" title="Eliminar" onclick="return confirm('¿Estás seguro?')"><i class="fas fa-trash"></i></button>
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="return confirm('¿Estás seguro?')">Eliminar</button>
                                 </form>
                             </td>
                         @endif
@@ -43,10 +44,30 @@
 
                 @if ($historiales->isEmpty())
                     <tr>
-                        <td colspan="6" class="text-center">No hay doctores registrados.</td>
+                        <td colspan="6" class="text-center">No hay historias medicas registrados.</td>
                     </tr>
                 @endif
             </tbody>
         </table>
+        <!-- Paginación -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {{-- Enlace "First" --}}
+                {{-- Enlace "Previous" --}}
+                <li class="page-item {{ $historiales->onFirstPage() ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ $historiales->previousPageUrl() }}">Anterior</a>
+                </li>
+                {{-- Páginas numéricas --}}
+                @for ($i = 1; $i <= $historiales->lastPage(); $i++)
+                    <li class="page-item {{ $i == $historiales->currentPage() ? 'active' : '' }}">
+                        <a class="page-link" href="{{ $historiales->url($i) }}">{{ $i }}</a>
+                    </li>
+                @endfor
+                {{-- Enlace "Next" --}}
+                <li class="page-item {{ $historiales->hasMorePages() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $historiales->nextPageUrl() }}">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 @endsection

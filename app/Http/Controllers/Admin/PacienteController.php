@@ -12,7 +12,7 @@ class PacienteController extends Controller
 {
     public function index()
     {
-        $pacientes = Patient::all();
+        $pacientes = Patient::with('user.profile')->paginate(10);
         return view('admin.paciente.index', compact('pacientes'));
     }
     public function create()
@@ -24,17 +24,12 @@ class PacienteController extends Controller
         $paciente = Patient::findOrFail($id);
         
         if ($paciente->user) {
-            $perfil = Profile::where('user_id', $paciente->user_id)->first();
-            $user = User::findOrFail($paciente->user_id);
-
-            // Eliminar datos
-            $paciente->delete();
-            $perfil->delete();
-            $user->delete();
-        } else {
-            // En caso de que no haya usuario asociado
-            $paciente->delete();
+            if($paciente->user->profile) {
+                $paciente->user->profile->delete();
+            }
+            $paciente->user->delete();
         }
+        $paciente->delete();
         
         return redirect()->route('admin.paciente.index')->with('success', 'Paciente eliminado correctamente.');
     }
