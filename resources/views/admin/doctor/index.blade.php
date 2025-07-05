@@ -2,9 +2,22 @@
 
 @section('content')
     <div class="container mt-4">
-        <h2>Lista de Doctores</h2>
-        <div class="mb-3">
-            <a href="{{ route('admin.doctor.create') }}" class="btn btn-primary">Agregar Doctor</a>
+        <h1 class="text-2xl font-bold mb-4">Lista de Doctores</h1>
+        <div class="mb-3 flex justify-end">
+            <a href="{{ route('admin.doctor.create') }}"
+                class="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2 shadow-sm hover:shadow-md transition-all duration-150">
+                <div class="relative">
+                    {{-- Icono svg agregar médico --}}
+                    <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-9 h-9">
+                        <path
+                            d="M212,152a12,12,0,1,1-12-12A12,12,0,0,1,212,152Zm-4.55,39.29A48.08,48.08,0,0,1,160,232H136a48.05,48.05,0,0,1-48-48V143.49A64,64,0,0,1,32,80V40A16,16,0,0,1,48,24H64a8,8,0,0,1,0,16H48V80a48,48,0,0,0,48.64,48c26.11-.34,47.36-22.25,47.36-48.83V40H128a8,8,0,0,1,0-16h16a16,16,0,0,1,16,16V79.17c0,32.84-24.53,60.29-56,64.31V184a32,32,0,0,0,32,32h24a32.06,32.06,0,0,0,31.22-25,40,40,0,1,1,16.23.27ZM224,152a24,24,0,1,0-24,24A24,24,0,0,0,224,152Z">
+                        </path>
+                    </svg>
+                    <span
+                        class="material-icons absolute -top-1 -right-1 bg-green-100 text-green-600 rounded-full text-sm p-0.5">add_circle</span>
+                </div>
+                <span class="text-green-700 font-medium text-sm">Agregar Médico</span>
+            </a>
         </div>
         <table class="table table-bordered table-striped">
             <thead class="table-primary">
@@ -30,7 +43,8 @@
                         <td>{{ $doctor->user->profile->phone }}</td>
                         <td>
                             <a href="{{ route('admin.doctor.show', $doctor->id) }}" class="btn btn-sm btn-info">Ver</a>
-                            <a href="{{ route('admin.doctor.edit', $doctor->id) }}" class="btn btn-sm btn-warning">Editar</a>
+                            <a href="{{ route('admin.doctor.edit', $doctor->id) }}"
+                                class="btn btn-sm btn-warning">Editar</a>
                             <form action="{{ route('admin.doctor.destroy', $doctor->id) }}" method="POST"
                                 class="d-inline delete-form">
                                 @csrf

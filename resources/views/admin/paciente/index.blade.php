@@ -3,6 +3,18 @@
 @section('content')
     <div class="container mt-4">
         <h2>Lista de Pacientes</h2>
+        <div class="mb-3 flex justify-end">
+            <a href="{{ route('admin.paciente.create') }}"
+                class="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2 shadow-sm hover:shadow-md transition-all duration-150">
+                <div class="relative">
+                    {{-- Icono svg agregar paciente --}}
+                    <span class="material-icons text-4xl">assist_walker</span>
+                    <span
+                        class="material-icons absolute -top-1 -right-1 bg-green-100 text-green-600 rounded-full text-sm p-0.5">add_circle</span>
+                </div>
+                <span class="text-green-700 font-medium text-sm">Agregar Paciente</span>
+            </a>
+        </div>
         <table class="table table-bordered table-striped">
             <thead class="table-primary">
                 <tr>
@@ -24,6 +36,9 @@
                         <td>{{ $paciente->user->email }}</td>
                         <td>{{ $paciente->user->profile->phone }}</td>
                         <td>
+                            <a href="{{ route('admin.paciente.show', $paciente->id) }}">
+                                <button class="btn btn-sm btn-info">Ver</button>
+                            </a>
                             <a href="{{ route('admin.paciente.edit', $paciente->id) }}"
                                 class="btn btn-sm btn-warning">Editar</a>
                             <form action="{{ route('admin.paciente.destroy', $paciente->id) }}" method="POST"
