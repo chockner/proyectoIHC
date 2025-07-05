@@ -34,7 +34,15 @@ class DoctorController extends Controller
             'document_id' => 'required|string|max:8|unique:users,document_id',
             'specialty_id' => 'required|exists:specialties,id',
             'license_code' => 'required|string|max:6',
-            'experience_years' => 'required|integer|min:0',
+            'experience_years' => 'required|integer|min:0|max:50',
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
+            'phone' => 'required|string|max:15',
+            'email' => 'required|email|max:100|unique:profiles,email',
+            'birthdate' => 'required|date',
+            'civil_status' => 'required|string|max:20',
+            'address' => 'required|string|max:255',
+
         ]);
         
         $password = $request->document_id;
@@ -49,6 +57,12 @@ class DoctorController extends Controller
             'user_id' => $user->id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'birthdate' => $request->birthdate,
+            'civil_status' => $request->civil_status,
+            'address' => $request->address,
+            'gender' => $request->gender,
         ]);
         
         Doctor::create([
@@ -96,9 +110,6 @@ class DoctorController extends Controller
                 'gender' => $request->gender,
                 'civil_status' => $request->civil_status,
                 'address' => $request->address,
-                'region' => $request->region_nombre,
-                'province' => $request->province_nombre,
-                'district' => $request->district_nombre,
             ]);
 
             $doctor->user->update([

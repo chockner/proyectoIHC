@@ -26,9 +26,15 @@ class SecretariaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'document_id' => 'required|string|max:8|unique:users,document_id',
-            'first_name' => 'required|string|max:50',
-            'last_name' => 'required|string|max:50',
+            'document_id' => 'required|digits:8|unique:users,document_id',
+            'first_name' => 'required|string|max:255|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
+            'last_name' => 'required|string|max:255|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
+            'email' => 'required|email|max:255|unique:users,email',
+            'phone' => 'required|string|max:9',
+            'birthdate' => 'required|date',
+            'civil_status' => 'required|in:0,1,2,3',
+            'address' => 'required|string|max:255',
+            'gender' => 'required|in:0,1',
         ]);
 
         $password = $request->document_id;
@@ -49,6 +55,17 @@ class SecretariaController extends Controller
             'user_id' => $user->id,
         ]);
 
+        $user->profile()->create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'birthdate' => $request->birthdate,
+            'gender' => $request->gender,
+            'civil_status' => $request->civil_status,
+            'address' => $request->address,
+        ]);
+
         return redirect()->route('admin.secretaria.index')->with('success', 'Secretaria creada exitosamente.');
     }
 
@@ -67,17 +84,31 @@ class SecretariaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-
-            'first_name' => 'required|string|max:50',
-            'last_name' => 'required|string|max:50',
+            'document_id' => 'required|digits:8',
+            'first_name' => 'required|string|max:255|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
+            'last_name' => 'required|string|max:255|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
+            'phone' => 'required|digits:9|starts_with:9',
+            'email' => 'required|email|max:255',
+            'birthdate' => 'required|date',
+            'gender' => 'required|in:0,1',
+            'civil_status' => 'required|in:0,1,2,3',
+            'address' => 'required|string|max:255',
         ]);
 
         $secretaria = Secretary::findOrFail($id);
-        $user = $secretaria->user;
+        $secretaria->user->update([
+            'document_id' => $request->document_id,
+        ]);
 
-        $user->profile->update([
+        $secretaria->user->profile->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'birthdate' => $request->birthdate,
+            'gender' => $request->gender,
+            'civil_status' => $request->civil_status,
+            'address' => $request->address,
         ]);
 
         return redirect()->route('admin.secretaria.index')->with('success', 'Secretaria actualizada exitosamente.');

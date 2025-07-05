@@ -13,7 +13,7 @@ class Doctor extends Model
         'user_id',
         'specialty_id',
         'license_code',
-        'years_experience'
+        'experience_years',
     ];
 
     public function user()

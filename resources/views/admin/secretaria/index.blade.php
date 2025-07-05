@@ -23,7 +23,7 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $secretaria->user->profile->first_name }}</td>
                         <td>{{ $secretaria->user->profile->last_name }}</td>
-                        <td>{{ $secretaria->user->email }}</td>
+                        <td>{{ $secretaria->user->profile->email }}</td>
                         <td>{{ $secretaria->user->profile->phone }}</td>
                         <td>
                             <a href="{{ route('admin.secretaria.show', $secretaria->id) }}"
