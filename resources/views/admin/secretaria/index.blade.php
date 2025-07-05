@@ -3,8 +3,21 @@
 @section('content')
     <div class="container mt-4">
         <h2>Lista de Secretarias</h2>
-        <div class="mb-3">
-            <a href="{{ route('admin.secretaria.create') }}" class="btn btn-primary">Agregar Secretaria</a>
+        <div class="mb-3 flex justify-end">
+            <a href="{{ route('admin.secretaria.create') }}"
+                class="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2 shadow-sm hover:shadow-md transition-all duration-150">
+                <div class="relative">
+                    <span
+                        class="material-icons text-pink-500 text-4xl opacity-75 group-hover:opacity-100 transition-opacity duration-200">
+                        support_agent
+                    </span>
+                    <span
+                        class="material-icons text-green-500 text-base absolute -top-1 -right-1 bg-white rounded-full p-0.5 shadow-md border border-slate-100 group-hover:scale-110 transition-transform duration-200">
+                        add_circle_outline
+                    </span>
+                </div>
+                <span>Agregar Secretaria</span>
+            </a>
         </div>
         <table class="table table-bordered table-striped">
             <thead class="table-primary">
@@ -20,25 +33,57 @@
             <tbody>
                 @foreach ($secretarias as $index => $secretaria)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $secretaria->user->profile->first_name }}</td>
-                        <td>{{ $secretaria->user->profile->last_name }}</td>
-                        <td>{{ $secretaria->user->profile->email }}</td>
-                        <td>{{ $secretaria->user->profile->phone }}</td>
+                        <td class="px-6 py-4 ">{{ $index + 1 }}</td>
+                        <td class="px-6 py-4 ">{{ $secretaria->user->profile->first_name }}</td>
+                        <td class="px-6 py-4 ">{{ $secretaria->user->profile->last_name }}</td>
+                        <td class="px-6 py-4 ">{{ $secretaria->user->profile->email }}</td>
+                        <td class="px-6 py-4 ">{{ $secretaria->user->profile->phone }}</td>
                         <td>
-                            <a href="{{ route('admin.secretaria.show', $secretaria->id) }}"
-                                class="btn btn-sm btn-info">Ver</a> {{-- {{ route('admin.doctor.show', $doctor->id) }} --}}
-                            <a href="{{ route('admin.secretaria.edit', $secretaria->id) }}"
-                                class="btn btn-sm btn-warning">Editar</a> {{-- {{ route('admin.doctor.edit', $doctor->id) }} --}}
-                            <form action="{{ route('admin.secretaria.destroy', $secretaria->id) }}" method="POST"
-                                class="d-inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-delete"
-                                    data-form-id="form-{{ $secretaria->id }}">
-                                    Eliminar
-                                </button>
-                            </form>
+                            <div class="mb-3 flex justity-center space-x-2">
+                                {{-- icono ver --}}
+                                <div class="flex flex-col items-center">
+                                    <a href="{{ route('admin.secretaria.show', $secretaria->id) }}"
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 ">
+                                        <div class="relative">
+                                            <span
+                                                class="material-icons text-pink-500 text-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-200">support_agent</span>
+                                            <span
+                                                class="material-icons text-blue-500 text-base absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-md border border-slate-100 group-hover:scale-110 transition-transform duration-200">visibility</span>
+                                        </div>
+                                    </a>
+                                    <span>Ver</span>
+                                </div>
+                                {{-- icono editar --}}
+                                <div class="flex flex-col items-center">
+                                    <a href="{{ route('admin.secretaria.edit', $secretaria->id) }}"
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 ">
+                                        <div class="relative">
+                                            <span
+                                                class="material-icons text-pink-500 text-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-200">support_agent</span>
+                                            <span
+                                                class="material-icons text-yellow-500 text-base absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-md border border-slate-100 group-hover:scale-110 transition-transform duration-200">edit</span>
+                                        </div>
+                                    </a>
+                                    <span>Editar</span>
+                                </div>
+                                {{-- icono eliminar --}}
+                                <form action="{{ route('admin.secretaria.destroy', $secretaria->id) }}" method="POST"
+                                    class="d-inline delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button"
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-delete"
+                                        data-form-id="form-{{ $secretaria->id }}">
+                                        <div class="relative">
+                                            <span
+                                                class="material-icons text-pink-500 text-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-200">support_agent</span>
+                                            <span
+                                                class="material-icons text-red-500 text-base absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-md border border-slate-100 group-hover:scale-110 transition-transform duration-200">delete</span>
+                                        </div>
+                                    </button>
+                                    <span>Eliminar</span>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

@@ -21,6 +21,9 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home" />
+
     @stack('scripts')
     <style>
         body {
@@ -133,7 +136,13 @@
                     </a>
                 </div>
             @else
-                <a href="/dashboard" class="{{ request()->routeIs('dashboard') ? 'active-link' : '' }}">Inicio</a>
+                <a href="/dashboard" class="sidebar-link {{ request()->routeIs('dashboard') ? 'active-link' : '' }}"
+                    style="display: flex; align-items: center; gap: 10px;">
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>
+                    <span>Inicio</span>
+                </a>
 
                 {{-- ADMINISTRADOR --}}
                 @if (Auth::user()->role->name == 'admin')
