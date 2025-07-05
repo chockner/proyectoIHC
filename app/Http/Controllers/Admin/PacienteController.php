@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\Profile;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 
 class PacienteController extends Controller
 {
@@ -18,6 +20,47 @@ class PacienteController extends Controller
     public function create()
     {
         return view('admin.paciente.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+
+            // otros campos necesarios
+        ]);
+
+        $password = $request->document_id;
+
+        // Crear el usuario
+        $user = User::create([
+            'role_id' => 3,
+            'document_id' => $request->document_id,
+            'password' => Hash::make($password),
+        ]);
+
+        // Crear el perfil del usuario
+        $profile = Profile::create([
+            'user_id' => $user->id,
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            // otros campos del perfil si es necesario
+        ]);
+
+        // Crear el paciente
+        Patient::create([
+            'user_id' => $user->id,
+            // otros campos del paciente si es necesario
+        ]);
+
+        return redirect()->route('admin.paciente.index')->with('success', 'Paciente creado correctamente.');
+    }
+
+    public function show($id)
+    {
+        $paciente = Patient::with('user.profile')->findOrFail($id);
+        return view('admin.paciente.show', compact('paciente'));
     }
 
     public function edit($id)

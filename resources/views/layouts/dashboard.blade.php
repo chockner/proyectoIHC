@@ -18,6 +18,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <!-- <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" /> -->
     <link href="ico-secre.ico" rel="icon" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
     @stack('scripts')
     <style>
@@ -45,8 +46,8 @@
 
         .topbar {
             background-color: #ffffff;
-            padding: 15px;
-            border-bottom: 2px solid #ddd;
+            padding: 20px;
+            border-bottom: 20px solid #ddd;
         }
 
         .main-content {
@@ -118,7 +119,7 @@
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar p-3">
-            <h4>Hospital</h4>
+            <h4 class="text-center mb-4">Hospital</h4>
             <hr>
 
             @if (!Auth::user()->profile)
