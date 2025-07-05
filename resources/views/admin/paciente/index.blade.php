@@ -24,7 +24,8 @@
                         <td>{{ $paciente->user->email }}</td>
                         <td>{{ $paciente->user->profile->phone }}</td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-warning">Editar</a>
+                            <a href="{{ route('admin.paciente.edit', $paciente->id) }}"
+                                class="btn btn-sm btn-warning">Editar</a>
                             <form action="{{ route('admin.paciente.destroy', $paciente->id) }}" method="POST"
                                 class="d-inline delete-form">
                                 @csrf
