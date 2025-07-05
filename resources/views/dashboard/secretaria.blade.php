@@ -1,40 +1,214 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <h2>Panel de Administración de Citas</h2>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+    <div>
+        <h1 class="text-[#0d131c] text-3xl md:text-4xl font-bold">Panel de Secretaría</h1>
+        <p class="text-[#49699c] text-base mt-1">Gestiona las citas y la atención al paciente.</p>
+    </div>
+</div>
 
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card text-white bg-primary">
-                <div class="card-body">
-                    <h5 class="card-title">Total de Citas</h5>
-                    <p class="card-text fs-3">{{ $totalCitas }}</p>
-                    <small class="opacity-75">Todas las citas registradas</small>
-                </div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Citas Hoy -->
+    <div class="bg-white p-6 rounded-xl shadow-md">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-[#49699c] text-sm font-medium">Citas Hoy</p>
+                <p class="text-[#0d131c] text-2xl font-bold">{{ \App\Models\Appointment::whereDate('appointment_date', today())->count() }}</p>
+            </div>
+            <div class="text-blue-600 bg-blue-100 p-3 rounded-full">
+                <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-96-88v64a8,8,0,0,1-16,0V132.94l-4.42,2.22a8,8,0,0,1-7.16-14.32l16-8A8,8,0,0,1,112,120Zm59.16,30.45L152,176h16a8,8,0,0,1,0,16H136a8,8,0,0,1-6.4-12.8l28.78-38.37A8,8,0,1,0,145.07,132a8,8,0,1,1-13.85-8A24,24,0,0,1,176,136,23.76,23.76,0,0,1,171.16,150.45Z"></path>
+                </svg>
             </div>
         </div>
-        
-        <div class="col-md-4">
-            <div class="card text-white bg-warning">
-                <div class="card-body">
-                    <h5 class="card-title">Citas Programadas</h5>
-                    <p class="card-text fs-3">{{ $totalCitasProgramadas }}</p>
-                    <small class="opacity-75">Citas pendientes por atender</small>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card text-white bg-success">
-                <div class="card-body">
-                    <h5 class="card-title">Citas Completadas</h5>
-                    <p class="card-text fs-3">{{ $totalCitasCompletadas }}</p>
-                    <small class="opacity-75">Citas atendidas exitosamente</small>
-                </div>
-            </div>
+        <div class="mt-4">
+            <a href="{{ route('secretaria.citas.index') }}" class="text-primary text-sm font-medium hover:underline">Ver citas de hoy →</a>
         </div>
     </div>
 
+    <!-- Citas Pendientes -->
+    <div class="bg-white p-6 rounded-xl shadow-md">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-[#49699c] text-sm font-medium">Citas Pendientes</p>
+                <p class="text-[#0d131c] text-2xl font-bold">{{ \App\Models\Appointment::where('status', 'pending')->count() }}</p>
+            </div>
+            <div class="text-yellow-600 bg-yellow-100 p-3 rounded-full">
+                <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM128,88a12,12,0,1,1-12,12A12,12,0,0,1,128,88Z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4">
+            <span class="text-[#49699c] text-sm font-medium">Requieren confirmación</span>
+        </div>
+    </div>
+
+    <!-- Citas Confirmadas -->
+    <div class="bg-white p-6 rounded-xl shadow-md">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-[#49699c] text-sm font-medium">Citas Confirmadas</p>
+                <p class="text-[#0d131c] text-2xl font-bold">{{ \App\Models\Appointment::where('status', 'confirmed')->count() }}</p>
+            </div>
+            <div class="text-green-600 bg-green-100 p-3 rounded-full">
+                <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4">
+            <span class="text-[#49699c] text-sm font-medium">Listas para atención</span>
+        </div>
+    </div>
+
+    <!-- Total Pacientes -->
+    <div class="bg-white p-6 rounded-xl shadow-md">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-[#49699c] text-sm font-medium">Total Pacientes</p>
+                <p class="text-[#0d131c] text-2xl font-bold">{{ \App\Models\Patient::count() }}</p>
+            </div>
+            <div class="text-purple-600 bg-purple-100 p-3 rounded-full">
+                <svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4">
+            <span class="text-[#49699c] text-sm font-medium">Pacientes registrados</span>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Próximas Citas -->
+    <div class="bg-white p-6 rounded-xl shadow-md">
+        <h3 class="text-[#0d131c] text-lg font-semibold mb-4">Próximas Citas</h3>
+        <div class="space-y-4">
+            @php
+                $proximasCitas = \App\Models\Appointment::with(['patient', 'doctor'])
+                    ->where('appointment_date', '>=', now())
+                    ->where('status', 'confirmed')
+                    ->orderBy('appointment_date')
+                    ->limit(5)
+                    ->get();
+            @endphp
+            
+            @forelse($proximasCitas as $cita)
+            <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <div class="text-primary bg-primary-light p-3 rounded-full mt-0.5">
+                    <svg fill="currentColor" height="20px" viewBox="0 0 256 256" width="20px" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-96-88v64a8,8,0,0,1-16,0V132.94l-4.42,2.22a8,8,0,0,1-7.16-14.32l16-8A8,8,0,0,1,112,120Zm59.16,30.45L152,176h16a8,8,0,0,1,0,16H136a8,8,0,0,1-6.4-12.8l28.78-38.37A8,8,0,1,0,145.07,132a8,8,0,1,1-13.85-8A24,24,0,0,1,176,136,23.76,23.76,0,0,1,171.16,150.45Z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-[#0d131c] text-base font-medium">{{ $cita->patient->name ?? 'Paciente' }}</p>
+                    <p class="text-[#49699c] text-sm">Dr. {{ $cita->doctor->name ?? 'Doctor' }} - {{ \Carbon\Carbon::parse($cita->appointment_date)->format('d/m/Y H:i') }}</p>
+                </div>
+                <span class="text-xs text-gray-400 ml-auto whitespace-nowrap">{{ \Carbon\Carbon::parse($cita->appointment_date)->diffForHumans() }}</span>
+            </div>
+            @empty
+            <div class="text-center py-8">
+                <div class="text-gray-400 mb-2">
+                    <svg fill="currentColor" height="48" viewBox="0 0 256 256" width="48" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-96-88v64a8,8,0,0,1-16,0V132.94l-4.42,2.22a8,8,0,0,1-7.16-14.32l16-8A8,8,0,0,1,112,120Zm59.16,30.45L152,176h16a8,8,0,0,1,0,16H136a8,8,0,0,1-6.4-12.8l28.78-38.37A8,8,0,1,0,145.07,132a8,8,0,1,1-13.85-8A24,24,0,0,1,176,136,23.76,23.76,0,0,1,171.16,150.45Z"></path>
+                    </svg>
+                </div>
+                <p class="text-[#49699c] text-sm">No hay citas próximas programadas</p>
+            </div>
+            @endforelse
+        </div>
+        <a href="{{ route('secretaria.citas.index') }}" class="inline-block text-sm text-primary hover:underline mt-4 font-medium">Ver todas las citas →</a>
+    </div>
+
+    <!-- Acciones Rápidas -->
+    <div class="bg-white p-6 rounded-xl shadow-md">
+        <h3 class="text-[#0d131c] text-lg font-semibold mb-4">Acciones Rápidas</h3>
+        <div class="space-y-3">
+            <a href="{{ route('secretaria.citas.index') }}" class="btn-primary w-full text-sm font-medium py-2.5 px-5 rounded-lg hover:opacity-90 transition-opacity inline-block text-center">
+                Gestionar Citas
+            </a>
+            <button class="btn-secondary w-full text-sm font-medium py-2.5 px-5 rounded-lg hover:bg-gray-200 transition-colors">
+                Confirmar Citas Pendientes
+            </button>
+            <button class="btn-secondary w-full text-sm font-medium py-2.5 px-5 rounded-lg hover:bg-gray-200 transition-colors">
+                Generar Reporte Diario
+            </button>
+            <button class="btn-secondary w-full text-sm font-medium py-2.5 px-5 rounded-lg hover:bg-gray-200 transition-colors">
+                Ver Calendario
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Citas del Día -->
+<div class="bg-white p-6 rounded-xl shadow-md mt-6">
+    <h3 class="text-[#0d131c] text-lg font-semibold mb-4">Citas de Hoy</h3>
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead>
+                <tr class="border-b border-gray-200">
+                    <th class="text-left py-3 px-4 text-sm font-medium text-[#49699c]">Hora</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-[#49699c]">Paciente</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-[#49699c]">Doctor</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-[#49699c]">Estado</th>
+                    <th class="text-left py-3 px-4 text-sm font-medium text-[#49699c]">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $citasHoy = \App\Models\Appointment::with(['patient', 'doctor'])
+                        ->whereDate('appointment_date', today())
+                        ->orderBy('appointment_date')
+                        ->limit(10)
+                        ->get();
+                @endphp
+                
+                @forelse($citasHoy as $cita)
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                    <td class="py-3 px-4 text-sm text-[#0d131c]">
+                        {{ \Carbon\Carbon::parse($cita->appointment_date)->format('H:i') }}
+                    </td>
+                    <td class="py-3 px-4 text-sm text-[#0d131c]">
+                        {{ $cita->patient->name ?? 'N/A' }}
+                    </td>
+                    <td class="py-3 px-4 text-sm text-[#0d131c]">
+                        Dr. {{ $cita->doctor->name ?? 'N/A' }}
+                    </td>
+                    <td class="py-3 px-4">
+                        @if($cita->status == 'confirmed')
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                Confirmada
+                            </span>
+                        @elseif($cita->status == 'pending')
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                Pendiente
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                {{ ucfirst($cita->status) }}
+                            </span>
+                        @endif
+                    </td>
+                    <td class="py-3 px-4">
+                        <button class="text-primary hover:text-primary-dark text-sm font-medium">
+                            Ver detalles
+                        </button>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5" class="py-8 text-center text-[#49699c] text-sm">
+                        No hay citas programadas para hoy
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
