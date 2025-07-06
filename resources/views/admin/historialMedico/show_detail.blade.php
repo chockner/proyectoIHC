@@ -46,11 +46,32 @@
         <hr>
 
         <div class="row mt-4 justify-content-center">
-            <h5 class="text-center mb-4 fw-bold">INFORMACION DE LA CITA</h5>
-            {{--  aqui ve si lo pones como es grande supuestamente asi uno de bajo de otro
-            los tres diagnostico tratamiendo y notas. que hagarre de largo uno de bajo de otro --}}
-            <p>aqui ve si lo pones como es grande supuestamente asi uno de bajo de otro
-                los tres diagnostico tratamiendo y notas. que hagarre de largo uno de bajo de otro</p>
+            <div class="col-12 col-md-8">
+                <div class="card bg-transparent border-0">
+                    <div class="card-body">
+                        <h5 class="text-center mb-4 fw-bold">INFORMACIÓN DE LA CITA</h5>
+                        <div class="row g-3">
+                            <!-- Diagnóstico -->
+                            <div class="col-12 mb-3">
+                                <label for="diagnosis" class="form-label fw-bold">Diagnóstico</label>
+                                <textarea name="diagnosis" id="diagnosis" class="form-control disabled-field" rows="5" disabled>{{ $historial->diagnosis ?? '' }}</textarea>
+                            </div>
+                            <hr>
+                            <!-- Tratamiento -->
+                            <div class="col-12 mb-3">
+                                <label for="treatment" class="form-label fw-bold">Tratamiento</label>
+                                <textarea name="treatment" id="treatment" class="form-control disabled-field" rows="5" disabled>{{ $historial->treatment ?? '' }}</textarea>
+                            </div>
+                            <hr>
+                            <!-- Notas -->
+                            <div class="col-12 mb-3">
+                                <label for="notes" class="form-label fw-bold">Notas</label>
+                                <textarea name="notes" id="notes" class="form-control disabled-field" rows="5" disabled>{{ $historial->notes ?? '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row mt-4 justify-content-center">
             <div class="col-md-4 d-flex justify-content-start">
@@ -58,7 +79,8 @@
                     class="btn btn-outline-secondary">Volver</a>
             </div>
             <div class="col-md-4 d-flex justify-content-end">
-                <a href="" class="btn btn-primary">Editar Doctor</a>
+                <a href="{{ route('admin.historialMedico.edit_detail', $historial->id) }}" class="btn btn-primary">Editar
+                    Cita</a>
             </div>
         </div>
     </div>

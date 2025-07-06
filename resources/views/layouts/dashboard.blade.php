@@ -249,32 +249,71 @@
 
                 {{-- DOCTOR --}}
                 @if (Auth::user()->role->name == 'doctor')
-                    {{-- Doctor --}}
-                    <div class="mb-2">
-                        <strong>Gestión</strong>
-                        <a href="#">Pacientes</a>
-                        <a href="#">Citas</a>
-                    </div>
+                    <ul class="list-unstyled ps-3">
+                        <li>
+                            <a href="#" class="sidebar-link {{-- {{ request()->routeIs('doctor.historias.index') ? 'active-link' : '' }} --}}"
+                                style="display: flex; align-items: center; gap: 10px;">
+                                <span class="material-icons text-gray-500 text-2xl"
+                                    style="flex-shrink: 0;">assist_walker</span>
+                                <span>Pacientes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{-- {{ route('doctor.agendarCita.create') }} --}}" class="sidebar-link {{-- {{ request()->routeIs('paciente.agendarCita.create') ? 'active-link' : '' }} --}}"
+                                style="display: flex; align-items: center; gap: 10px;">
+                                <span class="material-icons text-gray-500 text-2xl"
+                                    style="flex-shrink: 0;">calendar_today</span>
+                                <span>Citas</span>
+                            </a>
+                        </li>
+                    </ul>
                 @endif
 
                 {{-- PACIENTE --}}
                 @if (Auth::user()->role->name == 'paciente')
-                    {{-- Paciente --}}
-                    <div class="mb-2">
-                        <strong>Gestión</strong>
-                        <a href="#">Historias Médicas</a>
-                        <a href="{{ route('paciente.agendarCita.create') }}">Agendar Cita</a>
-                    </div>
+                    <ul class="list-unstyled ps-3">
+                        <li>
+                            <a href="#"
+                                class="sidebar-link {{ request()->routeIs('paciente.historias.index') ? 'active-link' : '' }}"
+                                style="display: flex; align-items: center; gap: 10px;">
+                                <span class="material-icons text-gray-500 text-2xl"
+                                    style="flex-shrink: 0;">assignment</span>
+                                <span>Historias Médicas</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('paciente.agendarCita.create') }}"
+                                class="sidebar-link {{ request()->routeIs('paciente.agendarCita.create') ? 'active-link' : '' }}"
+                                style="display: flex; align-items: center; gap: 10px;">
+                                <span class="material-icons text-gray-500 text-2xl"
+                                    style="flex-shrink: 0;">calendar_today</span>
+                                <span>Agendar Cita</span>
+                            </a>
+                        </li>
+                    </ul>
                 @endif
 
                 {{-- SECRETARIA --}}
                 @if (Auth::user()->role->name == 'secretaria')
-                    {{-- Secretaria --}}
-                    <div class="mb-2">
-                        <strong>Gestión</strong>
-                        <a href="{{ route('secretaria.citas.index') }}">Citas</a> {{-- {{ route('secretaria.citas.index') }} --}}
-                        <a href="#">Reportes</a>
-                    </div>
+                    <ul class="list-unstyled ps-3">
+                        <li>
+                            <a href="{{ route('secretaria.citas.index') }}"
+                                class="sidebar-link {{ request()->routeIs('secretaria.citas.index') ? 'active-link' : '' }}"
+                                style="display: flex; align-items: center; gap: 10px;">
+                                <span class="material-icons text-gray-500 text-2xl"
+                                    style="flex-shrink: 0;">calendar_today</span>
+                                <span>Citas</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" {{-- class="sidebar-link {{ request()->routeIs('secretaria.reportes.index') ? 'active-link' : '' }}" --}}
+                                style="display: flex; align-items: center; gap: 10px;">
+                                <span class="material-icons text-gray-500 text-2xl"
+                                    style="flex-shrink: 0;">assessment</span>
+                                <span>Reportes</span>
+                            </a>
+                        </li>
+                    </ul>
                 @endif
 
             @endif
