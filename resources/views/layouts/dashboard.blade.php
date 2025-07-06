@@ -90,6 +90,11 @@
             font-feature-settings: 'liga';
         }
 
+        .material-icons.text-xs {
+            font-size: 12px;
+            /* Tamaño fijo para el ícono secundario */
+        }
+
         .sidebar-link {
             display: flex;
             align-items: center;
@@ -100,18 +105,18 @@
 
         .sidebar-link svg {
             transition: color 0.3s ease;
-            color: #0d6efd;
+            color: #474b4e;
             /* Color azul por defecto del ícono */
         }
 
         .sidebar-link.active-link svg {
-            color: #0d6efd;
+            color: #474b4e;
             /* Cambiar a blanco (o cualquier otro color que resalte) cuando está activo */
         }
 
         .sidebar-link.active-link {
             /* background-color: #0d6efd; */
-            background-color: #a2b9db;
+            background-color: #c6dcf6;
             /* Fondo azul cuando está activo */
             color: #333;
             /* Color del texto cuando está activo */
@@ -172,7 +177,7 @@
                                     class="sidebar-link {{ request()->routeIs('admin.secretaria.index') ? 'active-link' : '' }}"
                                     style="display: flex; align-items: center; gap: 10px;">
                                     {{-- Secretarias --}}
-                                    <span class="material-icons text-pink-500 text-2xl" fill="currentColor"
+                                    <span class="material-icons text-gray-500 text-2xl" fill="currentColor"
                                         style="flex-shrink: 0;">support_agent</span>
                                     <span>Secretaria</span>
                                 </a>
@@ -182,8 +187,11 @@
                         <ul class="list-unstyled ps-3">
                             <li>
                                 <a href="{{ route('admin.especialidad.index') }}"
-                                    class="{{ request()->routeIs('admin.especialidad.index') ? 'active-link' : '' }}">
-                                    Especialidades
+                                    class="sidebar-link {{ request()->routeIs('admin.especialidad.index') ? 'active-link' : '' }}"
+                                    style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons text-gray-500 text-2xl" fill="currentColor"
+                                        style="flex-shrink: 0;">medical_information</span>
+                                    <span>Especialidad</span>
                                 </a>
                             </li>
                         </ul>
@@ -191,18 +199,23 @@
                         <ul class="list-unstyled ps-3">
                             <li>
                                 <a href="{{ route('admin.paciente.index') }}"
-                                    class="sidebar-link {{ request()->routeIs('admin.paciente.index') ? 'active-link' : '' }}">
-                                    <span class="material-icons text-2xl align-middle">assist_walker</span>
-                                    Pacientes
+                                    class="sidebar-link {{ request()->routeIs('admin.paciente.index') ? 'active-link' : '' }}"
+                                    style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons text-gray-500 text-2xl" fill="currentColor"
+                                        style="flex-shrink: 0;">assist_walker</span>
+                                    <span>Pacientes</span>
                                 </a>
                             </li>
                         </ul>
-                        {{-- Histias Medicas --}}
+                        {{-- Historias Médicas --}}
                         <ul class="list-unstyled ps-3">
                             <li>
                                 <a href="{{ route('admin.historialMedico.index') }}"
-                                    class="{{ request()->routeIs('admin.historialMedico.index') ? 'active-link' : '' }}">
-                                    Historias Medicas
+                                    class="sidebar-link {{ request()->routeIs('admin.historialMedico.index') ? 'active-link' : '' }}"
+                                    style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons text-gray-500 text-2xl" fill="currentColor"
+                                        style="flex-shrink: 0;">assignment</span>
+                                    <span>Historias Médicas</span>
                                 </a>
                             </li>
 
@@ -211,16 +224,22 @@
                         <ul class="list-unstyled ps-3">
                             <li>
                                 <a href="{{ route('admin.horarios.index') }}"
-                                    class="{{ request()->routeIs('admin.horarios.index') ? 'active-link' : '' }}">
-                                    Horarios
+                                    class="sidebar-link {{ request()->routeIs('admin.horarios.index') ? 'active-link' : '' }}"
+                                    style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons text-gray-500 text-2xl" fill="currentColor"
+                                        style="flex-shrink: 0;">schedule</span>
+                                    <span>Horarios</span>
                                 </a>
                             </li>
                         </ul>
                         {{-- Citas --}}
                         <ul class="list-unstyled ps-3">
                             <li>
-                                <a href="#" {{-- <a href="{{ route('admin.citas.index') }}" --}} {{-- class="{{ request()->routeIs('admin.citas.index') ? 'active-link' : '' }}" --}}>
-                                    Citas
+                                <a href="sidebar-link" {{-- <a href="{{ route('admin.citas.index') }}" --}} {{-- class="{{ request()->routeIs('admin.citas.index') ? 'active-link' : '' }}" --}}
+                                    style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons text-gray-500 text-2xl" fill="currentColor"
+                                        style="flex-shrink: 0;">calendar_today</span>
+                                    <span>Citas</span>
                                 </a>
                             </li>
 
