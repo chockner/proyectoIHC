@@ -70,6 +70,8 @@
 
                     <div class="grid grid-cols-7 gap-1" id="calendarGrid"></div>
                     
+
+                    
                     <!-- Leyenda del calendario -->
                     <div class="mt-4 pt-4 border-t border-gray-200">
                         <div class="flex items-center justify-center gap-4 text-xs text-gray-600">
@@ -124,6 +126,13 @@
     @push('scripts')
         <script>
             (function() {
+                // Protección contra múltiples inicializaciones
+                if (window.calendarInitialized) {
+                    console.log('⚠️ Calendario ya inicializado, saltando...');
+                    return;
+                }
+                window.calendarInitialized = true;
+                
                 let currentDate = new Date();
                 let selectedDate = null;
                 let selectedTime = null;
@@ -131,8 +140,8 @@
 
                 // Valores preservados de la sesión
                 const preservedDate = '{{ $selectedDate }}';
-                const preservedTime = '{{ $selectedTime }}';
-                const preservedScheduleId = '{{ $selectedScheduleId }}';
+                let preservedTime = '{{ $selectedTime }}';
+                let preservedScheduleId = '{{ $selectedScheduleId }}';
 
                 // Días de la semana en español (0 = Domingo, 1 = Lunes, etc.)
                 const diasSemana = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
@@ -193,7 +202,16 @@
                                 dayElement.classList.add('text-gray-300', 'cursor-not-allowed');
                             } else if (hasSchedule) {
                                 dayElement.classList.add('bg-green-50', 'text-green-700', 'hover:bg-green-100', 'calendar-day', 'available');
-                                dayElement.addEventListener('click', () => selectDate(date));
+                                
+                                // Usar addEventListener en lugar de onclick para mejor compatibilidad
+                                dayElement.addEventListener('click', function(e) {
+                                    console.log('🖱️ Clic en día disponible:', date.toDateString());
+                                    console.log('🖱️ Elemento clickeado:', e.target);
+                                    console.log('🖱️ Data-date del elemento:', e.target.getAttribute('data-date'));
+                                    selectDate(date);
+                                });
+                                
+                                console.log(`✅ Día ${date.getDate()} marcado como disponible y clickeable`);
                             } else {
                                 dayElement.classList.add('text-gray-500', 'cursor-not-allowed');
                             }
@@ -205,17 +223,13 @@
 
                         calendarGrid.appendChild(dayElement);
                     }
+                    
+
                 }
 
                 function checkIfDateHasSchedule(date) {
                     const dayOfWeek = diasSemana[date.getDay()];
                     const hasSchedule = horarios.some(horario => horario.day_of_week === dayOfWeek);
-                    
-                    // Solo mostrar logs en desarrollo
-                    if (horarios.length > 0) {
-                        console.log(`Verificando ${dayOfWeek} (${date.toDateString()}): ${hasSchedule ? 'SÍ tiene horario' : 'NO tiene horario'}`);
-                    }
-                    
                     return hasSchedule;
                 }
 
@@ -247,25 +261,22 @@
                     // Cargar horarios disponibles
                     loadAvailableTimeSlots(date);
 
-                    // Actualizar campos ocultos
-                    document.getElementById('selectedDate').value = dateStr;
-                    
-                    console.log('Fecha seleccionada:', dateStr);
+                    // Actualizar campos ocultos - usar formato local para evitar problemas de zona horaria
+                    const localDateStr = date.getFullYear() + '-' + 
+                                       String(date.getMonth() + 1).padStart(2, '0') + '-' + 
+                                       String(date.getDate()).padStart(2, '0');
+                    document.getElementById('selectedDate').value = localDateStr;
                 }
 
                 function loadAvailableTimeSlots(date) {
                     const dayOfWeek = diasSemana[date.getDay()];
                     const dateStr = date.toISOString().split('T')[0];
 
-                    console.log(`Cargando horarios para ${dayOfWeek} (${dateStr})`);
-
                     // Obtener horarios del médico para ese día
                     const daySchedules = horarios.filter(h => h.day_of_week === dayOfWeek);
-                    console.log('Horarios encontrados:', daySchedules.length);
 
                     // Obtener citas existentes para esa fecha
                     const existingAppointments = citasExistentes[dateStr] || [];
-                    console.log('Citas existentes:', existingAppointments.length);
 
                     const container = document.getElementById('timeSlotsContainer');
                     container.innerHTML = '';
@@ -276,10 +287,9 @@
                     }
 
                     let availableSlots = 0;
+                    const slotsCreated = [];
                     
                     daySchedules.forEach(schedule => {
-                        console.log(`Procesando horario: ${schedule.start_time} - ${schedule.end_time}`);
-                        
                         const startTime = new Date(`2000-01-01T${schedule.start_time}`);
                         const endTime = new Date(`2000-01-01T${schedule.end_time}`);
 
@@ -302,13 +312,14 @@
                                 slotElement.dataset.scheduleId = schedule.id;
                                 slotElement.setAttribute('data-time', timeSlot);
 
-                                slotElement.addEventListener('click', () => selectTimeSlot(slotElement, timeSlot, schedule.id));
+                                // Usar addEventListener en lugar de onclick para mejor compatibilidad
+                                slotElement.addEventListener('click', function(e) {
+                                    selectTimeSlot(slotElement, timeSlot, schedule.id);
+                                });
 
                                 container.appendChild(slotElement);
                                 availableSlots++;
-                                console.log(`Horario disponible agregado: ${timeSlot}`);
-                            } else {
-                                console.log(`Horario ocupado: ${timeSlot}`);
+                                slotsCreated.push(timeSlot);
                             }
 
                             startTime.setMinutes(startTime.getMinutes() + 30);
@@ -319,6 +330,8 @@
                         container.innerHTML = '<p class="text-gray-500 text-sm">Todos los horarios para este día están ocupados.</p>';
                     }
                 }
+
+
 
                 function selectTimeSlot(element, time, scheduleId) {
                     // Remover selección previa
@@ -340,29 +353,19 @@
                     document.getElementById('nextButton').disabled = false;
                 }
 
-                // Validación del formulario
-                document.getElementById('fechaHoraForm').addEventListener('submit', function(e) {
-                    if (!selectedDate || !selectedTime || !selectedScheduleId) {
-                        e.preventDefault();
-                        alert('Por favor seleccione una fecha y hora');
-                    }
-                });
-
                 // Inicializar calendario cuando se carga la página
                 document.addEventListener('DOMContentLoaded', function() {
                     console.log('Inicializando calendario...');
-                    console.log('Horarios recibidos:', horarios);
-                    console.log('Citas existentes:', citasExistentes);
-                    console.log('Valores preservados:', { preservedDate, preservedTime, preservedScheduleId });
                     
                     // Verificar que tenemos datos
                     if (!horarios || horarios.length === 0) {
                         console.warn('No hay horarios disponibles para este médico');
                         document.getElementById('timeSlotsContainer').innerHTML = 
                             '<p class="text-red-500 text-sm">No hay horarios configurados para este médico.</p>';
+                        return;
                     }
                     
-                    // Inicializar calendario y listeners solo si existen los botones
+                    // Inicializar calendario y listeners
                     initCalendar();
                     const prevBtn = document.getElementById('prevMonth');
                     const nextBtn = document.getElementById('nextMonth');
@@ -379,39 +382,124 @@
                         });
                     }
                     
-                    // Restaurar selección preservada si existe
-                    if (preservedDate) {
-                        const date = new Date(preservedDate);
-                        selectedDate = date;
-                        document.getElementById('selectedDate').value = preservedDate;
-                        // Marcar visualmente el día
+                    // Función para encontrar el primer día disponible con horarios
+                    function findFirstAvailableDate() {
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        
+                        for (let i = 0; i < 30; i++) { // Buscar en los próximos 30 días
+                            const testDate = new Date(today);
+                            testDate.setDate(today.getDate() + i);
+                            
+                            const dayOfWeek = diasSemana[testDate.getDay()];
+                            const hasSchedule = horarios.some(h => h.day_of_week === dayOfWeek);
+                            
+                            if (hasSchedule) {
+                                console.log(`✅ Primer día disponible encontrado: ${testDate.toDateString()} (${dayOfWeek})`);
+                                return testDate;
+                            }
+                        }
+                        
+                        console.log('❌ No se encontró ningún día disponible en los próximos 30 días');
+                        return null;
+                    }
+                    
+                    // Función para restaurar el estado preservado
+                    function restorePreservedState() {
+                        if (!preservedDate) {
+                            return;
+                        }
+                        
+                        // Crear fecha de manera explícita para evitar problemas de zona horaria
+                        const [year, month, day] = preservedDate.split('-').map(Number);
+                        const date = new Date(year, month - 1, day); // month - 1 porque los meses van de 0-11
+                        
+                        // Verificar si la fecha preservada tiene horarios disponibles
+                        const dayOfWeek = diasSemana[date.getDay()];
+                        const hasSchedule = horarios.some(h => h.day_of_week === dayOfWeek);
+                        
+                        if (!hasSchedule) {
+                            const firstAvailable = findFirstAvailableDate();
+                            if (firstAvailable) {
+                                selectedDate = firstAvailable;
+                                document.getElementById('selectedDate').value = firstAvailable.toISOString().split('T')[0];
+                                
+                                // Limpiar hora preservada ya que cambiamos de día
+                                preservedTime = null;
+                                preservedScheduleId = null;
+                            } else {
+                                return;
+                            }
+                        } else {
+                            selectedDate = date;
+                            document.getElementById('selectedDate').value = preservedDate;
+                        }
+                        
+                        // Actualizar el texto de fecha seleccionada
+                        const options = {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        };
+                        document.getElementById('selectedDateText').textContent =
+                            `Horarios disponibles para el ${date.toLocaleDateString('es-ES', options)}`;
+                        
+                        // Marcar visualmente el día en el calendario
                         updateCalendar();
-                        // Cargar horarios y marcar el horario si existe
+                        
+                        // Marcar el día seleccionado en el calendario
                         setTimeout(() => {
-                            loadAvailableTimeSlots(date);
-                            // Marcar el día seleccionado
                             const dateElement = document.querySelector(`[data-date="${preservedDate}"]`);
                             if (dateElement) {
                                 dateElement.classList.add('selected');
                             }
-                            // Marcar el horario seleccionado si existe
+                        }, 50);
+                        
+                        // Cargar horarios para el día preservado
+                        loadAvailableTimeSlots(date);
+                        
+                        // Restaurar la hora seleccionada después de cargar los horarios
+                        setTimeout(() => {
                             if (preservedTime && preservedScheduleId) {
-                                selectedTime = preservedTime;
-                                selectedScheduleId = preservedScheduleId;
-                                document.getElementById('selectedTime').value = preservedTime;
-                                document.getElementById('selectedScheduleId').value = preservedScheduleId;
-                                // Simular click en el botón de horario para ejecutar toda la lógica
-                                setTimeout(() => {
-                                    const timeElement = document.querySelector(`[data-time="${preservedTime}"]`);
-                                    if (timeElement) {
-                                        timeElement.click();
-                                    }
-                                }, 100);
+                                const timeElement = document.querySelector(`[data-time="${preservedTime}"]`);
+                                if (timeElement) {
+                                    // La hora preservada está disponible para este día
+                                    selectTimeSlot(timeElement, preservedTime, preservedScheduleId);
+                                } else {
+                                    // La hora preservada no está disponible para este día
+                                    document.getElementById('nextButton').disabled = true;
+                                    document.getElementById('selectedTime').value = '';
+                                    document.getElementById('selectedScheduleId').value = '';
+                                    selectedTime = null;
+                                    selectedScheduleId = null;
+                                }
                             } else {
-                                // Si solo hay fecha, deshabilitar botón siguiente
                                 document.getElementById('nextButton').disabled = true;
                             }
-                        }, 100);
+                        }, 200); // Esperar a que los horarios estén completamente cargados
+                    }
+                    
+                    // Restaurar estado preservado si existe
+                    if (preservedDate) {
+                        restorePreservedState();
+                    }
+                    // Si no hay fecha preservada, NO seleccionar automáticamente - dejar que el usuario elija
+                    
+                    // Validación del formulario
+                    const form = document.getElementById('fechaHoraForm');
+                    if (form) {
+                        form.addEventListener('submit', function(e) {
+                            const dateValue = document.getElementById('selectedDate').value;
+                            const timeValue = document.getElementById('selectedTime').value;
+                            const scheduleValue = document.getElementById('selectedScheduleId').value;
+                            
+                            if (!dateValue || !timeValue || !scheduleValue) {
+                                e.preventDefault();
+                                alert('Por favor seleccione una fecha y hora');
+                                return;
+                            }
+                        });
                     }
                 });
             })();
@@ -423,6 +511,10 @@
                 color: #166534;
                 font-weight: 500;
                 transition: all 0.2s ease;
+                position: relative;
+                z-index: 10;
+                cursor: pointer !important;
+                pointer-events: auto !important;
             }
 
             .calendar-day.available:hover {
@@ -440,6 +532,10 @@
 
             .time-slot {
                 transition: all 0.2s ease;
+                position: relative;
+                z-index: 10;
+                cursor: pointer !important;
+                pointer-events: auto !important;
             }
 
             .time-slot:hover {
