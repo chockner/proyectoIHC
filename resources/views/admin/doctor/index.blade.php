@@ -100,9 +100,6 @@
                                     </form>
                                     <span class="text-xs text-gray-600 font-medium">Eliminar</span>
                                 </div>
-
-
-
                             </div>
                         </td>
                     </tr>
