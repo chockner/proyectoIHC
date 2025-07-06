@@ -121,7 +121,11 @@ Route::prefix('secretaria')->middleware(['auth'])->group(function () {
 Route::prefix('paciente')->middleware(['auth'])->group(function () {
     /* paciente -> agendar cita */
     Route::get('/agendar-cita', [AgendarCitaController::class, 'create'])->name('paciente.agendarCita.create');
+    Route::post('/agendar-cita/seleccionar-medico', [AgendarCitaController::class, 'seleccionarMedico'])->name('paciente.agendarCita.seleccionarMedico');
+    Route::post('/agendar-cita/seleccionar-fecha-hora', [AgendarCitaController::class, 'seleccionarFechaHora'])->name('paciente.agendarCita.seleccionarFechaHora');
+    Route::post('/agendar-cita/confirmacion', [AgendarCitaController::class, 'confirmacion'])->name('paciente.agendarCita.confirmacion');
     Route::post('/agendar-cita', [AgendarCitaController::class, 'store'])->name('paciente.agendarCita.store');
+    Route::get('/agendar-cita/horarios-disponibles', [AgendarCitaController::class, 'getHorariosDisponibles'])->name('paciente.agendarCita.horariosDisponibles');
 
     /* paciente -> citas */
     Route::get('/citas', [AgendarCitaController::class, 'index'])->name('paciente.citas.index');
@@ -129,8 +133,8 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
     Route::get('/citas/{id}/edit', [AgendarCitaController::class, 'edit'])->name('paciente.citas.edit');
     Route::put('/citas/{id}', [AgendarCitaController::class, 'update'])->name('paciente.citas.update');
     Route::delete('/citas/{id}', [AgendarCitaController::class, 'destroy'])->name('paciente.citas.destroy');
-    Route::get('/citas/confirmar/{id}', [AgendarCitaController::class, 'confirm'])->name('paciente.citas.confirm');
-    Route::get('/citas/cancelar/{id}', [AgendarCitaController::class, 'cancel'])->name('paciente.citas.cancel');
+    Route::post('/citas/{id}/confirmar', [AgendarCitaController::class, 'confirm'])->name('paciente.citas.confirm');
+    Route::post('/citas/{id}/cancelar', [AgendarCitaController::class, 'cancel'])->name('paciente.citas.cancel');
 
     /** Historial médico de usuario del tipo paciente**/
     Route::get('/historial-medico', [HistorialMedicoPacienteController::class, 'index'])->name('paciente.historialMedico.index');

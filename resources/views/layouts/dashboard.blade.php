@@ -127,13 +127,8 @@
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar p-3">
-
             <div class="flex-grow-1">
-
-
-                <h4 class="text-center mb-4"><strong>Hospital</strong></h4>
-                <hr>
-
+                <h4 class="text-center mb-4"><strong>Hospital</strong></h4><hr>
                 @if (!Auth::user()->profile)
                     <div
                         class="alert alert-warning mt-4 text-center fw-bold d-flex justify-content-between align-items-center">
@@ -143,6 +138,8 @@
                         </a>
                     </div>
                 @else
+                
+                    {{-- Primera opción de la sidebar(Dashboard)--}}
                     <a href="{{ route('dashboard') }}"
                         class="sidebar-link {{ request()->routeIs('dashboard') ? 'active-link' : '' }}"
                         style="display: flex; align-items: center; gap: 10px;">
@@ -154,6 +151,7 @@
                             class="text-gray-800 text-lg font-medium leading-tight text-center group-hover:text-[#1A75FF] transition-colors">
                             Dashboard</h4>
                     </a>
+                    {{-- Fin Primera opción de la sidebar--}}
 
                     {{-- ADMINISTRADOR --}}
                     @if (Auth::user()->role->name == 'admin')
