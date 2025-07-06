@@ -7,16 +7,11 @@
             <a href="{{ route('admin.secretaria.create') }}"
                 class="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2 shadow-sm hover:shadow-md transition-all duration-150">
                 <div class="relative">
+                    <span class="material-icons text-4xl">support_agent</span>
                     <span
-                        class="material-icons text-pink-500 text-4xl opacity-75 group-hover:opacity-100 transition-opacity duration-200">
-                        support_agent
-                    </span>
-                    <span
-                        class="material-icons text-green-500 text-base absolute -top-1 -right-1 bg-white rounded-full p-0.5 shadow-md border border-slate-100 group-hover:scale-110 transition-transform duration-200">
-                        add_circle_outline
-                    </span>
+                        class="material-icons absolute -top-1 -right-1 bg-green-100 text-green-600 rounded-full text-sm p-0.5">add_circle</span>
                 </div>
-                <span>Agregar Secretaria</span>
+                <span class="text-green-700 font-medium text-sm">Agregar Secretaria</span>
             </a>
         </div>
         <table class="table table-bordered table-striped">
@@ -33,64 +28,62 @@
             <tbody>
                 @foreach ($secretarias as $index => $secretaria)
                     <tr>
-                        <td class="px-6 py-4 ">{{ $index + 1 }}</td>
-                        <td class="px-6 py-4 ">{{ $secretaria->user->profile->first_name }}</td>
-                        <td class="px-6 py-4 ">{{ $secretaria->user->profile->last_name }}</td>
-                        <td class="px-6 py-4 ">{{ $secretaria->user->profile->email }}</td>
-                        <td class="px-6 py-4 ">{{ $secretaria->user->profile->phone }}</td>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $secretaria->user->profile->first_name }}</td>
+                        <td>{{ $secretaria->user->profile->last_name }}</td>
+                        <td>{{ $secretaria->user->profile->email }}</td>
+                        <td>{{ $secretaria->user->profile->phone }}</td>
                         <td>
-                            <div class="mb-3 flex justity-center space-x-2">
-                                {{-- icono ver --}}
+                            <div class="mb-3 flex justify-center space-x-2">
+                                {{-- Icono Ver --}}
                                 <div class="flex flex-col items-center">
                                     <a href="{{ route('admin.secretaria.show', $secretaria->id) }}"
-                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 ">
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                        data-bs-toggle="tooltip" data-bs-title="Ver">
                                         <div class="relative">
+                                            <span class="material-icons h-6 w-6 text-2xl text-blue-600">support_agent</span>
                                             <span
-                                                class="material-icons text-pink-500 text-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-200">support_agent</span>
-                                            <span
-                                                class="material-icons text-blue-500 text-base absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-md border border-slate-100 group-hover:scale-110 transition-transform duration-200">visibility</span>
+                                                class="material-icons absolute -bottom-1 -right-1 text-xs bg-blue-100 text-blue-600 rounded-full p-0.5">visibility</span>
                                         </div>
                                     </a>
-                                    <span>Ver</span>
                                 </div>
-                                {{-- icono editar --}}
+                                {{-- Icono Editar --}}
                                 <div class="flex flex-col items-center">
                                     <a href="{{ route('admin.secretaria.edit', $secretaria->id) }}"
-                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 ">
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                        data-bs-toggle="tooltip" data-bs-title="Editar">
                                         <div class="relative">
+                                            <span class="material-icons h-6 w-6 text-2xl text-blue-600">support_agent</span>
                                             <span
-                                                class="material-icons text-pink-500 text-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-200">support_agent</span>
-                                            <span
-                                                class="material-icons text-yellow-500 text-base absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-md border border-slate-100 group-hover:scale-110 transition-transform duration-200">edit</span>
+                                                class="material-icons absolute -bottom-1 -right-1 text-xs bg-orange-100 text-orange-600 rounded-full p-0.5">edit</span>
                                         </div>
                                     </a>
-                                    <span>Editar</span>
                                 </div>
-                                {{-- icono eliminar --}}
-                                <form action="{{ route('admin.secretaria.destroy', $secretaria->id) }}" method="POST"
-                                    class="d-inline delete-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button"
-                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-delete"
-                                        data-form-id="form-{{ $secretaria->id }}">
-                                        <div class="relative">
-                                            <span
-                                                class="material-icons text-pink-500 text-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-200">support_agent</span>
-                                            <span
-                                                class="material-icons text-red-500 text-base absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-md border border-slate-100 group-hover:scale-110 transition-transform duration-200">delete</span>
-                                        </div>
-                                    </button>
-                                    <span>Eliminar</span>
-                                </form>
+                                {{-- Icono Eliminar --}}
+                                <div class="flex flex-col items-center">
+                                    <form action="{{ route('admin.secretaria.destroy', $secretaria->id) }}" method="POST"
+                                        class="d-inline delete-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button"
+                                            class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-delete"
+                                            data-form-id="form-{{ $secretaria->id }}"
+                                            data-bs-toggle="tooltip" data-bs-title="Eliminar">
+                                            <div class="relative">
+                                                <span class="material-icons h-6 w-6 text-2xl text-red-500">support_agent</span>
+                                                <span
+                                                    class="material-icons absolute -bottom-1 -right-1 text-xs bg-red-100 text-red-600 rounded-full p-0.5">delete</span>
+                                            </div>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </td>
                     </tr>
                 @endforeach
-
                 @if ($secretarias->isEmpty())
                     <tr>
-                        <td colspan="6" class="text-center">No hay doctores registrados.</td>
+                        <td colspan="6" class="text-center">No hay secretarias registradas.</td>
                     </tr>
                 @endif
             </tbody>
@@ -98,20 +91,16 @@
         <!-- Paginación -->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                {{-- Enlace "First" --}}
-                {{-- Enlace "Previous" --}}
                 <li class="page-item {{ $secretarias->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $secretarias->previousPageUrl() }}" aria-label="Previous">Anterior</a>
+                    <a class="page-link" href="{{ $secretarias->previousPageUrl() }}">Anterior</a>
                 </li>
-                {{-- Enlaces de páginas --}}
-                @foreach ($secretarias->getUrlRange(1, $secretarias->lastPage()) as $page => $url)
-                    <li class="page-item {{ $secretarias->currentPage() == $page ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                @for ($i = 1; $i <= $secretarias->lastPage(); $i++)
+                    <li class="page-item {{ $i == $secretarias->currentPage() ? 'active' : '' }}">
+                        <a class="page-link" href="{{ $secretarias->url($i) }}">{{ $i }}</a>
                     </li>
-                @endforeach
-                {{-- Enlace "Next" --}}
+                @endfor
                 <li class="page-item {{ $secretarias->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $secretarias->nextPageUrl() }}" aria-label="Next">Siguiente</a>
+                    <a class="page-link" href="{{ $secretarias->nextPageUrl() }}">Siguiente</a>
                 </li>
             </ul>
         </nav>
@@ -140,47 +129,40 @@
             </div>
         </div>
     </div>
-
     <!-- Audio para el sonido de alerta -->
     <audio id="alertSound" preload="auto">
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
     </audio>
 @endsection
-
 @section('scripts')
     <script>
+        // Inicializar tooltips de Bootstrap
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
         // Delegación de eventos para todos los botones de eliminar
         $(document).on('click', '.btn-delete', function() {
-            // Obtener el formulario específico para este doctor
             const form = $(this).closest('form');
-
-            // Configurar mensaje
             const message = `
-            ¿Está seguro que desea eliminar esta secretaria?
-            Esta acción no se puede deshacer.
-        `;
+                ¿Está seguro que desea eliminar esta secretaria?
+                Esta acción no se puede deshacer.
+            `;
             $('#confirmMessage').html(message);
-
-            // Guardar referencia al formulario en el modal
             $('#confirmDeleteModal').data('delete-form', form);
-
-            // Mostrar modal
             const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
             modal.show();
-
-            // Reproducir sonido
             const alertSound = document.getElementById('alertSound');
             if (alertSound) {
                 alertSound.play().catch(e => console.log('Error al reproducir sonido:', e));
             }
         });
 
-        // Confirmar eliminación
         $('#btnConfirmDelete').click(function() {
-            // Recuperar el formulario guardado
             const form = $('#confirmDeleteModal').data('delete-form');
-
-            // Enviar el formulario específico
             if (form) {
                 form.submit();
             }

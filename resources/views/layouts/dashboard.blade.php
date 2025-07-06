@@ -191,7 +191,8 @@
                         <ul class="list-unstyled ps-3">
                             <li>
                                 <a href="{{ route('admin.paciente.index') }}"
-                                    class="{{ request()->routeIs('admin.paciente.index') ? 'active-link' : '' }}">
+                                    class="sidebar-link {{ request()->routeIs('admin.paciente.index') ? 'active-link' : '' }}">
+                                    <span class="material-icons text-2xl align-middle">assist_walker</span>
                                     Pacientes
                                 </a>
                             </li>

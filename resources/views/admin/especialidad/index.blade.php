@@ -2,29 +2,25 @@
 
 @section('content')
     <div class="container mt-4">
-        <h2>Lista de Doctores</h2>
+        <h2>Lista de Especialidades</h2>
         <form action="{{ route('admin.especialidad.store') }}" method="POST" id="createEspecialidadForm">
             @csrf
             <div class="row mb-3">
-
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" name="name" id="name" required
-                            onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
-                            oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
-                            placeholder="Nombre de la Especialidad">
-                        @error('name')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-
-                    </div>
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="button" class="btn btn-primary" id="btnShowModal">Guardar</button>
-                    </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="name" id="name" required
+                        onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                        oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
+                        placeholder="Nombre de la Especialidad">
+                    @error('name')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-primary" id="btnShowModal">Guardar</button>
                 </div>
             </div>
         </form>
-        <!-- Modal de confirmación -->
+        <!-- Modal de confirmación para creación -->
         <div class="modal fade" id="confirmCreateModal" tabindex="-1" aria-labelledby="confirmCreateModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -37,7 +33,7 @@
                         <div class="text-center mb-3">
                             <p id="confirmMessageCreate"></p>
                             <div class="alert alert-primary mt-2">
-                                Se registrará un nueva especialidad.
+                                Se registrará una nueva especialidad.
                             </div>
                         </div>
                     </div>
@@ -53,76 +49,75 @@
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
-                    <th>Accion</th>
+                    <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($especialidades as $index => $especialidad)
                     <tr>
-                        <td class="px-6 py-4 ">{{ $index + 1 }}</td>
-                        <td class="px-6 py-4 ">{{ $especialidad->name }}</td>
+                        <td class="px-6 py-4">{{ $index + 1 }}</td>
+                        <td class="px-6 py-4">{{ $especialidad->name }}</td>
                         <td>
-                            <div class="mb-3 flex justity-center space-x-2">
-                                {{-- icono ver --}}
+                            <div class="mb-3 flex justify-center space-x-2">
+                                {{-- Icono Editar --}}
                                 <div class="flex flex-col items-center">
-                                    <a href="#" class="btn btn-sm btn-info">Ver</a>
+                                    <a href="{{ route('admin.especialidad.edit', $especialidad->id) }}"
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                        data-bs-toggle="tooltip" data-bs-title="Editar">
+                                        <div class="relative">
+                                            <span class="material-icons h-6 w-6 text-2xl text-blue-600">medical_information</span>
+                                            <span
+                                                class="material-icons absolute -bottom-1 -right-1 text-xs bg-orange-100 text-orange-600 rounded-full p-0.5">edit</span>
+                                        </div>
+                                    </a>
                                 </div>
-                                {{-- icono editar --}}
+                                {{-- Icono Eliminar --}}
                                 <div class="flex flex-col items-center">
-                                    <button type="button" class="btn btn-warning btn-edit"
-                                        data-especialidad-id="{{ $especialidad->id }}"
-                                        data-especialidad-name="{{ $especialidad->name }}">
-                                        Editar
-                                    </button>
-
-                                </div>
-                                {{-- icono eliminar --}}
-                                <div class="flex flex-col items-center">
-                                    <form action="{{ route('admin.especialidad.destroy', $especialidad->id) }}"
-                                        method="POST" class="d-inline delete-form">
+                                    <form action="{{ route('admin.especialidad.destroy', $especialidad->id) }}" method="POST"
+                                        class="d-inline delete-form">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-delete"
-                                            data-form-id="form-{{ $especialidad->id }}">
-                                            Eliminar
+                                        <button type="button"
+                                            class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-delete"
+                                            data-form-id="form-{{ $especialidad->id }}"
+                                            data-bs-toggle="tooltip" data-bs-title="Eliminar">
+                                            <div class="relative">
+                                                <span class="material-icons h-6 w-6 text-2xl text-red-500">medical_information</span>
+                                                <span
+                                                    class="material-icons absolute -bottom-1 -right-1 text-xs bg-red-100 text-red-600 rounded-full p-0.5">delete</span>
+                                            </div>
                                         </button>
                                     </form>
                                 </div>
                             </div>
-
                         </td>
                     </tr>
                 @endforeach
-
                 @if ($especialidades->isEmpty())
                     <tr>
-                        <td colspan="6" class="text-center">No hay especialidades registradas.</td>
+                        <td colspan="3" class="text-center">No hay especialidades registradas.</td>
                     </tr>
                 @endif
             </tbody>
         </table>
-
         <!-- Paginación -->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                {{-- Enlace "Previous" --}}
                 <li class="page-item {{ $especialidades->onFirstPage() ? 'disabled' : '' }}">
                     <a class="page-link" href="{{ $especialidades->previousPageUrl() }}" aria-label="Previous">Anterior</a>
                 </li>
-                {{-- Páginas numéricas --}}
                 @for ($i = 1; $i <= $especialidades->lastPage(); $i++)
                     <li class="page-item {{ $i == $especialidades->currentPage() ? 'active' : '' }}">
                         <a class="page-link" href="{{ $especialidades->url($i) }}">{{ $i }}</a>
                     </li>
                 @endfor
-                {{-- Enlace "Next" --}}
                 <li class="page-item {{ $especialidades->hasMorePages() ? '' : 'disabled' }}">
                     <a class="page-link" href="{{ $especialidades->nextPageUrl() }}" aria-label="Next">Siguiente</a>
                 </li>
             </ul>
         </nav>
     </div>
-    <!-- Modal de confirmación eliminar -->
+    <!-- Modal de confirmación para eliminación -->
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -146,7 +141,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal de edición -->
     <div class="modal fade" id="confirmEditModal" tabindex="-1" aria-labelledby="confirmEditModalLabel"
         aria-hidden="true">
@@ -168,14 +162,12 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-warning">Confirmar Edición</button>
+                        <button type="submit" id="btnConfirmEdit" class="btn btn-warning">Confirmar Edición</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-
     <!-- Audio para el sonido de alerta -->
     <audio id="alertSound" preload="auto">
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
@@ -183,100 +175,78 @@
 @endsection
 @section('scripts')
     <script>
-        // Al hacer clic en el botón "Guardar", mostrar el modal de confirmación
+        // Inicializar tooltips de Bootstrap
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
+        // Confirmación de creación
         $('#btnShowModal').click(function() {
-            // Validar el formulario
             if (!$('#createEspecialidadForm')[0].checkValidity()) {
                 $('#createEspecialidadForm')[0].reportValidity();
                 return;
             }
-            // Construir el mensaje de confirmación
             const message = `
-            <strong>¿Está seguro de que desea registrar esta especialidad?</strong><br>
+                <strong>¿Está seguro de que desea registrar esta especialidad?</strong><br>
                 Nombre de la Especialidad: ${$('#name').val()}<br>
             `;
-            // Establecer el mensaje de confirmación
             $('#confirmMessageCreate').html(message);
-            // Mostrar el modal
             const modal = new bootstrap.Modal(document.getElementById('confirmCreateModal'));
             modal.show();
         });
 
-        // Confirmar creación desde el modal
         $('#btnConfirmCreate').click(function() {
-            // Validar el formulario
             if ($('#createEspecialidadForm')[0].checkValidity()) {
-                // Enviar el formulario
                 $('#createEspecialidadForm').submit();
             } else {
-                // Mostrar errores de validación
                 $('#createEspecialidadForm')[0].reportValidity();
             }
         });
 
-        /* eliminar */
-        // Delegación de eventos para todos los botones de eliminar
+        // Confirmación de eliminación
         $(document).on('click', '.btn-delete', function() {
-            // Obtener el formulario específico para este doctor
             const form = $(this).closest('form');
-
-            // Configurar mensaje
             const message = `
-            ¿Está seguro que desea eliminar este doctor?
-            Esta acción no se puede deshacer.
-        `;
+                ¿Está seguro que desea eliminar esta especialidad?
+                Esta acción no se puede deshacer.
+            `;
             $('#confirmMessageDelete').html(message);
-
-            // Guardar referencia al formulario en el modal
             $('#confirmDeleteModal').data('delete-form', form);
-
-            // Mostrar modal
             const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
             modal.show();
-
-            // Reproducir sonido
             const alertSound = document.getElementById('alertSound');
             if (alertSound) {
                 alertSound.play().catch(e => console.log('Error al reproducir sonido:', e));
             }
         });
 
-        // Confirmar eliminación
         $('#btnConfirmDelete').click(function() {
-            // Recuperar el formulario guardado
             const form = $('#confirmDeleteModal').data('delete-form');
-
-            // Enviar el formulario específico
             if (form) {
                 form.submit();
             }
         });
 
-        /* editar */
         // Editar especialidad
         $(document).on('click', '.btn-edit', function() {
             const especialidadId = $(this).data('especialidad-id');
             const especialidadName = $(this).data('especialidad-name');
-
-            // Rellenar el formulario con los datos de la especialidad
             $('#editEspecialidadName').val(especialidadName);
-
-            // Aquí generamos la URL de actualización sin el :id
-            const updateUrl = '{{ route('admin.especialidad.update', ['id' => ':id']) }}'.replace(':id',
-                especialidadId);
-
-            // Ahora, actualizamos la acción del formulario con la URL completa
+            const updateUrl = '{{ route('admin.especialidad.update', ['id' => ':id']) }}'.replace(':id', especialidadId);
             $('#editEspecialidadForm').attr('action', updateUrl);
-
-            // Mostrar el modal
             const modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
             modal.show();
         });
 
-
-        // Confirmar la edición
         $('#btnConfirmEdit').click(function() {
-            $('#editEspecialidadForm').submit();
+            if ($('#editEspecialidadForm')[0].checkValidity()) {
+                $('#editEspecialidadForm').submit();
+            } else {
+                $('#editEspecialidadForm')[0].reportValidity();
+            }
         });
     </script>
 @endsection

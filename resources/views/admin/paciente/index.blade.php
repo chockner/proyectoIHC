@@ -7,7 +7,6 @@
             <a href="{{ route('admin.paciente.create') }}"
                 class="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2 shadow-sm hover:shadow-md transition-all duration-150">
                 <div class="relative">
-                    {{-- Icono svg agregar paciente --}}
                     <span class="material-icons text-4xl">assist_walker</span>
                     <span
                         class="material-icons absolute -top-1 -right-1 bg-green-100 text-green-600 rounded-full text-sm p-0.5">add_circle</span>
@@ -24,7 +23,6 @@
                     <th>Correo</th>
                     <th>Teléfono</th>
                     <th>Acciones</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -36,18 +34,50 @@
                         <td>{{ $paciente->user->profile->email }}</td>
                         <td>{{ $paciente->user->profile->phone }}</td>
                         <td>
-                            <a href="{{ route('admin.paciente.show', $paciente->id) }}">
-                                <button class="btn btn-sm btn-info">Ver</button>
-                            </a>
-                            <a href="{{ route('admin.paciente.edit', $paciente->id) }}"
-                                class="btn btn-sm btn-warning">Editar</a>
-                            <form action="{{ route('admin.paciente.destroy', $paciente->id) }}" method="POST"
-                                class="d-inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-delete"
-                                    data-form-id="form-{{ $paciente->id }}">Eliminar</button>
-                            </form>
+                            <div class="mb-3 flex justify-center space-x-2">
+                                {{-- Icono Ver --}}
+                                <div class="flex flex-col items-center">
+                                    <a href="{{ route('admin.paciente.show', $paciente->id) }}"
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                        data-bs-toggle="tooltip" data-bs-title="Ver">
+                                        <div class="relative">
+                                            <span class="material-icons h-6 w-6 text-2xl text-blue-600">assist_walker</span>
+                                            <span
+                                                class="material-icons absolute -bottom-1 -right-1 text-xs bg-blue-100 text-blue-600 rounded-full p-0.5">visibility</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                {{-- Icono Editar --}}
+                                <div class="flex flex-col items-center">
+                                    <a href="{{ route('admin.paciente.edit', $paciente->id) }}"
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                        data-bs-toggle="tooltip" data-bs-title="Editar">
+                                        <div class="relative">
+                                            <span class="material-icons h-6 w-6 text-2xl text-blue-600">assist_walker</span>
+                                            <span
+                                                class="material-icons absolute -bottom-1 -right-1 text-xs bg-orange-100 text-orange-600 rounded-full p-0.5">edit</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                {{-- Icono Eliminar --}}
+                                <div class="flex flex-col items-center">
+                                    <form action="{{ route('admin.paciente.destroy', $paciente->id) }}" method="POST"
+                                        class="d-inline delete-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button"
+                                            class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-delete"
+                                            data-form-id="form-{{ $paciente->id }}"
+                                            data-bs-toggle="tooltip" data-bs-title="Eliminar">
+                                            <div class="relative">
+                                                <span class="material-icons h-6 w-6 text-2xl text-red-500">assist_walker</span>
+                                                <span
+                                                    class="material-icons absolute -bottom-1 -right-1 text-xs bg-red-100 text-red-600 rounded-full p-0.5">delete</span>
+                                            </div>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
@@ -62,18 +92,14 @@
         <!-- Paginación -->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                {{-- Enlace "First" --}}
-                {{-- Enlace "Previous" --}}
                 <li class="page-item {{ $pacientes->onFirstPage() ? 'disabled' : '' }}">
                     <a class="page-link" href="{{ $pacientes->previousPageUrl() }}">Anterior</a>
                 </li>
-                {{-- Páginas numéricas --}}
                 @for ($i = 1; $i <= $pacientes->lastPage(); $i++)
                     <li class="page-item {{ $i == $pacientes->currentPage() ? 'active' : '' }}">
                         <a class="page-link" href="{{ $pacientes->url($i) }}">{{ $i }}</a>
                     </li>
                 @endfor
-                {{-- Enlace "Next" --}}
                 <li class="page-item {{ $pacientes->hasMorePages() ? '' : 'disabled' }}">
                     <a class="page-link" href="{{ $pacientes->nextPageUrl() }}">Siguiente</a>
                 </li>
@@ -112,9 +138,17 @@
 @endsection
 @section('scripts')
     <script>
+        // Inicializar tooltips de Bootstrap
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
         // Delegación de eventos para todos los botones de eliminar
         $(document).on('click', '.btn-delete', function() {
-            // Obtener el formulario específico para este doctor
+            // Obtener el formulario específico para este paciente
             const form = $(this).closest('form');
 
             // Configurar mensaje
