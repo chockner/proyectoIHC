@@ -2,7 +2,8 @@
 
 @section('content')
     <div class="container mt-4">
-        <h3 class="text-center mb-4">Editar Doctor</h3>
+        <h3 class="text-center mb-4 fw-bold">EDITAR DOCTOR</h3>
+        <hr>
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -17,8 +18,8 @@
             @method('PUT')
 
             {{-- INFORMACION BASICA --}}
-            <div class="row mt-2">
-                <h5>INFORMACION BASICA</h5>
+            <div class="row mt-2 justify-content-center">
+                <h5 class="text-center mb-4 fw-bold">INFORMACION BASICA</h5>
                 <div class="col-md-4">
                     {{-- DNI --}}
                     <div class="md-3 mb-3">
@@ -85,10 +86,11 @@
                     </div>
                 </div>
             </div>
+            <hr>
 
             {{-- INFORMACION DE CONTACTO --}}
-            <div class="row mt-4">
-                <h5>INFORMACION DE CONTACTO</h5>
+            <div class="row mt-4 justify-content-center">
+                <h5 class="text-center mb-4 fw-bold">INFORMACION DE CONTACTO</h5>
                 <div class="col-md-4">
                     {{-- TELEFONO --}}
                     <div class="md-3 mb-3">
@@ -117,10 +119,11 @@
                     </div>
                 </div>
             </div>
+            <hr>
 
             {{-- INFORMACION PERSONAL --}}
-            <div class="row mt-3">
-                <h5>INFORMACION PERSONAL</h5>
+            <div class="row mt-3 justify-content-center">
+                <h5 class="text-center mb-4 fw-bold">INFORMACION PERSONAL</h5>
                 <div class="col-md-4">
                     {{-- FECHA DE NACIMIENTO --}}
                     <div class="md-3 mb-3">
@@ -172,9 +175,13 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between mt-4">
-                <a href="{{ route('admin.doctor.index') }}" class="btn btn-outline-secondary">Cancelar</a>
-                <button type="button" class="btn btn-success" id="btnEdit">Guardar Cambios</button>
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-4 d-flex justify-content-start">
+                    <a href="{{ route('admin.doctor.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+                <div class="col-md-4 d-flex justify-content-end">
+                    <button type="button" class="btn btn-success" id="btnEdit">Guardar Cambios</button>
+                </div>
             </div>
         </form>
 

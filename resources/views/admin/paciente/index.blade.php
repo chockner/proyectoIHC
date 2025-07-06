@@ -33,7 +33,7 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $paciente->user->profile->first_name }}</td>
                         <td>{{ $paciente->user->profile->last_name }}</td>
-                        <td>{{ $paciente->user->email }}</td>
+                        <td>{{ $paciente->user->profile->email }}</td>
                         <td>{{ $paciente->user->profile->phone }}</td>
                         <td>
                             <a href="{{ route('admin.paciente.show', $paciente->id) }}">

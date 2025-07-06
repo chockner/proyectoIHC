@@ -29,7 +29,7 @@ class SecretariaController extends Controller
             'document_id' => 'required|digits:8|unique:users,document_id',
             'first_name' => 'required|string|max:255|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
             'last_name' => 'required|string|max:255|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
-            'email' => 'required|email|max:255|unique:users,email',
+            'email' => 'required|email|max:255|unique:profiles,email',
             'phone' => 'required|string|max:9',
             'birthdate' => 'required|date',
             'civil_status' => 'required|in:0,1,2,3',
@@ -49,6 +49,12 @@ class SecretariaController extends Controller
             'user_id' => $user->id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'birthdate' => $request->birthdate,
+            'civil_status' => $request->civil_status,
+            'address' => $request->address,
+            'gender' => $request->gender,
         ]);
 
         Secretary::create([

@@ -25,10 +25,15 @@ class PacienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-
-            // otros campos necesarios
+            'document_id' => 'required|digits:8|unique:users,document_id',
+            'first_name' => 'required|string|max:255|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
+            'last_name' => 'required|string|max:255|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
+            'phone' => 'required|string|max:9',
+            'email' => 'required|email|max:255|unique:profiles,email',
+            'birthdate' => 'required|date',
+            'gender' => 'required|in:0,1',
+            'civil_status' => 'required|in:0,1,2,3',
+            'address' => 'required|string|max:255',
         ]);
 
         $password = $request->document_id;
@@ -42,9 +47,14 @@ class PacienteController extends Controller
 
         // Crear el perfil del usuario
         $profile = Profile::create([
-            'user_id' => $user->id,
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'birthdate' => $request->birthdate,
+            'gender' => $request->gender,
+            'civil_status' => $request->civil_status,
+            'address' => $request->address,
             // otros campos del perfil si es necesario
         ]);
 
@@ -52,6 +62,17 @@ class PacienteController extends Controller
         Patient::create([
             'user_id' => $user->id,
             // otros campos del paciente si es necesario
+        ]);
+
+        $user->profile()->create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'birthdate' => $request->birthdate,
+            'gender' => $request->gender,
+            'civil_status' => $request->civil_status,
+            'address' => $request->address,
         ]);
 
         return redirect()->route('admin.paciente.index')->with('success', 'Paciente creado correctamente.');
@@ -71,15 +92,35 @@ class PacienteController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        $request->validate([
+            'document_id' => 'required|digits:8',
+            'first_name' => 'required|string|max:255|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
+            'last_name' => 'required|string|max:255|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
+            'phone' => 'required|digits:9|starts_with:9',
+            'email' => 'required|email|max:255',
+            'birthdate' => 'required|date',
+            'gender' => 'required|in:0,1',
+            'civil_status' => 'required|in:0,1,2,3',
+            'address' => 'required|string|max:255',
+        ]);
+
         $paciente = Patient::findOrFail($id);
+        $paciente->user->update([
+            'document_id' => $request->document_id,
+        ]);
         
         //$paciente->update([]); // Aquí puedes actualizar los campos específicos del paciente si es necesario
         
         $paciente->user->profile->update([
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'phone' => $request->input('phone'),
-            // mas datos del perfil si es necesario
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'birthdate' => $request->birthdate,
+            'gender' => $request->gender,
+            'civil_status' => $request->civil_status,
+            'address' => $request->address,
         ]);
 
         // creo que el dni no debe permitir editar ahhhh

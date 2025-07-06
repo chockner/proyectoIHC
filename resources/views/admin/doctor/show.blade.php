@@ -10,7 +10,8 @@
     </style>
 
     <div class="container mt-4">
-        <h3 class="text-center mb-4">Detalles del Doctor</h3>
+        <h3 class="text-center mb-4 fw-bold">DETALLES DEL DOCTOR</h3>
+        <hr>
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -20,8 +21,8 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
 
-        <div class="row mt-2">
-            <h5>INFORMACIÓN BÁSICA</h5>
+        <div class="row mt-2 justify-content-center">
+            <h5 class="text-center mb-4 fw-bold">INFORMACIÓN BÁSICA</h5>
             <div class="col-md-4">
                 <div class="mb-3">
                     <label class="form-label">DNI</label>
@@ -53,9 +54,10 @@
                 </div>
             </div>
         </div>
+        <hr>
 
-        <div class="row mt-4">
-            <h5>INFORMACIÓN DE CONTACTO</h5>
+        <div class="row mt-4 justify-content-center">
+            <h5 class="text-center mb-4 fw-bold">INFORMACIÓN DE CONTACTO</h5>
             <div class="col-md-4">
                 <div class="mb-3">
                     <label class="form-label">Teléfono</label>
@@ -69,9 +71,10 @@
                 </div>
             </div>
         </div>
+        <hr>
 
-        <div class="row mt-3">
-            <h5>INFORMACIÓN PERSONAL</h5>
+        <div class="row mt-3 justify-content-center">
+            <h5 class="text-center mb-4 fw-bold">INFORMACIÓN PERSONAL</h5>
             <div class="col-md-4">
                 <div class="mb-3">
                     <label class="form-label">Fecha de Nacimiento</label>
@@ -118,9 +121,13 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-between mt-4">
-            <a href="{{ route('admin.doctor.index') }}" class="btn btn-outline-secondary">Volver a la lista de doctores</a>
-            <a href="{{ route('admin.doctor.edit', $doctor->id) }}" class="btn btn-primary">Editar Doctor</a>
+        <div class="row mt-4 justify-content-center">
+            <div class="col-md-4 d-flex justify-content-start">
+                <a href="{{ route('admin.doctor.index') }}" class="btn btn-outline-secondary">Volver a la lista de doctores</a>
+            </div>
+            <div class="col-md-4 d-flex justify-content-end">
+                <a href="{{ route('admin.doctor.edit', $doctor->id) }}" class="btn btn-primary">Editar Doctor</a>
+            </div>
         </div>
     </div>
 @endsection

@@ -2,7 +2,8 @@
 
 @section('content')
     <div class="container mt-4">
-        <h3 class="text-center mb-4">Editar Perfil</h3>
+        <h3 class="text-center mb-4 fw-bold">EDITAR PERFIL</h3>
+        <hr>
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -17,8 +18,8 @@
             @method('PUT')
 
             {{-- INFORMACION BASICA --}}
-            <div class="row mt-2">
-                <h5>INFORMACION BASICA</h5>
+            <div class="row mt-2 justify-content-center">
+                <h5 class="text-center mb-4 fw-bold">INFORMACION BASICA</h5>
                 <div class="col-md-4">
                     {{-- DNI --}}
                     <div class="md-3 mb-3">
@@ -52,10 +53,11 @@
 
                 </div>
             </div>
+            <hr>
 
             {{-- INFORMACION DE CONTACTO --}}
-            <div class="row mt-4">
-                <h5>INFORMACION DE CONTACTO</h5>
+            <div class="row mt-4 justify-content-center">
+                <h5 class="text-center mb-4 fw-bold">INFORMACION DE CONTACTO</h5>
                 <div class="col-md-4">
                     {{-- TELEFONO --}}
                     <div class="md-3 mb-3">
@@ -85,10 +87,11 @@
 
                 </div>
             </div>
+            <hr>
 
             {{-- INFORMACION PERSONAL --}}
-            <div class="row mt-3">
-                <h5>INFORMACION PERSONAL</h5>
+            <div class="row mt-3 justify-content-center">
+                <h5 class="text-center mb-4 fw-bold">INFORMACION PERSONAL</h5>
 
                 <div class="col-md-4">
                     {{-- FECHA DE NACIMIENTO --}}
@@ -111,6 +114,8 @@
                                 Femenino</option>
                         </select>
                     </div>
+                </div>
+                <div class="col-md-4">
                     {{-- ESTADO CIVIL --}}
                     <div class="md-3 mb-3">
                         <label>Estado civil</label>
@@ -136,36 +141,6 @@
                         <input type="text" class="form-control" name="address"
                             value="{{ old('address', Auth::user()->profile->address ?? '') }}" required>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    {{-- REGION --}}
-                    <div class="md-3 mb-3">
-                        <label for="region">Región</label>
-                        <select id="region" name="region" class="form-select" required>
-                            <option value="">Seleccione una región</option>
-                        </select>
-                    </div>
-                    {{-- PROVINCIA --}}
-                    <div class="md-3 mb-3">
-                        <label for="province">Provincia</label>
-                        <select id="province" name="province" class="form-select" required disabled>
-                            <option value="">Seleccione una provincia</option>
-                        </select>
-                    </div>
-                    {{-- DISTRITO --}}
-                    <div class="md-3 mb-3">
-                        <label for="district">Distrito</label>
-                        <select id="district" name="district" class="form-select" required disabled>
-                            <option value="">Seleccione un distrito</option>
-                        </select>
-                    </div>
-                    {{-- Campos ocultos para almacenar los nombres --}}
-                    <input type="hidden" name="region_nombre" id="region_nombre"
-                        value="{{ Auth::user()->profile->region ?? '' }}">
-                    <input type="hidden" name="province_nombre" id="province_nombre"
-                        value="{{ Auth::user()->profile->province ?? '' }}">
-                    <input type="hidden" name="district_nombre" id="district_nombre"
-                        value="{{ Auth::user()->profile->district ?? '' }}">
                 </div>
             </div>
 
