@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-4">
-        <h2>Lista de Pacientes</h2>
+        <h1 class="text-2xl font-bold mb-4">Lista de Pacientes</h1>
         <div class="mb-3 flex justify-end">
             <a href="{{ route('admin.paciente.create') }}"
                 class="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2 shadow-sm hover:shadow-md transition-all duration-150">

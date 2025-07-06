@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="container mt-4">
-        <h2>Lista de Doctores</h2>
+        <h1 class="text-2xl font-bold mb-4">Lista de Especialidades</h1>
+
         <form action="{{ route('admin.especialidad.store') }}" method="POST" id="createEspecialidadForm">
             @csrf
             <div class="row mb-3">
-
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <input type="text" class="form-control" name="name" id="name" required
@@ -16,7 +16,6 @@
                         @error('name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
-
                     </div>
                     <div class="d-flex justify-content-between mt-4">
                         <button type="button" class="btn btn-primary" id="btnShowModal">Guardar</button>
@@ -63,10 +62,6 @@
                         <td class="px-6 py-4 ">{{ $especialidad->name }}</td>
                         <td>
                             <div class="mb-3 flex justity-center space-x-2">
-                                {{-- icono ver --}}
-                                <div class="flex flex-col items-center">
-                                    <a href="#" class="btn btn-sm btn-info">Ver</a>
-                                </div>
                                 {{-- icono editar --}}
                                 <div class="flex flex-col items-center">
                                     <button type="button" class="btn btn-warning btn-edit"
@@ -74,7 +69,6 @@
                                         data-especialidad-name="{{ $especialidad->name }}">
                                         Editar
                                     </button>
-
                                 </div>
                                 {{-- icono eliminar --}}
                                 <div class="flex flex-col items-center">
@@ -89,7 +83,6 @@
                                     </form>
                                 </div>
                             </div>
-
                         </td>
                     </tr>
                 @endforeach
@@ -174,8 +167,6 @@
             </div>
         </div>
     </div>
-
-
     <!-- Audio para el sonido de alerta -->
     <audio id="alertSound" preload="auto">
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
@@ -252,7 +243,6 @@
             }
         });
 
-        /* editar */
         // Editar especialidad
         $(document).on('click', '.btn-edit', function() {
             const especialidadId = $(this).data('especialidad-id');
@@ -271,6 +261,11 @@
             // Mostrar el modal
             const modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
             modal.show();
+            // Reproducir sonido
+            const alertSound = document.getElementById('alertSound');
+            if (alertSound) {
+                alertSound.play().catch(e => console.log('Error al reproducir sonido:', e));
+            }
         });
 
 

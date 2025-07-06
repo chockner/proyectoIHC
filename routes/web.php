@@ -81,8 +81,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/especialidades', [EspecialidadController::class, 'index'])->name('admin.especialidad.index');
     Route::post('/especialidades', [EspecialidadController::class, 'store'])->name('admin.especialidad.store');
     Route::put('/especialidad/{id}', [EspecialidadController::class, 'update'])->name('admin.especialidad.update');
-
-
     Route::delete('/especialidades/{id}', [EspecialidadController::class, 'destroy'])->name('admin.especialidad.destroy');
 
     /* admin -> paciente */
@@ -96,8 +94,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     /* admin -> historial Medico */
     Route::get('/historiales', [HistorialMedicoController::class, 'index'])->name('admin.historialMedico.index');
+    Route::get('/historiales/{id}', [HistorialMedicoController::class, 'show'])->name('admin.historialMedico.show');
+    Route::get('/historiales/{id}/detail', [HistorialMedicoController::class, 'show_detail'])->name('admin.historialMedico.show_detail');
+    Route::get('/historiales/{id}/edit-detail', [HistorialMedicoController::class, 'edit_detail'])->name('admin.historialMedico.edit_detail');
+    Route::delete('/historiales/{id}', [HistorialMedicoController::class, 'destroy'])->name('admin.historialMedico.destroy');
 
-    
+
     /* admin -> horarios */
     Route::get('/horarios', [HorarioController::class, 'index'])->name('admin.horarios.index');
     Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');

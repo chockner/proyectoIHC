@@ -5,7 +5,7 @@
         <!-- Encabezado y Filtros -->
         <div class="row mb-4">
             <div class="col-md-12">
-                <h2>Horarios Médicos</h2>
+                <h1 class="text-2xl font-bold mb-4">Horarios Médicos</h1>
             </div>
         </div>
 
