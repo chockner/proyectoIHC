@@ -26,31 +26,37 @@
             <div class="col-md-4">
                 <div class="mb-3">
                     <label class="form-label">DNI</label>
-                    <input type="text" class="form-control disabled-field" value="{{ $doctor->user->document_id ?? '' }}" disabled>
+                    <input type="text" class="form-control disabled-field" value="{{ $doctor->user->document_id ?? '' }}"
+                        disabled>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Nombres</label>
-                    <input type="text" class="form-control disabled-field" value="{{ $doctor->user->profile->first_name ?? '' }}" disabled>
+                    <input type="text" class="form-control disabled-field"
+                        value="{{ $doctor->user->profile->first_name ?? '' }}" disabled>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Código de Licencia</label>
-                    <input type="text" class="form-control disabled-field" value="{{ $doctor->license_code ?? '' }}" disabled>
+                    <input type="text" class="form-control disabled-field" value="{{ $doctor->license_code ?? '' }}"
+                        disabled>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="mb-3">
                     <label class="form-label">Apellidos</label>
-                    <input type="text" class="form-control disabled-field" value="{{ $doctor->user->profile->last_name ?? '' }}" disabled>
+                    <input type="text" class="form-control disabled-field"
+                        value="{{ $doctor->user->profile->last_name ?? '' }}" disabled>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Especialidad</label>
                     <select class="form-select disabled-field" disabled>
-                        <option value="{{ $doctor->specialty_id }}" selected>{{ $doctor->specialty->name ?? 'No disponible' }}</option>
+                        <option value="{{ $doctor->specialty_id }}" selected>
+                            {{ $doctor->specialty->name ?? 'No disponible' }}</option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Años de Experiencia</label>
-                    <input type="number" class="form-control disabled-field" value="{{ $doctor->experience_years ?? '' }}" disabled>
+                    <input type="number" class="form-control disabled-field" value="{{ $doctor->experience_years ?? '' }}"
+                        disabled>
                 </div>
             </div>
         </div>
@@ -61,13 +67,15 @@
             <div class="col-md-4">
                 <div class="mb-3">
                     <label class="form-label">Teléfono</label>
-                    <input type="text" class="form-control disabled-field" value="{{ $doctor->user->profile->phone ?? '' }}" disabled>
+                    <input type="text" class="form-control disabled-field"
+                        value="{{ $doctor->user->profile->phone ?? '' }}" disabled>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="mb-3">
                     <label class="form-label">Correo Electrónico</label>
-                    <input type="email" class="form-control disabled-field" value="{{ $doctor->user->profile->email ?? '' }}" disabled>
+                    <input type="email" class="form-control disabled-field"
+                        value="{{ $doctor->user->profile->email ?? '' }}" disabled>
                 </div>
             </div>
         </div>
@@ -78,7 +86,9 @@
             <div class="col-md-4">
                 <div class="mb-3">
                     <label class="form-label">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control disabled-field" value="{{ $doctor->user->profile->birthdate ? $doctor->user->profile->birthdate->format('Y-m-d') : '' }}" disabled>
+                    <input type="date" class="form-control disabled-field"
+                        value="{{ $doctor->user->profile->birthdate ? $doctor->user->profile->birthdate->format('Y-m-d') : '' }}"
+                        disabled>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Género</label>
@@ -116,7 +126,8 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Dirección</label>
-                    <input type="text" class="form-control disabled-field" value="{{ $doctor->user->profile->address ?? '' }}" disabled>
+                    <input type="text" class="form-control disabled-field"
+                        value="{{ $doctor->user->profile->address ?? '' }}" disabled>
                 </div>
             </div>
         </div>

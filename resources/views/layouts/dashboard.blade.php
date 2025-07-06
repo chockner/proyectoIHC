@@ -19,6 +19,10 @@
     <!-- <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" /> -->
     <link href="ico-secre.ico" rel="icon" type="image/x-icon" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home" />
 
     @stack('scripts')
     <style>
@@ -65,7 +69,7 @@
         }
 
         .active-link:hover {
-            background-color: #0b5ed7;
+            /* background-color: #0b5ed7; */
         }
 
         .material-icons {
@@ -101,14 +105,15 @@
         }
 
         .sidebar-link.active-link svg {
-            color: #ffffff;
+            color: #0d6efd;
             /* Cambiar a blanco (o cualquier otro color que resalte) cuando está activo */
         }
 
         .sidebar-link.active-link {
-            background-color: #0d6efd;
+            /* background-color: #0d6efd; */
+            background-color: #a2b9db;
             /* Fondo azul cuando está activo */
-            color: #ffffff;
+            color: #333;
             /* Color del texto cuando está activo */
         }
     </style>
@@ -131,7 +136,13 @@
                     </a>
                 </div>
             @else
-                <a href="/dashboard" class="{{ request()->routeIs('dashboard') ? 'active-link' : '' }}">Inicio</a>
+                <a href="/dashboard" class="sidebar-link {{ request()->routeIs('dashboard') ? 'active-link' : '' }}"
+                    style="display: flex; align-items: center; gap: 10px;">
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>
+                    <span>Inicio</span>
+                </a>
 
                 {{-- ADMINISTRADOR --}}
                 @if (Auth::user()->role->name == 'admin')
@@ -158,8 +169,12 @@
                         <ul class="list-unstyled ps-3">
                             <li>
                                 <a href="{{ route('admin.secretaria.index') }}"
-                                    class="{{ request()->routeIs('admin.secretaria.index') ? 'active-link' : '' }}">
-                                    Secretarias
+                                    class="sidebar-link {{ request()->routeIs('admin.secretaria.index') ? 'active-link' : '' }}"
+                                    style="display: flex; align-items: center; gap: 10px;">
+                                    {{-- Secretarias --}}
+                                    <span class="material-icons text-pink-500 text-2xl" fill="currentColor"
+                                        style="flex-shrink: 0;">support_agent</span>
+                                    <span>Secretaria</span>
                                 </a>
                             </li>
                         </ul>

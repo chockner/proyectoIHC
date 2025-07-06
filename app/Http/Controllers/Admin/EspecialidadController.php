@@ -16,11 +16,6 @@ class EspecialidadController extends Controller
         return view('admin.especialidad.index', compact('especialidades'));
     }
 
-    public function create()
-    {
-        return view('admin.especialidad.create');
-    }
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -32,6 +27,28 @@ class EspecialidadController extends Controller
         ]);
 
         return redirect()->route('admin.especialidad.index')->with('success', 'Especialidad creada exitosamente.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $especialidad = Specialty::findOrFail($id);
+        $especialidad->name = $request->input('name');
+        $especialidad->save();
+
+        return redirect()->route('admin.especialidad.index')->with('success', 'Especialidad actualizada correctamente');
+    }
+
+
+    public function destroy($id)
+    {
+        $especialidad = Specialty::findOrFail($id);
+        $especialidad->delete();
+
+        return redirect()->route('admin.especialidad.index')->with('success', 'Especialidad eliminada exitosamente.');
     }
 
 }

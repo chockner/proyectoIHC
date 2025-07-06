@@ -79,7 +79,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     /* admin -> especialidad */
     Route::get('/especialidades', [EspecialidadController::class, 'index'])->name('admin.especialidad.index');
-    Route::get('/especialidades/create', [EspecialidadController::class, 'create'])->name('admin.especialidad.create');
+    Route::post('/especialidades', [EspecialidadController::class, 'store'])->name('admin.especialidad.store');
+    Route::put('/especialidad/{id}', [EspecialidadController::class, 'update'])->name('admin.especialidad.update');
+
+
+    Route::delete('/especialidades/{id}', [EspecialidadController::class, 'destroy'])->name('admin.especialidad.destroy');
 
     /* admin -> paciente */
     Route::get('/pacientes', [PacienteController::class, 'index'])->name('admin.paciente.index');
