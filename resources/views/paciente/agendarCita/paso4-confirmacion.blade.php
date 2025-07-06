@@ -157,12 +157,12 @@
 
                 <!-- Botones de navegación -->
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
-                    <a href="{{ route('paciente.agendarCita.seleccionarFechaHora') }}"
+                    <a href="{{ route('paciente.agendarCita.seleccionarFechaHoraPreservado') }}"
                         class="w-full sm:w-auto px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150 text-center">
                         Anterior
                     </a>
                     <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                        <a href="{{ route('dashboard') }}"
+                        <a href="{{ route('paciente.agendarCita.limpiarSesion') }}"
                             class="w-full sm:w-auto px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150 text-center">
                             Cancelar
                         </a>

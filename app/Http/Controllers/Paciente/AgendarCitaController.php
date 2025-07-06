@@ -32,8 +32,15 @@ class AgendarCitaController extends Controller
      */
     public function create()
     {
+        // Limpiar sesión si viene de un flujo nuevo
+        if (!request()->has('preserve_state')) {
+            session()->forget(['agendar_cita.specialty_id', 'agendar_cita.doctor_id', 'agendar_cita.schedule_id', 'agendar_cita.appointment_date', 'agendar_cita.appointment_time']);
+        }
+        
         $especialidades = Specialty::all();
-        return view('paciente.agendarCita.paso1-especialidad', compact('especialidades'));
+        $selectedSpecialtyId = session('agendar_cita.specialty_id');
+        
+        return view('paciente.agendarCita.paso1-especialidad', compact('especialidades', 'selectedSpecialtyId'));
     }
 
     /**
@@ -45,12 +52,44 @@ class AgendarCitaController extends Controller
             'specialty_id' => 'required|exists:specialties,id'
         ]);
 
+        // Guardar especialidad en sesión
+        session(['agendar_cita.specialty_id' => $request->specialty_id]);
+        
+        // Limpiar estados futuros si cambió la especialidad
+        $previousSpecialtyId = session('agendar_cita.specialty_id');
+        if ($previousSpecialtyId && $previousSpecialtyId != $request->specialty_id) {
+            session()->forget(['agendar_cita.doctor_id', 'agendar_cita.schedule_id', 'agendar_cita.appointment_date', 'agendar_cita.appointment_time']);
+        }
+
         $especialidad = Specialty::findOrFail($request->specialty_id);
         $medicos = Doctor::where('specialty_id', $request->specialty_id)
             ->with(['user.profile', 'specialty'])
             ->get();
+        
+        $selectedDoctorId = session('agendar_cita.doctor_id');
 
-        return view('paciente.agendarCita.paso2-medico', compact('medicos', 'especialidad'));
+        return view('paciente.agendarCita.paso2-medico', compact('medicos', 'especialidad', 'selectedDoctorId'));
+    }
+
+    /**
+     * Paso 2: Selección de Médico (con estado preservado)
+     */
+    public function seleccionarMedicoPreservado()
+    {
+        $specialtyId = session('agendar_cita.specialty_id');
+        
+        if (!$specialtyId) {
+            return redirect()->route('paciente.agendarCita.create');
+        }
+
+        $especialidad = Specialty::findOrFail($specialtyId);
+        $medicos = Doctor::where('specialty_id', $specialtyId)
+            ->with(['user.profile', 'specialty'])
+            ->get();
+        
+        $selectedDoctorId = session('agendar_cita.doctor_id');
+
+        return view('paciente.agendarCita.paso2-medico', compact('medicos', 'especialidad', 'selectedDoctorId'));
     }
 
     /**
@@ -62,6 +101,15 @@ class AgendarCitaController extends Controller
             'specialty_id' => 'required|exists:specialties,id',
             'doctor_id' => 'required|exists:doctors,id'
         ]);
+
+        // Guardar médico en sesión
+        session(['agendar_cita.doctor_id' => $request->doctor_id]);
+        
+        // Limpiar estados futuros si cambió el médico
+        $previousDoctorId = session('agendar_cita.doctor_id');
+        if ($previousDoctorId && $previousDoctorId != $request->doctor_id) {
+            session()->forget(['agendar_cita.schedule_id', 'agendar_cita.appointment_date', 'agendar_cita.appointment_time']);
+        }
 
         $especialidad = Specialty::findOrFail($request->specialty_id);
         $medico = Doctor::with(['user.profile', 'specialty'])->findOrFail($request->doctor_id);
@@ -75,7 +123,42 @@ class AgendarCitaController extends Controller
                 return $cita->appointment_date . ' ' . $cita->appointment_time;
             });
 
-        return view('paciente.agendarCita.paso3-fecha-hora', compact('especialidad', 'medico', 'horarios', 'citasExistentes'));
+        $selectedScheduleId = session('agendar_cita.schedule_id');
+        $selectedDate = session('agendar_cita.appointment_date');
+        $selectedTime = session('agendar_cita.appointment_time');
+
+        return view('paciente.agendarCita.paso3-fecha-hora', compact('especialidad', 'medico', 'horarios', 'citasExistentes', 'selectedScheduleId', 'selectedDate', 'selectedTime'));
+    }
+
+    /**
+     * Paso 3: Selección de Fecha y Hora (con estado preservado)
+     */
+    public function seleccionarFechaHoraPreservado()
+    {
+        $specialtyId = session('agendar_cita.specialty_id');
+        $doctorId = session('agendar_cita.doctor_id');
+        
+        if (!$specialtyId || !$doctorId) {
+            return redirect()->route('paciente.agendarCita.create');
+        }
+
+        $especialidad = Specialty::findOrFail($specialtyId);
+        $medico = Doctor::with(['user.profile', 'specialty'])->findOrFail($doctorId);
+        $horarios = Schedule::where('doctor_id', $doctorId)->get();
+
+        // Obtener citas existentes del médico para verificar disponibilidad
+        $citasExistentes = Appointment::where('doctor_id', $doctorId)
+            ->where('status', 'programada')
+            ->get()
+            ->groupBy(function ($cita) {
+                return $cita->appointment_date . ' ' . $cita->appointment_time;
+            });
+
+        $selectedScheduleId = session('agendar_cita.schedule_id');
+        $selectedDate = session('agendar_cita.appointment_date');
+        $selectedTime = session('agendar_cita.appointment_time');
+
+        return view('paciente.agendarCita.paso3-fecha-hora', compact('especialidad', 'medico', 'horarios', 'citasExistentes', 'selectedScheduleId', 'selectedDate', 'selectedTime'));
     }
 
     /**
@@ -89,6 +172,13 @@ class AgendarCitaController extends Controller
             'schedule_id' => 'required|exists:schedules,id',
             'appointment_date' => 'required|date|after:today',
             'appointment_time' => 'required'
+        ]);
+
+        // Guardar fecha y hora en sesión
+        session([
+            'agendar_cita.schedule_id' => $request->schedule_id,
+            'agendar_cita.appointment_date' => $request->appointment_date,
+            'agendar_cita.appointment_time' => $request->appointment_time
         ]);
 
         $especialidad = Specialty::findOrFail($request->specialty_id);
@@ -190,6 +280,9 @@ class AgendarCitaController extends Controller
             }
 
             DB::commit();
+
+            // Limpiar sesión después de agendar exitosamente
+            session()->forget(['agendar_cita.specialty_id', 'agendar_cita.doctor_id', 'agendar_cita.schedule_id', 'agendar_cita.appointment_date', 'agendar_cita.appointment_time']);
 
             return redirect()->route('paciente.citas.show', $cita->id)
                 ->with('success', 'Cita agendada exitosamente.');
@@ -332,5 +425,16 @@ class AgendarCitaController extends Controller
 
         return redirect()->route('paciente.citas.index')
             ->with('success', 'Cita cancelada exitosamente.');
+    }
+
+    /**
+     * Limpiar sesión de agendar cita
+     */
+    public function limpiarSesion()
+    {
+        session()->forget(['agendar_cita.specialty_id', 'agendar_cita.doctor_id', 'agendar_cita.schedule_id', 'agendar_cita.appointment_date', 'agendar_cita.appointment_time']);
+        
+        return redirect()->route('dashboard')
+            ->with('success', 'Proceso de agendar cita cancelado.');
     }
 }

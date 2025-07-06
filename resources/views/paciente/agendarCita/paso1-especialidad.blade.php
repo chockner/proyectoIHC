@@ -35,7 +35,7 @@
         <!-- Grid de especialidades -->
         <form action="{{ route('paciente.agendarCita.seleccionarMedico') }}" method="POST" id="especialidadForm">
             @csrf
-            <input type="hidden" name="specialty_id" id="selectedSpecialtyId">
+            <input type="hidden" name="specialty_id" id="selectedSpecialtyId" value="{{ $selectedSpecialtyId }}">
 
             <!-- Mensaje de "no se encontraron resultados" -->
             <div id="no-results-message" class="hidden text-center py-8">
@@ -48,9 +48,10 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" id="especialidades-grid">
                 @foreach ($especialidades as $especialidad)
-                    <div class="group bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 especialidad-card"
+                    <div class="group bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 especialidad-card {{ $selectedSpecialtyId == $especialidad->id ? 'selected-specialty' : '' }}"
                         data-especialidad-id="{{ $especialidad->id }}" data-especialidad-nombre="{{ $especialidad->name }}"
-                        onclick="seleccionarEspecialidad(this, {{ $especialidad->id }})" role="radio" tabindex="0">
+                        onclick="seleccionarEspecialidad(this, {{ $especialidad->id }})" role="radio" tabindex="0"
+                        aria-checked="{{ $selectedSpecialtyId == $especialidad->id ? 'true' : 'false' }}">
                         <div class="flex items-center gap-4 mb-2">
                             <span class="material-icons text-3xl text-blue-600">
                                 @switch($especialidad->name)
@@ -157,13 +158,13 @@
 
             <!-- Botones de navegación -->
             <div class="mt-8 flex flex-col sm:flex-row justify-end gap-3">
-                <a href="{{ route('dashboard') }}"
+                <a href="{{ route('paciente.agendarCita.limpiarSesion') }}"
                     class="w-full sm:w-auto px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150 text-center">
                     Cancelar
                 </a>
                 <button type="submit"
                     class="w-full sm:w-auto px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150"
-                    disabled id="nextButton">
+                    {{ $selectedSpecialtyId ? '' : 'disabled' }} id="nextButton">
                     Siguiente
                 </button>
             </div>

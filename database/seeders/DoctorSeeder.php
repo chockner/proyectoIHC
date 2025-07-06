@@ -17,10 +17,10 @@ class DoctorSeeder extends Seeder
     public function run(): void
     {
         $nombres = [
-            'Dr. Carlos', 'Dra. María', 'Dr. Roberto', 'Dra. Ana', 'Dr. Luis',
-            'Dra. Carmen', 'Dr. Javier', 'Dra. Patricia', 'Dr. Miguel', 'Dra. Elena',
-            'Dr. Fernando', 'Dra. Isabel', 'Dr. Antonio', 'Dra. Rosa', 'Dr. Manuel',
-            'Dra. Lucía', 'Dr. Pedro', 'Dra. Teresa', 'Dr. Francisco', 'Dra. Gloria'
+            'Carlos', 'María', 'Roberto', 'Ana', 'Luis',
+            'Carmen', 'Javier', 'Patricia', 'Miguel', 'Elena',
+            'Fernando', 'Isabel', 'Antonio', 'Rosa', 'Manuel',
+            'Lucía', 'Pedro', 'Teresa', 'Francisco', 'Gloria'
         ];
 
         $apellidos = [

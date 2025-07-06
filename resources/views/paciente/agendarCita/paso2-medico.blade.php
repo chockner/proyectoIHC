@@ -51,15 +51,16 @@
         <form action="{{ route('paciente.agendarCita.seleccionarFechaHora') }}" method="POST" id="medicoForm">
             @csrf
             <input type="hidden" name="specialty_id" value="{{ $especialidad->id }}">
-            <input type="hidden" name="doctor_id" id="selectedDoctorId">
+            <input type="hidden" name="doctor_id" id="selectedDoctorId" value="{{ $selectedDoctorId }}">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="medicos-grid">
                 @forelse($medicos as $medico)
-                    <div class="group bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 medico-card"
+                    <div class="group bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 medico-card {{ $selectedDoctorId == $medico->id ? 'selected-doctor' : '' }}"
                         data-medico-id="{{ $medico->id }}" 
-                        data-medico-nombre="Dr. {{ $medico->user->profile->first_name ?? 'Médico' }} {{ $medico->user->profile->last_name ?? '' }}"
+                        data-medico-nombre="{{ $medico->user->profile->gender == '0' ? 'Dra.' : 'Dr.' }} {{ $medico->user->profile->first_name ?? 'Médico' }} {{ $medico->user->profile->last_name ?? '' }}"
                         onclick="seleccionarMedico(this, {{ $medico->id }})"
-                        role="radio" tabindex="0">
+                        role="radio" tabindex="0"
+                        aria-checked="{{ $selectedDoctorId == $medico->id ? 'true' : 'false' }}">
                         <div class="flex items-start gap-4">
                             @if ($medico->user->profile && $medico->user->profile->profile_photo)
                                 <img alt="Foto del {{ $medico->user->profile->first_name }} {{ $medico->user->profile->last_name }}"
@@ -71,60 +72,84 @@
                             @endif
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-700">
-                                    Dr. {{ $medico->user->profile->first_name ?? 'Médico' }}
+                                    {{ $medico->user->profile->gender == '0' ? 'Dra.' : 'Dr.' }} {{ $medico->user->profile->first_name ?? 'Médico' }}
                                     {{ $medico->user->profile->last_name ?? '' }}
                                 </h3>
                                 <p class="text-sm text-gray-600 mt-1">
                                     @switch($especialidad->name)
                                         @case('Cardiología')
-                                            Cardiólogo con {{ $medico->experience_years }} años de experiencia en enfermedades
+                                            {{ $medico->user->profile->gender == '0' ? 'Cardióloga' : 'Cardiólogo' }} con {{ $medico->experience_years }} años de experiencia en enfermedades
                                             coronarias y arritmias.
                                         @break
 
                                         @case('Pediatría')
-                                            Pediatra con {{ $medico->experience_years }} años de experiencia en atención integral
+                                            {{ $medico->user->profile->gender == '0' ? 'Pediatra' : 'Pediatra' }} con {{ $medico->experience_years }} años de experiencia en atención integral
                                             infantil.
                                         @break
 
                                         @case('Dermatología')
-                                            Dermatólogo con {{ $medico->experience_years }} años de experiencia en afecciones de la
+                                            {{ $medico->user->profile->gender == '0' ? 'Dermatóloga' : 'Dermatólogo' }} con {{ $medico->experience_years }} años de experiencia en afecciones de la
                                             piel.
                                         @break
 
                                         @case('Neurología')
-                                            Neurólogo con {{ $medico->experience_years }} años de experiencia en trastornos del
+                                            {{ $medico->user->profile->gender == '0' ? 'Neuróloga' : 'Neurólogo' }} con {{ $medico->experience_years }} años de experiencia en trastornos del
                                             sistema nervioso.
                                         @break
 
                                         @case('Ortopedia')
-                                            Ortopedista con {{ $medico->experience_years }} años de experiencia en traumatología.
+                                            {{ $medico->user->profile->gender == '0' ? 'Ortopedista' : 'Ortopedista' }} con {{ $medico->experience_years }} años de experiencia en traumatología.
                                         @break
 
                                         @case('Oncología')
-                                            Oncólogo con {{ $medico->experience_years }} años de experiencia en tratamiento del
+                                            {{ $medico->user->profile->gender == '0' ? 'Oncóloga' : 'Oncólogo' }} con {{ $medico->experience_years }} años de experiencia en tratamiento del
                                             cáncer.
                                         @break
 
                                         @case('Ginecología')
-                                            Ginecólogo con {{ $medico->experience_years }} años de experiencia en salud
+                                            {{ $medico->user->profile->gender == '0' ? 'Ginecóloga' : 'Ginecólogo' }} con {{ $medico->experience_years }} años de experiencia en salud
                                             reproductiva.
                                         @break
 
                                         @case('Oftalmología')
-                                            Oftalmólogo con {{ $medico->experience_years }} años de experiencia en enfermedades
+                                            {{ $medico->user->profile->gender == '0' ? 'Oftalmóloga' : 'Oftalmólogo' }} con {{ $medico->experience_years }} años de experiencia en enfermedades
                                             oculares.
                                         @break
 
                                         @case('Psiquiatría')
-                                            Psiquiatra con {{ $medico->experience_years }} años de experiencia en salud mental.
+                                            {{ $medico->user->profile->gender == '0' ? 'Psiquiatra' : 'Psiquiatra' }} con {{ $medico->experience_years }} años de experiencia en salud mental.
                                         @break
 
                                         @case('Traumatología')
-                                            Traumatólogo con {{ $medico->experience_years }} años de experiencia en lesiones.
+                                            {{ $medico->user->profile->gender == '0' ? 'Traumatóloga' : 'Traumatólogo' }} con {{ $medico->experience_years }} años de experiencia en lesiones.
+                                        @break
+
+                                        @case('Endocrinología')
+                                            {{ $medico->user->profile->gender == '0' ? 'Endocrinóloga' : 'Endocrinólogo' }} con {{ $medico->experience_years }} años de experiencia en trastornos hormonales.
+                                        @break
+
+                                        @case('Gastroenterología')
+                                            {{ $medico->user->profile->gender == '0' ? 'Gastroenteróloga' : 'Gastroenterólogo' }} con {{ $medico->experience_years }} años de experiencia en enfermedades digestivas.
+                                        @break
+
+                                        @case('Neumología')
+                                            {{ $medico->user->profile->gender == '0' ? 'Neumóloga' : 'Neumólogo' }} con {{ $medico->experience_years }} años de experiencia en enfermedades respiratorias.
+                                        @break
+
+                                        @case('Urología')
+                                            {{ $medico->user->profile->gender == '0' ? 'Uróloga' : 'Urólogo' }} con {{ $medico->experience_years }} años de experiencia en enfermedades urológicas.
+                                        @break
+
+                                        @case('Otorrinolaringología')
+                                            {{ $medico->user->profile->gender == '0' ? 'Otorrinolaringóloga' : 'Otorrinolaringólogo' }} con {{ $medico->experience_years }} años de experiencia en enfermedades de oído, nariz y garganta.
+                                        @break
+
+                                        @case('Medicina Interna')
+                                            {{ $medico->user->profile->gender == '0' ? 'Médica Internista' : 'Médico Internista' }} con {{ $medico->experience_years }} años de experiencia en medicina general.
                                         @break
 
                                         @default
-                                            Especialista en {{ $especialidad->name }} con {{ $medico->experience_years }} años de
+                                            {{ $medico->user->profile->gender == '0' ? 'Especialista' : 'Especialista' }} en {{ $especialidad->name }} con {{ $medico->experience_years }} años de
                                             experiencia.
                                     @endswitch
                                 </p>
@@ -152,18 +177,18 @@
 
                 <!-- Botones de navegación -->
                 <div class="mt-8 flex flex-col sm:flex-row justify-between items-center gap-3">
-                    <a href="{{ route('paciente.agendarCita.create') }}"
+                    <a href="{{ route('paciente.agendarCita.create', ['preserve_state' => true]) }}"
                         class="w-full sm:w-auto px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150 text-center">
                         Anterior
                     </a>
                     <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                        <a href="{{ route('dashboard') }}"
+                        <a href="{{ route('paciente.agendarCita.limpiarSesion') }}"
                             class="w-full sm:w-auto px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150 text-center">
                             Cancelar
                         </a>
                         <button type="submit"
                             class="w-full sm:w-auto px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150"
-                            disabled id="nextButton">
+                            {{ $selectedDoctorId ? '' : 'disabled' }} id="nextButton">
                             Siguiente
                         </button>
                     </div>

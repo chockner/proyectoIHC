@@ -47,9 +47,9 @@
             @csrf
             <input type="hidden" name="specialty_id" value="{{ $especialidad->id }}">
             <input type="hidden" name="doctor_id" value="{{ $medico->id }}">
-            <input type="hidden" name="schedule_id" id="selectedScheduleId">
-            <input type="hidden" name="appointment_date" id="selectedDate">
-            <input type="hidden" name="appointment_time" id="selectedTime">
+            <input type="hidden" name="schedule_id" id="selectedScheduleId" value="{{ $selectedScheduleId }}">
+            <input type="hidden" name="appointment_date" id="selectedDate" value="{{ $selectedDate }}">
+            <input type="hidden" name="appointment_time" id="selectedTime" value="{{ $selectedTime }}">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Calendario -->
@@ -84,20 +84,20 @@
 
             <!-- Botones de navegación -->
             <div class="mt-8 flex flex-col sm:flex-row justify-between items-center gap-3">
-                <a href="{{ route('paciente.agendarCita.seleccionarMedico') }}"
+                <a href="{{ route('paciente.agendarCita.seleccionarMedicoPreservado') }}"
                     class="w-full sm:w-auto px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150 text-center">
                     Anterior
                 </a>
                 <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                    <a href="{{ route('dashboard') }}"
+                    <a href="{{ route('paciente.agendarCita.limpiarSesion') }}"
                         class="w-full sm:w-auto px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150 text-center">
                         Cancelar
                     </a>
-                    <button type="submit"
-                        class="w-full sm:w-auto px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150"
-                        disabled id="nextButton">
-                        Siguiente
-                    </button>
+                                            <button type="submit"
+                            class="w-full sm:w-auto px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150"
+                            {{ $selectedDate && $selectedTime ? '' : 'disabled' }} id="nextButton">
+                            Siguiente
+                        </button>
                 </div>
             </div>
         </form>
@@ -109,6 +109,11 @@
             let selectedDate = null;
             let selectedTime = null;
             let selectedScheduleId = null;
+
+            // Valores preservados de la sesión
+            const preservedDate = '{{ $selectedDate }}';
+            const preservedTime = '{{ $selectedTime }}';
+            const preservedScheduleId = '{{ $selectedScheduleId }}';
 
             // Días de la semana en español
             const diasSemana = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
@@ -158,6 +163,7 @@
 
                     const dayElement = document.createElement('div');
                     dayElement.className = 'p-2 text-center text-sm cursor-pointer rounded-lg';
+                    dayElement.setAttribute('data-date', date.toISOString().split('T')[0]);
 
                     if (date.getMonth() === month) {
                         const isToday = date.toDateString() === new Date().toDateString();
@@ -255,6 +261,7 @@
                             slotElement.textContent = timeSlot;
                             slotElement.dataset.time = timeSlot;
                             slotElement.dataset.scheduleId = schedule.id;
+                            slotElement.setAttribute('data-time', timeSlot);
 
                             slotElement.addEventListener('click', () => selectTimeSlot(slotElement, timeSlot, schedule
                                 .id));
@@ -296,7 +303,37 @@
             });
 
             // Inicializar calendario cuando se carga la página
-            document.addEventListener('DOMContentLoaded', initCalendar);
+            document.addEventListener('DOMContentLoaded', function() {
+                initCalendar();
+                
+                // Restaurar selección preservada si existe
+                if (preservedDate && preservedTime && preservedScheduleId) {
+                    const date = new Date(preservedDate);
+                    selectedDate = date;
+                    selectedTime = preservedTime;
+                    selectedScheduleId = preservedScheduleId;
+                    
+                    // Actualizar UI
+                    updateCalendar();
+                    loadAvailableTimeSlots(date);
+                    
+                    // Marcar fecha y hora como seleccionadas
+                    setTimeout(() => {
+                        const dateElement = document.querySelector(`[data-date="${preservedDate}"]`);
+                        if (dateElement) {
+                            dateElement.classList.add('selected');
+                        }
+                        
+                        const timeElement = document.querySelector(`[data-time="${preservedTime}"]`);
+                        if (timeElement) {
+                            timeElement.classList.add('selected');
+                        }
+                        
+                        // Habilitar botón siguiente
+                        document.getElementById('nextButton').disabled = false;
+                    }, 100);
+                }
+            });
         </script>
 
         <style>
