@@ -19,6 +19,8 @@ use App\Http\Controllers\Secretaria\CitaController;
 
 /* PACIENTE CONTROLLERS */
 use App\Http\Controllers\Paciente\AgendarCitaController;
+use App\Http\Controllers\Paciente\HistorialMedicoPacienteController;
+use App\Http\Controllers\Paciente\NotificacionesPacienteController;
 
 Route::view('/', 'home')->name('home');
 Route::view('/login', 'auth.login')->name('login');
@@ -120,4 +122,26 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
     /* paciente -> agendar cita */
     Route::get('/agendar-cita', [AgendarCitaController::class, 'create'])->name('paciente.agendarCita.create');
     Route::post('/agendar-cita', [AgendarCitaController::class, 'store'])->name('paciente.agendarCita.store');
+
+    /* paciente -> citas */
+    Route::get('/citas', [AgendarCitaController::class, 'index'])->name('paciente.citas.index');
+    Route::get('/citas/{id}', [AgendarCitaController::class, 'show'])->name('paciente.citas.show');
+    Route::get('/citas/{id}/edit', [AgendarCitaController::class, 'edit'])->name('paciente.citas.edit');
+    Route::put('/citas/{id}', [AgendarCitaController::class, 'update'])->name('paciente.citas.update');
+    Route::delete('/citas/{id}', [AgendarCitaController::class, 'destroy'])->name('paciente.citas.destroy');
+    Route::get('/citas/confirmar/{id}', [AgendarCitaController::class, 'confirm'])->name('paciente.citas.confirm');
+    Route::get('/citas/cancelar/{id}', [AgendarCitaController::class, 'cancel'])->name('paciente.citas.cancel');
+
+    /** Historial médico de usuario del tipo paciente**/
+    Route::get('/historial-medico', [HistorialMedicoPacienteController::class, 'index'])->name('paciente.historialMedico.index');
+    Route::get('/historial-medico/crear', [HistorialMedicoPacienteController::class, 'create'])->name('paciente.historialMedico.create');
+    Route::post('/historial-medico', [HistorialMedicoPacienteController::class, 'store'])->name('paciente.historialMedico.store');
+    Route::get('/historial-medico/{id}', [HistorialMedicoPacienteController::class, 'show'])->name('paciente.historialMedico.show');
+    Route::get('/historial-medico/{id}/edit', [HistorialMedicoPacienteController::class, 'edit'])->name('paciente.historialMedico.edit');
+    Route::put('/historial-medico/{id}', [HistorialMedicoPacienteController::class, 'update'])->name('paciente.historialMedico.update');
+    Route::delete('/historial-medico/{id}', [HistorialMedicoPacienteController::class, 'destroy'])->name('paciente.historialMedico.destroy');
+
+    /** Notificaciones de usuario del tipo paciente**/
+    Route::get('/notificaciones', [NotificacionesPacienteController::class, 'index'])->name('paciente.notificaciones.index');
+    
 });

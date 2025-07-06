@@ -14,4 +14,14 @@ class HistorialMedicoController extends Controller
             ->paginate(10);
         return view('admin.historialMedico.index',compact('historiales'));
     }
+
+    public function show($id)
+    {
+        //Quiero el historial médico del paciente
+        $historial = MedicalRecord::find($id);
+
+        return view('paciente.historialMedico.show', compact('historial'));
+
+    }
+
 }

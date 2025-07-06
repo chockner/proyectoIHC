@@ -35,6 +35,11 @@
         </div>
     </div>
 
+    {{-- <h2>Gráficos</h2>
+    <div class="card-body">
+        <canvas id="citasChart" with="400" height="400"></canvas>
+    </div> --}}
+
 @endsection
 
 @section('scripts')
