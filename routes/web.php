@@ -130,10 +130,13 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
     Route::get('/agendar-cita/paso1', [AgendarCitaController::class, 'createPaso1'])->name('paciente.agendarCita.paso1');
     Route::get('/agendar-cita/horarios/get-available-times/{doctorId}/{shift}/{date}', [AgendarCitaController::class, 'getAvailableTimes']);
     Route::get('/agendar-cita/horarios/get-schedules/{id}/{shift}',[AgendarCitaController::class, 'getSchedules']);
+    Route::post('/guardar-cita', [AgendarCitaController::class, 'storeAppointment'])->name('guardar.cita');
+    Route::get('/agendar-cita/consultar-citas/{doctorId}/{fecha}', [AppointmentController::class, 'getExistingAppointments']);
 
 
 
 });
+
 
 
 
