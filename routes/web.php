@@ -126,4 +126,14 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
     /* paciente -> agendar cita */
     Route::get('/agendar-cita', [AgendarCitaController::class, 'create'])->name('paciente.agendarCita.create');
     Route::post('/agendar-cita', [AgendarCitaController::class, 'store'])->name('paciente.agendarCita.store');
+    Route::get('/agendar-cita/horarios/get-doctors/{specialtyId}/{shift}', [AgendarCitaController::class, 'getDoctors']);
+    Route::get('/agendar-cita/paso1', [AgendarCitaController::class, 'createPaso1'])->name('paciente.agendarCita.paso1');
+    Route::get('/agendar-cita/horarios/get-available-times/{doctorId}/{shift}/{date}', [AgendarCitaController::class, 'getAvailableTimes']);
+    Route::get('/agendar-cita/horarios/get-schedules/{id}/{shift}',[AgendarCitaController::class, 'getSchedules']);
+
+
+
 });
+
+
+
