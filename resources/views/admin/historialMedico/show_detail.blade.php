@@ -58,7 +58,8 @@
                     class="btn btn-outline-secondary">Volver</a>
             </div>
             <div class="col-md-4 d-flex justify-content-end">
-                <a href="" class="btn btn-primary">Editar Doctor</a>
+                <a href="{{ route('admin.historialMedico.edit_detail', $historial->id) }}" class="btn btn-primary">Editar
+                    Doctor</a>
             </div>
         </div>
     </div>
