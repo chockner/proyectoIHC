@@ -380,27 +380,37 @@
                     }
                     
                     // Restaurar selección preservada si existe
-                    if (preservedDate && preservedTime && preservedScheduleId) {
-                        console.log('Restaurando selección preservada...');
+                    if (preservedDate) {
                         const date = new Date(preservedDate);
                         selectedDate = date;
-                        selectedTime = preservedTime;
-                        selectedScheduleId = preservedScheduleId;
-                        // Actualizar UI
+                        document.getElementById('selectedDate').value = preservedDate;
+                        // Marcar visualmente el día
                         updateCalendar();
-                        loadAvailableTimeSlots(date);
-                        // Marcar fecha y hora como seleccionadas
+                        // Cargar horarios y marcar el horario si existe
                         setTimeout(() => {
+                            loadAvailableTimeSlots(date);
+                            // Marcar el día seleccionado
                             const dateElement = document.querySelector(`[data-date="${preservedDate}"]`);
                             if (dateElement) {
                                 dateElement.classList.add('selected');
                             }
-                            const timeElement = document.querySelector(`[data-time="${preservedTime}"]`);
-                            if (timeElement) {
-                                timeElement.classList.add('selected');
+                            // Marcar el horario seleccionado si existe
+                            if (preservedTime && preservedScheduleId) {
+                                selectedTime = preservedTime;
+                                selectedScheduleId = preservedScheduleId;
+                                document.getElementById('selectedTime').value = preservedTime;
+                                document.getElementById('selectedScheduleId').value = preservedScheduleId;
+                                // Simular click en el botón de horario para ejecutar toda la lógica
+                                setTimeout(() => {
+                                    const timeElement = document.querySelector(`[data-time="${preservedTime}"]`);
+                                    if (timeElement) {
+                                        timeElement.click();
+                                    }
+                                }, 100);
+                            } else {
+                                // Si solo hay fecha, deshabilitar botón siguiente
+                                document.getElementById('nextButton').disabled = true;
                             }
-                            // Habilitar botón siguiente
-                            document.getElementById('nextButton').disabled = false;
                         }, 100);
                     }
                 });

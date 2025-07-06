@@ -52,20 +52,18 @@ class AgendarCitaController extends Controller
             'specialty_id' => 'required|exists:specialties,id'
         ]);
 
-        // Guardar especialidad en sesión
-        session(['agendar_cita.specialty_id' => $request->specialty_id]);
-        
         // Limpiar estados futuros si cambió la especialidad
         $previousSpecialtyId = session('agendar_cita.specialty_id');
         if ($previousSpecialtyId && $previousSpecialtyId != $request->specialty_id) {
             session()->forget(['agendar_cita.doctor_id', 'agendar_cita.schedule_id', 'agendar_cita.appointment_date', 'agendar_cita.appointment_time']);
         }
+        // Guardar especialidad en sesión
+        session(['agendar_cita.specialty_id' => $request->specialty_id]);
 
         $especialidad = Specialty::findOrFail($request->specialty_id);
         $medicos = Doctor::where('specialty_id', $request->specialty_id)
             ->with(['user.profile', 'specialty'])
             ->get();
-        
         $selectedDoctorId = session('agendar_cita.doctor_id');
 
         return view('paciente.agendarCita.paso2-medico', compact('medicos', 'especialidad', 'selectedDoctorId'));
@@ -102,14 +100,13 @@ class AgendarCitaController extends Controller
             'doctor_id' => 'required|exists:doctors,id'
         ]);
 
-        // Guardar médico en sesión
-        session(['agendar_cita.doctor_id' => $request->doctor_id]);
-        
         // Limpiar estados futuros si cambió el médico
         $previousDoctorId = session('agendar_cita.doctor_id');
         if ($previousDoctorId && $previousDoctorId != $request->doctor_id) {
             session()->forget(['agendar_cita.schedule_id', 'agendar_cita.appointment_date', 'agendar_cita.appointment_time']);
         }
+        // Guardar médico en sesión
+        session(['agendar_cita.doctor_id' => $request->doctor_id]);
 
         $especialidad = Specialty::findOrFail($request->specialty_id);
         $medico = Doctor::with(['user.profile', 'specialty'])->findOrFail($request->doctor_id);
