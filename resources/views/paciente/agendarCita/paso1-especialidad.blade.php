@@ -37,7 +37,16 @@
             @csrf
             <input type="hidden" name="specialty_id" id="selectedSpecialtyId">
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <!-- Mensaje de "no se encontraron resultados" -->
+            <div id="no-results-message" class="hidden text-center py-8">
+                <div class="bg-gray-50 rounded-lg p-6 border-2 border-dashed border-gray-300">
+                    <span class="material-icons text-6xl text-gray-400 mb-4">search_off</span>
+                    <h3 class="text-lg font-medium text-gray-600 mb-2">No se encontraron especialidades</h3>
+                    <p class="text-sm text-gray-500">Intenta con otros términos de búsqueda</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" id="especialidades-grid">
                 @foreach ($especialidades as $especialidad)
                     <div class="group bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 especialidad-card"
                         data-especialidad-id="{{ $especialidad->id }}" data-especialidad-nombre="{{ $especialidad->name }}"
@@ -182,18 +191,48 @@
             }
 
             // Filtro de búsqueda
-            document.getElementById('search-specialty').addEventListener('input', function(e) {
-                const searchTerm = e.target.value.toLowerCase();
-                const cards = document.querySelectorAll('.especialidad-card');
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.getElementById('search-specialty');
+                const noResultsMessage = document.getElementById('no-results-message');
+                const especialidadesGrid = document.getElementById('especialidades-grid');
+                
+                if (searchInput) {
+                    searchInput.addEventListener('input', function(e) {
+                        const searchTerm = e.target.value.toLowerCase().trim();
+                        const cards = document.querySelectorAll('.especialidad-card');
+                        
+                        console.log('Buscando:', searchTerm); // Debug
+                        console.log('Tarjetas encontradas:', cards.length); // Debug
 
-                cards.forEach(card => {
-                    const nombre = card.getAttribute('data-especialidad-nombre').toLowerCase();
-                    if (nombre.includes(searchTerm)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+                        let visibleCards = 0;
+
+                        cards.forEach(card => {
+                            const nombre = card.getAttribute('data-especialidad-nombre');
+                            if (nombre) {
+                                const nombreLower = nombre.toLowerCase();
+                                console.log('Comparando:', nombreLower, 'con:', searchTerm); // Debug
+                                
+                                if (searchTerm === '' || nombreLower.includes(searchTerm)) {
+                                    card.classList.remove('hidden');
+                                    visibleCards++;
+                                    console.log('Mostrando:', nombre); // Debug
+                                } else {
+                                    card.classList.add('hidden');
+                                    console.log('Ocultando:', nombre); // Debug
+                                }
+                            }
+                        });
+
+                        // Mostrar/ocultar mensaje de "no se encontraron resultados"
+                        if (searchTerm !== '' && visibleCards === 0) {
+                            noResultsMessage.classList.remove('hidden');
+                            especialidadesGrid.classList.add('hidden');
+                        } else {
+                            noResultsMessage.classList.add('hidden');
+                            especialidadesGrid.classList.remove('hidden');
+                        }
+                    });
+                }
             });
 
             // Validación del formulario
