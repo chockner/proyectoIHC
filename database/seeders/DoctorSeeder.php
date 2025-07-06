@@ -16,9 +16,33 @@ class DoctorSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 8; $i++){
-            $user =User::create([
-                'role_id' => 2,
+        $nombres = [
+            'Dr. Carlos', 'Dra. María', 'Dr. Roberto', 'Dra. Ana', 'Dr. Luis',
+            'Dra. Carmen', 'Dr. Javier', 'Dra. Patricia', 'Dr. Miguel', 'Dra. Elena',
+            'Dr. Fernando', 'Dra. Isabel', 'Dr. Antonio', 'Dra. Rosa', 'Dr. Manuel',
+            'Dra. Lucía', 'Dr. Pedro', 'Dra. Teresa', 'Dr. Francisco', 'Dra. Gloria'
+        ];
+
+        $apellidos = [
+            'García', 'Rodríguez', 'López', 'Martínez', 'González',
+            'Pérez', 'Sánchez', 'Ramírez', 'Torres', 'Flores',
+            'Rivera', 'Morales', 'Castro', 'Ortiz', 'Silva',
+            'Cruz', 'Reyes', 'Moreno', 'Jiménez', 'Díaz'
+        ];
+
+        $distritos = [
+            'Miraflores', 'San Isidro', 'Barranco', 'Surco', 'La Molina',
+            'San Borja', 'Lince', 'Jesús María', 'Magdalena', 'Pueblo Libre'
+        ];
+
+        // Crear 20 doctores (uno para cada especialidad + extras)
+        for ($i = 1; $i <= 20; $i++) {
+            $nombreIndex = ($i - 1) % count($nombres);
+            $apellidoIndex = ($i - 1) % count($apellidos);
+            $distritoIndex = ($i - 1) % count($distritos);
+            
+            $user = User::create([
+                'role_id' => 2, // Doctor
                 'document_id' => str_pad(20000000 + $i, 8, '0', STR_PAD_LEFT),
                 'password' => Hash::make("doctor{$i}"),
             ]);
@@ -26,24 +50,23 @@ class DoctorSeeder extends Seeder
             Profile::create([
                 'user_id' => $user->id,
                 'email' => "doctor{$i}@gmail.com",
-                'first_name' => "Doctor{$i}",
-                'last_name' => 'Pérez',
+                'first_name' => $nombres[$nombreIndex],
+                'last_name' => $apellidos[$apellidoIndex],
                 'phone' => "92000000{$i}",
-                'birthdate' => '1985-01-01',
-                'address' => 'Av. Médica',
-                'gender' => '0', // 0: Hombre, 1: Mujer
-                'civil_status' => '1', // 0: Soltero, 1: Casado, 2: Divorciado, 3: Viudo
+                'birthdate' => '198' . rand(0, 9) . '-' . str_pad(rand(1, 12), 2, '0', STR_PAD_LEFT) . '-' . str_pad(rand(1, 28), 2, '0', STR_PAD_LEFT),
+                'address' => 'Av. Médica ' . $i,
+                'gender' => $i % 2 == 0 ? '0' : '1', // Alternar entre hombre y mujer
+                'civil_status' => rand(0, 3), // 0: Soltero, 1: Casado, 2: Divorciado, 3: Viudo
                 'region' => 'Lima',
                 'province' => 'Lima',
-                'district' => 'Miraflores',
-                /* 'country' => 'Perú' */
+                'district' => $distritos[$distritoIndex],
             ]);
 
             Doctor::create([
                 'user_id' => $user->id,
-                'specialty_id' => $i, // Una especialidad distinta para cada uno
-                'license_code' => "LIC00{$i}",
-                'experience_years' => rand(5, 25)
+                'specialty_id' => ($i <= 16) ? $i : rand(1, 16), // Los primeros 16 tienen especialidades únicas, los demás aleatorias
+                'license_code' => "LIC" . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'experience_years' => rand(3, 30)
             ]);
         }
     }

@@ -21,7 +21,15 @@ class SpecialtiesSeeder extends Seeder
             'Oftalmología',
             'Neurología',
             'Psiquiatría',
-            'Traumatología'
+            'Traumatología',
+            'Ortopedia',
+            'Oncología',
+            'Endocrinología',
+            'Gastroenterología',
+            'Neumología',
+            'Urología',
+            'Otorrinolaringología',
+            'Medicina Interna'
         ];
         foreach ($especialidades as $name){
             Specialty::create(['name' => $name,]);

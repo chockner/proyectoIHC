@@ -24,16 +24,41 @@
             <p class="text-lg font-semibold text-blue-700">{{ $especialidad->name }}</p>
         </div>
 
+        <!-- Buscador de médicos -->
+        <div class="mb-6">
+            <label class="sr-only" for="search-doctor">Buscar médico</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="material-icons text-gray-400">search</span>
+                </div>
+                <input
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    id="search-doctor" name="search-doctor"
+                    placeholder="Buscar médico por nombre (ej. Dr. Carlos, Dra. María...)" type="search" />
+            </div>
+        </div>
+
+        <!-- Mensaje de "no se encontraron resultados" -->
+        <div id="no-results-message" class="hidden text-center py-8">
+            <div class="bg-gray-50 rounded-lg p-6 border-2 border-dashed border-gray-300">
+                <span class="material-icons text-6xl text-gray-400 mb-4">person_search</span>
+                <h3 class="text-lg font-medium text-gray-600 mb-2">No se encontraron médicos</h3>
+                <p class="text-sm text-gray-500">Intenta con otros términos de búsqueda</p>
+            </div>
+        </div>
+
         <!-- Grid de médicos -->
         <form action="{{ route('paciente.agendarCita.seleccionarFechaHora') }}" method="POST" id="medicoForm">
             @csrf
             <input type="hidden" name="specialty_id" value="{{ $especialidad->id }}">
             <input type="hidden" name="doctor_id" id="selectedDoctorId">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="medicos-grid">
                 @forelse($medicos as $medico)
                     <div class="group bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-2 border-transparent focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 medico-card"
-                        data-medico-id="{{ $medico->id }}" onclick="seleccionarMedico(this, {{ $medico->id }})"
+                        data-medico-id="{{ $medico->id }}" 
+                        data-medico-nombre="Dr. {{ $medico->user->profile->first_name ?? 'Médico' }} {{ $medico->user->profile->last_name ?? '' }}"
+                        onclick="seleccionarMedico(this, {{ $medico->id }})"
                         role="radio" tabindex="0">
                         <div class="flex items-start gap-4">
                             @if ($medico->user->profile && $medico->user->profile->profile_photo)
@@ -165,6 +190,51 @@
                     // Habilitar el botón siguiente
                     document.getElementById('nextButton').disabled = false;
                 }
+
+                // Filtro de búsqueda de médicos
+                document.addEventListener('DOMContentLoaded', function() {
+                    const searchInput = document.getElementById('search-doctor');
+                    const noResultsMessage = document.getElementById('no-results-message');
+                    const medicosGrid = document.getElementById('medicos-grid');
+                    
+                    if (searchInput) {
+                        searchInput.addEventListener('input', function(e) {
+                            const searchTerm = e.target.value.toLowerCase().trim();
+                            const cards = document.querySelectorAll('.medico-card');
+                            
+                            console.log('Buscando médico:', searchTerm); // Debug
+                            console.log('Tarjetas de médicos encontradas:', cards.length); // Debug
+
+                            let visibleCards = 0;
+
+                            cards.forEach(card => {
+                                const nombre = card.getAttribute('data-medico-nombre');
+                                if (nombre) {
+                                    const nombreLower = nombre.toLowerCase();
+                                    console.log('Comparando médico:', nombreLower, 'con:', searchTerm); // Debug
+                                    
+                                    if (searchTerm === '' || nombreLower.includes(searchTerm)) {
+                                        card.classList.remove('hidden');
+                                        visibleCards++;
+                                        console.log('Mostrando médico:', nombre); // Debug
+                                    } else {
+                                        card.classList.add('hidden');
+                                        console.log('Ocultando médico:', nombre); // Debug
+                                    }
+                                }
+                            });
+
+                            // Mostrar/ocultar mensaje de "no se encontraron resultados"
+                            if (searchTerm !== '' && visibleCards === 0) {
+                                noResultsMessage.classList.remove('hidden');
+                                medicosGrid.classList.add('hidden');
+                            } else {
+                                noResultsMessage.classList.add('hidden');
+                                medicosGrid.classList.remove('hidden');
+                            }
+                        });
+                    }
+                });
 
                 // Validación del formulario
                 document.getElementById('medicoForm').addEventListener('submit', function(e) {
