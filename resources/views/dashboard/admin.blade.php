@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <h2>Panel de Administración</h2>
+    <h1 class="text-2xl font-bold mb-4">Panel de Administración</h1>
 
     <div class="row mt-4">
         <div class="col-md-4">

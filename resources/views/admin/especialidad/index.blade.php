@@ -2,21 +2,24 @@
 
 @section('content')
     <div class="container mt-4">
-        <h2>Lista de Especialidades</h2>
+        <h1 class="text-2xl font-bold mb-4">Lista de Especialidades</h1>
+
         <form action="{{ route('admin.especialidad.store') }}" method="POST" id="createEspecialidadForm">
             @csrf
             <div class="row mb-3">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" name="name" id="name" required
-                        onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
-                        oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
-                        placeholder="Nombre de la Especialidad">
-                    @error('name')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="button" class="btn btn-primary" id="btnShowModal">Guardar</button>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="name" id="name" required
+                            onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                            oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
+                            placeholder="Nombre de la Especialidad">
+                        @error('name')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-primary" id="btnShowModal">Guardar</button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -58,23 +61,19 @@
                         <td class="px-6 py-4">{{ $index + 1 }}</td>
                         <td class="px-6 py-4">{{ $especialidad->name }}</td>
                         <td>
-                            <div class="mb-3 flex justify-center space-x-2">
-                                {{-- Icono Editar --}}
+                            <div class="mb-3 flex justity-center space-x-2">
+                                {{-- icono editar --}}
                                 <div class="flex flex-col items-center">
-                                    <a href="{{ route('admin.especialidad.edit', $especialidad->id) }}"
-                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
-                                        data-bs-toggle="tooltip" data-bs-title="Editar">
-                                        <div class="relative">
-                                            <span class="material-icons h-6 w-6 text-2xl text-blue-600">medical_information</span>
-                                            <span
-                                                class="material-icons absolute -bottom-1 -right-1 text-xs bg-orange-100 text-orange-600 rounded-full p-0.5">edit</span>
-                                        </div>
-                                    </a>
+                                    <button type="button" class="btn btn-warning btn-edit"
+                                        data-especialidad-id="{{ $especialidad->id }}"
+                                        data-especialidad-name="{{ $especialidad->name }}">
+                                        Editar
+                                    </button>
                                 </div>
-                                {{-- Icono Eliminar --}}
+                                {{-- icono eliminar --}}
                                 <div class="flex flex-col items-center">
-                                    <form action="{{ route('admin.especialidad.destroy', $especialidad->id) }}" method="POST"
-                                        class="d-inline delete-form">
+                                    <form action="{{ route('admin.especialidad.destroy', $especialidad->id) }}"
+                                        method="POST" class="d-inline delete-form">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button"
@@ -239,6 +238,11 @@
             $('#editEspecialidadForm').attr('action', updateUrl);
             const modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
             modal.show();
+            // Reproducir sonido
+            const alertSound = document.getElementById('alertSound');
+            if (alertSound) {
+                alertSound.play().catch(e => console.log('Error al reproducir sonido:', e));
+            }
         });
 
         $('#btnConfirmEdit').click(function() {
