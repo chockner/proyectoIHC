@@ -69,6 +69,24 @@
                     </div>
 
                     <div class="grid grid-cols-7 gap-1" id="calendarGrid"></div>
+                    
+                    <!-- Leyenda del calendario -->
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+                        <div class="flex items-center justify-center gap-4 text-xs text-gray-600">
+                            <div class="flex items-center gap-1">
+                                <div class="w-3 h-3 bg-green-100 border border-green-300 rounded"></div>
+                                <span>Disponible</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <div class="w-3 h-3 bg-blue-100 border border-blue-300 rounded"></div>
+                                <span>Hoy</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <div class="w-3 h-3 bg-gray-100 border border-gray-300 rounded"></div>
+                                <span>No disponible</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Horarios disponibles -->
@@ -105,252 +123,326 @@
 
     @push('scripts')
         <script>
-            let currentDate = new Date();
-            let selectedDate = null;
-            let selectedTime = null;
-            let selectedScheduleId = null;
+            (function() {
+                let currentDate = new Date();
+                let selectedDate = null;
+                let selectedTime = null;
+                let selectedScheduleId = null;
 
-            // Valores preservados de la sesión
-            const preservedDate = '{{ $selectedDate }}';
-            const preservedTime = '{{ $selectedTime }}';
-            const preservedScheduleId = '{{ $selectedScheduleId }}';
+                // Valores preservados de la sesión
+                const preservedDate = '{{ $selectedDate }}';
+                const preservedTime = '{{ $selectedTime }}';
+                const preservedScheduleId = '{{ $selectedScheduleId }}';
 
-            // Días de la semana en español
-            const diasSemana = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
-            const diasCortos = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'];
+                // Días de la semana en español (0 = Domingo, 1 = Lunes, etc.)
+                const diasSemana = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
+                const diasCortos = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'];
 
-            // Horarios del médico
-            const horarios = @json($horarios);
+                // Horarios del médico
+                const horarios = @json($horarios);
 
-            // Citas existentes
-            const citasExistentes = @json($citasExistentes);
+                // Citas existentes
+                const citasExistentes = @json($citasExistentes);
 
-            function initCalendar() {
-                updateCalendar();
-
-                document.getElementById('prevMonth').addEventListener('click', () => {
-                    currentDate.setMonth(currentDate.getMonth() - 1);
+                function initCalendar() {
                     updateCalendar();
-                });
+                }
 
-                document.getElementById('nextMonth').addEventListener('click', () => {
-                    currentDate.setMonth(currentDate.getMonth() + 1);
-                    updateCalendar();
-                });
-            }
+                function updateCalendar() {
+                    const year = currentDate.getFullYear();
+                    const month = currentDate.getMonth();
 
-            function updateCalendar() {
-                const year = currentDate.getFullYear();
-                const month = currentDate.getMonth();
+                    document.getElementById('currentMonthYear').textContent =
+                        new Date(year, month).toLocaleDateString('es-ES', {
+                            month: 'long',
+                            year: 'numeric'
+                        });
 
-                document.getElementById('currentMonthYear').textContent =
-                    new Date(year, month).toLocaleDateString('es-ES', {
+                    const firstDay = new Date(year, month, 1);
+                    let startDay = firstDay.getDay(); // 0=domingo, 1=lunes, ..., 6=sábado
+                    if (startDay === 0) startDay = 7; // Para que domingo sea 7
+                    const startDate = new Date(firstDay);
+                    startDate.setDate(startDate.getDate() - (startDay - 1)); // Siempre inicia en lunes
+
+                    const calendarGrid = document.getElementById('calendarGrid');
+                    calendarGrid.innerHTML = '';
+
+                    console.log('Actualizando calendario para:', year, month);
+                    console.log('Horarios disponibles:', horarios);
+
+                    // Generar 6 semanas (42 días) para el calendario
+                    for (let i = 0; i < 42; i++) {
+                        const date = new Date(startDate);
+                        date.setDate(startDate.getDate() + i);
+
+                        const dayElement = document.createElement('div');
+                        dayElement.className = 'p-2 text-center text-sm cursor-pointer rounded-lg';
+                        dayElement.setAttribute('data-date', date.toISOString().split('T')[0]);
+
+                        // Solo mostrar días del mes actual
+                        if (date.getMonth() === month) {
+                            const isToday = date.toDateString() === new Date().toDateString();
+                            const isPast = date < new Date().setHours(0, 0, 0, 0);
+                            const hasSchedule = checkIfDateHasSchedule(date);
+
+                            dayElement.textContent = date.getDate();
+
+                            if (isToday) {
+                                dayElement.classList.add('bg-blue-100', 'text-blue-700', 'font-semibold');
+                            } else if (isPast) {
+                                dayElement.classList.add('text-gray-300', 'cursor-not-allowed');
+                            } else if (hasSchedule) {
+                                dayElement.classList.add('bg-green-50', 'text-green-700', 'hover:bg-green-100', 'calendar-day', 'available');
+                                dayElement.addEventListener('click', () => selectDate(date));
+                            } else {
+                                dayElement.classList.add('text-gray-500', 'cursor-not-allowed');
+                            }
+                        } else {
+                            // Días de otros meses
+                            dayElement.textContent = date.getDate();
+                            dayElement.classList.add('text-gray-300');
+                        }
+
+                        calendarGrid.appendChild(dayElement);
+                    }
+                }
+
+                function checkIfDateHasSchedule(date) {
+                    const dayOfWeek = diasSemana[date.getDay()];
+                    const hasSchedule = horarios.some(horario => horario.day_of_week === dayOfWeek);
+                    
+                    // Solo mostrar logs en desarrollo
+                    if (horarios.length > 0) {
+                        console.log(`Verificando ${dayOfWeek} (${date.toDateString()}): ${hasSchedule ? 'SÍ tiene horario' : 'NO tiene horario'}`);
+                    }
+                    
+                    return hasSchedule;
+                }
+
+                function selectDate(date) {
+                    selectedDate = date;
+
+                    // Actualizar UI del calendario
+                    document.querySelectorAll('.calendar-day').forEach(day => {
+                        day.classList.remove('selected');
+                    });
+                    
+                    // Encontrar y seleccionar el elemento correcto
+                    const dateStr = date.toISOString().split('T')[0];
+                    const dayElement = document.querySelector(`[data-date="${dateStr}"]`);
+                    if (dayElement) {
+                        dayElement.classList.add('selected');
+                    }
+
+                    // Actualizar texto de fecha seleccionada
+                    const options = {
+                        weekday: 'long',
+                        year: 'numeric',
                         month: 'long',
-                        year: 'numeric'
+                        day: 'numeric'
+                    };
+                    document.getElementById('selectedDateText').textContent =
+                        `Horarios disponibles para el ${date.toLocaleDateString('es-ES', options)}`;
+
+                    // Cargar horarios disponibles
+                    loadAvailableTimeSlots(date);
+
+                    // Actualizar campos ocultos
+                    document.getElementById('selectedDate').value = dateStr;
+                    
+                    console.log('Fecha seleccionada:', dateStr);
+                }
+
+                function loadAvailableTimeSlots(date) {
+                    const dayOfWeek = diasSemana[date.getDay()];
+                    const dateStr = date.toISOString().split('T')[0];
+
+                    console.log(`Cargando horarios para ${dayOfWeek} (${dateStr})`);
+
+                    // Obtener horarios del médico para ese día
+                    const daySchedules = horarios.filter(h => h.day_of_week === dayOfWeek);
+                    console.log('Horarios encontrados:', daySchedules.length);
+
+                    // Obtener citas existentes para esa fecha
+                    const existingAppointments = citasExistentes[dateStr] || [];
+                    console.log('Citas existentes:', existingAppointments.length);
+
+                    const container = document.getElementById('timeSlotsContainer');
+                    container.innerHTML = '';
+
+                    if (daySchedules.length === 0) {
+                        container.innerHTML = '<p class="text-gray-500 text-sm">No hay horarios disponibles para este día.</p>';
+                        return;
+                    }
+
+                    let availableSlots = 0;
+                    
+                    daySchedules.forEach(schedule => {
+                        console.log(`Procesando horario: ${schedule.start_time} - ${schedule.end_time}`);
+                        
+                        const startTime = new Date(`2000-01-01T${schedule.start_time}`);
+                        const endTime = new Date(`2000-01-01T${schedule.end_time}`);
+
+                        while (startTime < endTime) {
+                            const timeSlot = startTime.toTimeString().substring(0, 5);
+                            const timeSlotFull = startTime.toTimeString().substring(0, 8);
+
+                            // Verificar si el horario está ocupado
+                            const isOccupied = existingAppointments.some(appointment =>
+                                appointment.appointment_time === timeSlotFull
+                            );
+
+                            if (!isOccupied) {
+                                const slotElement = document.createElement('button');
+                                slotElement.type = 'button';
+                                slotElement.className =
+                                    'p-3 text-sm font-medium border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 time-slot';
+                                slotElement.textContent = timeSlot;
+                                slotElement.dataset.time = timeSlot;
+                                slotElement.dataset.scheduleId = schedule.id;
+                                slotElement.setAttribute('data-time', timeSlot);
+
+                                slotElement.addEventListener('click', () => selectTimeSlot(slotElement, timeSlot, schedule.id));
+
+                                container.appendChild(slotElement);
+                                availableSlots++;
+                                console.log(`Horario disponible agregado: ${timeSlot}`);
+                            } else {
+                                console.log(`Horario ocupado: ${timeSlot}`);
+                            }
+
+                            startTime.setMinutes(startTime.getMinutes() + 30);
+                        }
+                    });
+                    
+                    if (availableSlots === 0) {
+                        container.innerHTML = '<p class="text-gray-500 text-sm">Todos los horarios para este día están ocupados.</p>';
+                    }
+                }
+
+                function selectTimeSlot(element, time, scheduleId) {
+                    // Remover selección previa
+                    document.querySelectorAll('.time-slot').forEach(slot => {
+                        slot.classList.remove('selected');
                     });
 
-                const firstDay = new Date(year, month, 1);
-                const lastDay = new Date(year, month + 1, 0);
-                const startDate = new Date(firstDay);
-                startDate.setDate(startDate.getDate() - firstDay.getDay());
+                    // Seleccionar nuevo horario
+                    element.classList.add('selected');
 
-                const calendarGrid = document.getElementById('calendarGrid');
-                calendarGrid.innerHTML = '';
+                    selectedTime = time;
+                    selectedScheduleId = scheduleId;
 
-                for (let i = 0; i < 42; i++) {
-                    const date = new Date(startDate);
-                    date.setDate(startDate.getDate() + i);
+                    // Actualizar campos ocultos
+                    document.getElementById('selectedTime').value = time;
+                    document.getElementById('selectedScheduleId').value = scheduleId;
 
-                    const dayElement = document.createElement('div');
-                    dayElement.className = 'p-2 text-center text-sm cursor-pointer rounded-lg';
-                    dayElement.setAttribute('data-date', date.toISOString().split('T')[0]);
-
-                    if (date.getMonth() === month) {
-                        const isToday = date.toDateString() === new Date().toDateString();
-                        const isPast = date < new Date().setHours(0, 0, 0, 0);
-                        const hasSchedule = checkIfDateHasSchedule(date);
-
-                        dayElement.textContent = date.getDate();
-
-                        if (isToday) {
-                            dayElement.classList.add('bg-blue-100', 'text-blue-700', 'font-semibold');
-                        } else if (isPast) {
-                            dayElement.classList.add('text-gray-300', 'cursor-not-allowed');
-                        } else if (hasSchedule) {
-                            dayElement.classList.add('bg-green-50', 'text-green-700', 'hover:bg-green-100', 'calendar-day',
-                                'available');
-                            dayElement.addEventListener('click', () => selectDate(date));
-                        } else {
-                            dayElement.classList.add('text-gray-500', 'cursor-not-allowed');
-                        }
-                    } else {
-                        dayElement.classList.add('text-gray-300');
-                    }
-
-                    calendarGrid.appendChild(dayElement);
-                }
-            }
-
-            function checkIfDateHasSchedule(date) {
-                const dayOfWeek = diasSemana[date.getDay()];
-                return horarios.some(horario => horario.day_of_week === dayOfWeek);
-            }
-
-            function selectDate(date) {
-                selectedDate = date;
-
-                // Actualizar UI del calendario
-                document.querySelectorAll('.calendar-day').forEach(day => {
-                    day.classList.remove('selected');
-                });
-                event.target.classList.add('selected');
-
-                // Actualizar texto de fecha seleccionada
-                const options = {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-                document.getElementById('selectedDateText').textContent =
-                    `Horarios disponibles para el ${date.toLocaleDateString('es-ES', options)}`;
-
-                // Cargar horarios disponibles
-                loadAvailableTimeSlots(date);
-
-                // Actualizar campos ocultos
-                document.getElementById('selectedDate').value = date.toISOString().split('T')[0];
-            }
-
-            function loadAvailableTimeSlots(date) {
-                const dayOfWeek = diasSemana[date.getDay()];
-                const dateStr = date.toISOString().split('T')[0];
-
-                // Obtener horarios del médico para ese día
-                const daySchedules = horarios.filter(h => h.day_of_week === dayOfWeek);
-
-                // Obtener citas existentes para esa fecha
-                const existingAppointments = citasExistentes[dateStr] || [];
-
-                const container = document.getElementById('timeSlotsContainer');
-                container.innerHTML = '';
-
-                if (daySchedules.length === 0) {
-                    container.innerHTML = '<p class="text-gray-500 text-sm">No hay horarios disponibles para este día.</p>';
-                    return;
+                    // Habilitar botón siguiente
+                    document.getElementById('nextButton').disabled = false;
                 }
 
-                daySchedules.forEach(schedule => {
-                    const startTime = new Date(`2000-01-01T${schedule.start_time}`);
-                    const endTime = new Date(`2000-01-01T${schedule.end_time}`);
-
-                    while (startTime < endTime) {
-                        const timeSlot = startTime.toTimeString().substring(0, 5);
-                        const timeSlotFull = startTime.toTimeString().substring(0, 8);
-
-                        // Verificar si el horario está ocupado
-                        const isOccupied = existingAppointments.some(appointment =>
-                            appointment.appointment_time === timeSlotFull
-                        );
-
-                        if (!isOccupied) {
-                            const slotElement = document.createElement('button');
-                            slotElement.type = 'button';
-                            slotElement.className =
-                                'p-3 text-sm font-medium border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 time-slot';
-                            slotElement.textContent = timeSlot;
-                            slotElement.dataset.time = timeSlot;
-                            slotElement.dataset.scheduleId = schedule.id;
-                            slotElement.setAttribute('data-time', timeSlot);
-
-                            slotElement.addEventListener('click', () => selectTimeSlot(slotElement, timeSlot, schedule
-                                .id));
-
-                            container.appendChild(slotElement);
-                        }
-
-                        startTime.setMinutes(startTime.getMinutes() + 30);
+                // Validación del formulario
+                document.getElementById('fechaHoraForm').addEventListener('submit', function(e) {
+                    if (!selectedDate || !selectedTime || !selectedScheduleId) {
+                        e.preventDefault();
+                        alert('Por favor seleccione una fecha y hora');
                     }
                 });
-            }
 
-            function selectTimeSlot(element, time, scheduleId) {
-                // Remover selección previa
-                document.querySelectorAll('.time-slot').forEach(slot => {
-                    slot.classList.remove('selected');
+                // Inicializar calendario cuando se carga la página
+                document.addEventListener('DOMContentLoaded', function() {
+                    console.log('Inicializando calendario...');
+                    console.log('Horarios recibidos:', horarios);
+                    console.log('Citas existentes:', citasExistentes);
+                    console.log('Valores preservados:', { preservedDate, preservedTime, preservedScheduleId });
+                    
+                    // Verificar que tenemos datos
+                    if (!horarios || horarios.length === 0) {
+                        console.warn('No hay horarios disponibles para este médico');
+                        document.getElementById('timeSlotsContainer').innerHTML = 
+                            '<p class="text-red-500 text-sm">No hay horarios configurados para este médico.</p>';
+                    }
+                    
+                    // Inicializar calendario y listeners solo si existen los botones
+                    initCalendar();
+                    const prevBtn = document.getElementById('prevMonth');
+                    const nextBtn = document.getElementById('nextMonth');
+                    if (prevBtn) {
+                        prevBtn.addEventListener('click', () => {
+                            currentDate.setMonth(currentDate.getMonth() - 1);
+                            updateCalendar();
+                        });
+                    }
+                    if (nextBtn) {
+                        nextBtn.addEventListener('click', () => {
+                            currentDate.setMonth(currentDate.getMonth() + 1);
+                            updateCalendar();
+                        });
+                    }
+                    
+                    // Restaurar selección preservada si existe
+                    if (preservedDate && preservedTime && preservedScheduleId) {
+                        console.log('Restaurando selección preservada...');
+                        const date = new Date(preservedDate);
+                        selectedDate = date;
+                        selectedTime = preservedTime;
+                        selectedScheduleId = preservedScheduleId;
+                        // Actualizar UI
+                        updateCalendar();
+                        loadAvailableTimeSlots(date);
+                        // Marcar fecha y hora como seleccionadas
+                        setTimeout(() => {
+                            const dateElement = document.querySelector(`[data-date="${preservedDate}"]`);
+                            if (dateElement) {
+                                dateElement.classList.add('selected');
+                            }
+                            const timeElement = document.querySelector(`[data-time="${preservedTime}"]`);
+                            if (timeElement) {
+                                timeElement.classList.add('selected');
+                            }
+                            // Habilitar botón siguiente
+                            document.getElementById('nextButton').disabled = false;
+                        }, 100);
+                    }
                 });
-
-                // Seleccionar nuevo horario
-                element.classList.add('selected');
-
-                selectedTime = time;
-                selectedScheduleId = scheduleId;
-
-                // Actualizar campos ocultos
-                document.getElementById('selectedTime').value = time;
-                document.getElementById('selectedScheduleId').value = scheduleId;
-
-                // Habilitar botón siguiente
-                document.getElementById('nextButton').disabled = false;
-            }
-
-            // Validación del formulario
-            document.getElementById('fechaHoraForm').addEventListener('submit', function(e) {
-                if (!selectedDate || !selectedTime || !selectedScheduleId) {
-                    e.preventDefault();
-                    alert('Por favor seleccione una fecha y hora');
-                }
-            });
-
-            // Inicializar calendario cuando se carga la página
-            document.addEventListener('DOMContentLoaded', function() {
-                initCalendar();
-                
-                // Restaurar selección preservada si existe
-                if (preservedDate && preservedTime && preservedScheduleId) {
-                    const date = new Date(preservedDate);
-                    selectedDate = date;
-                    selectedTime = preservedTime;
-                    selectedScheduleId = preservedScheduleId;
-                    
-                    // Actualizar UI
-                    updateCalendar();
-                    loadAvailableTimeSlots(date);
-                    
-                    // Marcar fecha y hora como seleccionadas
-                    setTimeout(() => {
-                        const dateElement = document.querySelector(`[data-date="${preservedDate}"]`);
-                        if (dateElement) {
-                            dateElement.classList.add('selected');
-                        }
-                        
-                        const timeElement = document.querySelector(`[data-time="${preservedTime}"]`);
-                        if (timeElement) {
-                            timeElement.classList.add('selected');
-                        }
-                        
-                        // Habilitar botón siguiente
-                        document.getElementById('nextButton').disabled = false;
-                    }, 100);
-                }
-            });
+            })();
         </script>
 
         <style>
+            .calendar-day.available {
+                background-color: #dcfce7;
+                color: #166534;
+                font-weight: 500;
+                transition: all 0.2s ease;
+            }
+
             .calendar-day.available:hover {
-                background-color: #e0e7ff;
-                color: #3730a3;
+                background-color: #bbf7d0;
+                color: #15803d;
+                transform: scale(1.05);
             }
 
             .calendar-day.selected {
-                background-color: #312e81;
+                background-color: #1e40af;
                 color: white;
+                font-weight: 600;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .time-slot {
+                transition: all 0.2s ease;
+            }
+
+            .time-slot:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
 
             .time-slot.selected {
-                background-color: #312e81;
+                background-color: #1e40af;
                 color: white;
-                border-color: #312e81;
+                border-color: #1e40af;
+                font-weight: 600;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
 
             .material-icons {
