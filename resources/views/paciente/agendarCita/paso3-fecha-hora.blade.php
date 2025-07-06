@@ -266,6 +266,15 @@
                                        String(date.getMonth() + 1).padStart(2, '0') + '-' + 
                                        String(date.getDate()).padStart(2, '0');
                     document.getElementById('selectedDate').value = localDateStr;
+                    
+                    // Limpiar selección de hora al cambiar de día
+                    selectedTime = null;
+                    selectedScheduleId = null;
+                    document.getElementById('selectedTime').value = '';
+                    document.getElementById('selectedScheduleId').value = '';
+                    
+                    // Deshabilitar botón siguiente hasta que se seleccione un nuevo horario
+                    document.getElementById('nextButton').disabled = true;
                 }
 
                 function loadAvailableTimeSlots(date) {
@@ -283,6 +292,8 @@
 
                     if (daySchedules.length === 0) {
                         container.innerHTML = '<p class="text-gray-500 text-sm">No hay horarios disponibles para este día.</p>';
+                        // Deshabilitar botón siguiente si no hay horarios
+                        document.getElementById('nextButton').disabled = true;
                         return;
                     }
 
