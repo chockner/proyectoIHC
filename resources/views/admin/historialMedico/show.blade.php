@@ -189,7 +189,7 @@
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
     </audio>
 @endsection
-@section('scripts')
+@push('scripts')
     <script>
         // Inicializar tooltips de Bootstrap
         document.addEventListener('DOMContentLoaded', function() {
@@ -206,9 +206,9 @@
 
             // Configurar mensaje
             const message = `
-            ¿Está seguro que desea eliminar campo?
-            Esta acción no se puede deshacer.
-        `;
+        ¿Está seguro que desea eliminar campo?
+        Esta acción no se puede deshacer.
+    `;
             $('#confirmMessage').html(message);
 
             // Guardar referencia al formulario en el modal
@@ -236,4 +236,4 @@
             }
         });
     </script>
-@endsection
+@endpush

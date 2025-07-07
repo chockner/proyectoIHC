@@ -85,21 +85,15 @@
                             </div>
                             {{-- Botón Eliminar --}}
                             <div class="flex flex-col items-center">
-                                <form action="{{ route('admin.horarios.delete-by-filters') }}" method="POST"
-                                    class="d-inline delete-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button"
-                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-delete"
-                                        data-form-id="form-horarios-delete" data-bs-toggle="tooltip"
-                                        data-bs-title="Eliminar">
-                                        <div class="relative">
-                                            <span class="material-icons text-red-600">schedule</span>
-                                            <span
-                                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-red-100 text-red-600 rounded-full p-0.4">delete_outline</span>
-                                        </div>
-                                    </button>
-                                </form>
+                                <a href="{{ route('admin.horarios.delete-by-filters') }}"
+                                    class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                    data-bs-toggle="tooltip" data-bs-title="Eliminar">
+                                    <div class="relative">
+                                        <span class="material-icons text-red-600">schedule</span>
+                                        <span
+                                            class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-red-100 text-red-600 rounded-full p-0.4">delete_outline</span>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -178,8 +172,7 @@
         </div>
     </div>
 @endsection
-
-@section('scripts')
+@push('scripts')
     <script>
         // Inicializar tooltips de Bootstrap
         document.addEventListener('DOMContentLoaded', function() {
@@ -188,42 +181,5 @@
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
         });
-
-        // Delegación de eventos para todos los botones de eliminar
-        $(document).on('click', '.btn-delete', function() {
-            // Obtener el formulario específico para este paciente
-            const form = $(this).closest('form');
-
-            // Configurar mensaje
-            const message = `
-            ¿Está seguro que desea eliminar este horario?
-            Esta acción no se puede deshacer.
-        `;
-            $('#confirmMessage').html(message);
-
-            // Guardar referencia al formulario en el modal
-            $('#confirmDeleteModal').data('delete-form', form);
-
-            // Mostrar modal
-            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-            modal.show();
-
-            // Reproducir sonido
-            const alertSound = document.getElementById('alertSound');
-            if (alertSound) {
-                alertSound.play().catch(e => console.log('Error al reproducir sonido:', e));
-            }
-        });
-
-        // Confirmar eliminación
-        $('#btnConfirmDelete').click(function() {
-            // Recuperar el formulario guardado
-            const form = $('#confirmDeleteModal').data('delete-form');
-
-            // Enviar el formulario específico
-            if (form) {
-                form.submit();
-            }
-        });
     </script>
-@endsection
+@endpush

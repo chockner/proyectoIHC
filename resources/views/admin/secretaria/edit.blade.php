@@ -195,8 +195,7 @@
         </audio>
     </div>
 @endsection
-
-@section('scripts')
+@push('scripts')
     <script>
         // Validación del formulario y modal de confirmación
         $('#btnEdit').click(function() {
@@ -208,17 +207,17 @@
 
             // Construir el mensaje de confirmación
             const message = `
-                <strong>Datos de la Cita:</strong><br>
-                DNI: ${$('#document_id').val()}<br>
-                Nombres: ${$('#first_name').val()}<br>
-                Apellidos: ${$('#last_name').val()}<br>
-                Teléfono: ${$('#phone').val()}<br>
-                Correo Electrónico: ${$('#email').val()}<br>
-                Fecha de Nacimiento: ${$('#birthdate').val()}<br>
-                Género: ${$('#gender option:selected').text()}<br>
-                Estado Civil: ${$('#civil_status option:selected').text()}<br>
-                Dirección: ${$('#address').val()}
-            `;
+            <strong>Datos de la Cita:</strong><br>
+            DNI: ${$('#document_id').val()}<br>
+            Nombres: ${$('#first_name').val()}<br>
+            Apellidos: ${$('#last_name').val()}<br>
+            Teléfono: ${$('#phone').val()}<br>
+            Correo Electrónico: ${$('#email').val()}<br>
+            Fecha de Nacimiento: ${$('#birthdate').val()}<br>
+            Género: ${$('#gender option:selected').text()}<br>
+            Estado Civil: ${$('#civil_status option:selected').text()}<br>
+            Dirección: ${$('#address').val()}
+        `;
             $('#confirmMessage').html(message);
 
             // Mostrar el modal
@@ -237,4 +236,4 @@
             $('#editSecretariaForm').submit();
         });
     </script>
-@endsection
+@endpush

@@ -134,7 +134,7 @@
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
     </audio>
 @endsection
-@section('scripts')
+@push('scripts')
     <script>
         // Inicializar tooltips de Bootstrap
         document.addEventListener('DOMContentLoaded', function() {
@@ -148,9 +148,9 @@
         $(document).on('click', '.btn-delete', function() {
             const form = $(this).closest('form');
             const message = `
-                ¿Está seguro que desea eliminar esta secretaria?
-                Esta acción no se puede deshacer.
-            `;
+            ¿Está seguro que desea eliminar esta secretaria?
+            Esta acción no se puede deshacer.
+        `;
             $('#confirmMessage').html(message);
             $('#confirmDeleteModal').data('delete-form', form);
             const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
@@ -168,4 +168,4 @@
             }
         });
     </script>
-@endsection
+@endpush

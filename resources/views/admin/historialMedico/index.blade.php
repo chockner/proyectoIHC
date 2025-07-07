@@ -123,7 +123,7 @@
         </audio>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script>
         // Inicializar tooltips de Bootstrap
         document.addEventListener('DOMContentLoaded', function() {
@@ -140,9 +140,9 @@
 
             // Configurar mensaje
             const message = `
-            ¿Está seguro que desea eliminar este Historial?
-            Esta acción no se puede deshacer.
-        `;
+        ¿Está seguro que desea eliminar este Historial?
+        Esta acción no se puede deshacer.
+    `;
             $('#confirmMessage').html(message);
 
             // Guardar referencia al formulario en el modal
@@ -170,4 +170,4 @@
             }
         });
     </script>
-@endsection
+@endpush

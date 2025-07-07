@@ -83,8 +83,8 @@
                                         @method('DELETE')
                                         <button type="button"
                                             class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-delete"
-                                            data-form-id="form-{{ $doctor->id }}"
-                                            data-bs-toggle="tooltip" data-bs-title="Eliminar">
+                                            data-form-id="form-{{ $doctor->id }}" data-bs-toggle="tooltip"
+                                            data-bs-title="Eliminar">
                                             <div class="relative">
                                                 <svg class="text-red-500" fill="currentColor" height="24px"
                                                     viewBox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
@@ -159,13 +159,12 @@
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
     </audio>
 @endsection
-
-@section('scripts')
+@push('scripts')
     <script>
         // Inicializar tooltips de Bootstrap
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
         });
@@ -177,9 +176,9 @@
 
             // Configurar mensaje
             const message = `
-            ¿Está seguro que desea eliminar este doctor?
-            Esta acción no se puede deshacer.
-        `;
+        ¿Está seguro que desea eliminar este doctor?
+        Esta acción no se puede deshacer.
+    `;
             $('#confirmMessage').html(message);
 
             // Guardar referencia al formulario en el modal
@@ -207,4 +206,4 @@
             }
         });
     </script>
-@endsection
+@endpush

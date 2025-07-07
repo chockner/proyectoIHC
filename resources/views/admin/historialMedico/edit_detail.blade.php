@@ -121,8 +121,7 @@
         </audio>
     </div>
 @endsection
-
-@section('scripts')
+@push('scripts')
     <script>
         // Validación del formulario y modal de confirmación
         $('#btnEdit').click(function() {
@@ -134,15 +133,15 @@
 
             // Construir el mensaje de confirmación
             const message = `
-                <strong>Datos de la Cita:</strong><br>
-                Doctor: ${$('#doctor_nombre').val()}<br>
-                Paciente: ${$('#nombre_paciente').val()}<br>
-                Especialidad: ${$('#especialidad_id').val()}<br>
-                Fecha y Hora: ${$('#fechayhora').val()}<br>
-                Diagnóstico: ${$('#diagnosis').val()}<br>
-                Tratamiento: ${$('#treatment').val()}<br>
-                Notas: ${$('#notes').val()}<br>
-            `;
+            <strong>Datos de la Cita:</strong><br>
+            Doctor: ${$('#doctor_nombre').val()}<br>
+            Paciente: ${$('#nombre_paciente').val()}<br>
+            Especialidad: ${$('#especialidad_id').val()}<br>
+            Fecha y Hora: ${$('#fechayhora').val()}<br>
+            Diagnóstico: ${$('#diagnosis').val()}<br>
+            Tratamiento: ${$('#treatment').val()}<br>
+            Notas: ${$('#notes').val()}<br>
+        `;
             $('#confirmMessage').html(message);
 
             // Mostrar el modal
@@ -161,4 +160,4 @@
             $('#editHistorialForm').submit();
         });
     </script>
-@endsection
+@endpush

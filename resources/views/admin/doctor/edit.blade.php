@@ -13,7 +13,8 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
 
-        <form action="{{ route('admin.doctor.update', $doctor->id) }}" method="POST" id="editDoctorForm" enctype="multipart/form-data">
+        <form action="{{ route('admin.doctor.update', $doctor->id) }}" method="POST" id="editDoctorForm"
+            enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -76,8 +77,8 @@
                     {{-- AÑOS DE EXPERIENCIA --}}
                     <div class="mb-3">
                         <label for="experience_years" class="form-label">Años de Experiencia</label>
-                        <input type="number" class="form-control" name="experience_years" id="experience_years" min="0"
-                            max="50" step="1" required
+                        <input type="number" class="form-control" name="experience_years" id="experience_years"
+                            min="0" max="50" step="1" required
                             value="{{ old('experience_years', $doctor->experience_years ?? '') }}"
                             title="Ingrese un número entre 0 y 50">
                         @error('experience_years')
@@ -186,7 +187,8 @@
         </form>
 
         <!-- Modal de confirmación -->
-        <div class="modal fade" id="confirmEditModal" tabindex="-1" aria-labelledby="confirmEditModalLabel" aria-hidden="true">
+        <div class="modal fade" id="confirmEditModal" tabindex="-1" aria-labelledby="confirmEditModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-warning text-white">
@@ -215,7 +217,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         // Validación del formulario y modal de confirmación
         $('#btnEdit').click(function() {
@@ -240,4 +242,4 @@
             $('#editDoctorForm').submit();
         });
     </script>
-@endsection
+@endpush
