@@ -13,8 +13,8 @@
             @if($cita->status === 'programada')
                 <a href="{{ route('paciente.citas.edit', $cita->id) }}" 
                    class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150">
-                    <span class="material-icons mr-2">edit</span>
-                    Editar
+                    <span class="material-icons mr-2">schedule</span>
+                    Reprogramar
                 </a>
             @endif
         </div>
@@ -199,27 +199,14 @@
     @if($cita->status === 'programada')
     <div class="bg-white rounded-lg shadow-sm overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Acciones</h2>
+            <h2 class="text-lg font-semibold text-gray-800">Gestionar Cita</h2>
         </div>
         <div class="p-6">
             <div class="flex flex-wrap gap-3">
-                <form action="{{ route('paciente.citas.confirm', $cita->id) }}" 
-                      method="POST" 
-                      class="inline"
-                      onsubmit="return confirm('¿Confirmar que la cita se completó?')">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" 
-                            class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-150">
-                        <span class="material-icons mr-2">check_circle</span>
-                        Marcar como Completada
-                    </button>
-                </form>
-                
                 <form action="{{ route('paciente.citas.cancel', $cita->id) }}" 
                       method="POST" 
                       class="inline"
-                      onsubmit="return confirm('¿Está seguro de que desea cancelar esta cita?')">
+                      onsubmit="return confirm('¿Está seguro de que desea cancelar esta cita? Esta acción no se puede deshacer.')">
                     @csrf
                     @method('PATCH')
                     <button type="submit" 
@@ -228,6 +215,22 @@
                         Cancelar Cita
                     </button>
                 </form>
+            </div>
+            
+            <!-- Información adicional -->
+            <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div class="flex items-start">
+                    <span class="material-icons text-blue-600 mr-3 mt-1">info</span>
+                    <div>
+                        <h4 class="text-sm font-medium text-blue-800">Información importante:</h4>
+                        <ul class="mt-2 text-sm text-blue-700 space-y-1">
+                            <li>• Llegue 15 minutos antes de su cita</li>
+                            <li>• Traiga su documento de identidad</li>
+                            <li>• Si no puede asistir, cancele con anticipación</li>
+                            <li>• El estado de su cita será actualizado por el personal médico</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
