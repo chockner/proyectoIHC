@@ -58,4 +58,9 @@ class CitaController extends Controller
 
         return view('secretaria.citas.index', compact('citas'));
     }
+
+    public function show($id){
+        $cita = Appointment::findOrFail($id);
+        return view('secretaria.citas.show', compact('cita'));
+    }
 }

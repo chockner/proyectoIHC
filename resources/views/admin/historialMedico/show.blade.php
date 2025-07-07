@@ -36,43 +36,43 @@
                                     {{-- icono ver --}}
                                     <div class="flex flex-col items-center">
                                         <a href="{{ route('admin.historialMedico.show_detail', $detalle->id) }}"
-                                            class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 ">
+                                            class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                            data-bs-toggle="tooltip" data-bs-title="Ver">
                                             <div class="relative">
-                                                {{-- aqui el icono --}}
+                                                <span class="material-icons text-blue-600">assignment</span>
                                                 <span
-                                                    class="material-icons absolute -top-1 -right-1 text-xs bg-blue-100 text-blue-600 rounded-full p-0.5">visibility</span>
+                                                    class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-blue-100 text-blue-600 rounded-full p-0.5">visibility</span>
                                             </div>
                                         </a>
-                                        <span class="text-xs text-gray-600 font-medium">Ver</span>
                                     </div>
                                     {{-- icono editar --}}
                                     <div class="flex flex-col items-center">
                                         <a href="{{ route('admin.historialMedico.edit_detail', $detalle->id) }}"
-                                            class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 ">
+                                            class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                            data-bs-toggle="tooltip" data-bs-title="Editar">
                                             <div class="relative">
-                                                {{-- aqui el icono --}}
+                                                <span class="material-icons text-orange-500">assignment</span>
                                                 <span
-                                                    class="material-icons absolute -top-1 -right-1 text-xs bg-yellow-100 text-yellow-600 rounded-full p-0.5">edit</span>
+                                                    class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-orange-100 text-orange-600 rounded-full p-0.5">edit</span>
                                             </div>
                                         </a>
-                                        <span class="text-xs text-gray-600 font-medium">Editar</span>
                                     </div>
                                     {{-- icono eliminar --}}
                                     <div class="flex flex-col items-center">
-                                        <form action="" method="POST" class="d-inline delete-form">
+                                        <form action={{-- "{{ route('admin.historialMedico.destroy', $detalle->id) }}" --}} method="POST" class="d-inline delete-form">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"
                                                 class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-delete"
-                                                data-form-id="form-{{ $detalle->id }}">
+                                                data-form-id="form-{{ $detalle->id }}" data-bs-toggle="tooltip"
+                                                data-bs-title="Eliminar">
                                                 <div class="relative">
-                                                    {{-- aqui el icono --}}
+                                                    <span class="material-icons text-red-600">assignment</span>
                                                     <span
-                                                        class="material-icons absolute -top-1 -right-1 text-xs bg-red-100 text-red-600 rounded-full p-0.5">delete</span>
+                                                        class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-red-100 text-red-600 rounded-full p-0.5">delete</span>
                                                 </div>
                                             </button>
                                         </form>
-                                        <span class="text-xs text-gray-600 font-medium">Eliminar</span>
                                     </div>
                                 </div>
                             </td>
@@ -189,8 +189,16 @@
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
     </audio>
 @endsection
-@section('scripts')
+@push('scripts')
     <script>
+        // Inicializar tooltips de Bootstrap
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
         // Delegación de eventos para todos los botones de eliminar
         $(document).on('click', '.btn-delete', function() {
             // Obtener el formulario específico para este doctor
@@ -198,9 +206,9 @@
 
             // Configurar mensaje
             const message = `
-            ¿Está seguro que desea eliminar campo?
-            Esta acción no se puede deshacer.
-        `;
+        ¿Está seguro que desea eliminar campo?
+        Esta acción no se puede deshacer.
+    `;
             $('#confirmMessage').html(message);
 
             // Guardar referencia al formulario en el modal
@@ -228,4 +236,4 @@
             }
         });
     </script>
-@endsection
+@endpush

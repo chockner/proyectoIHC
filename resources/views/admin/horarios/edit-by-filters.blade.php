@@ -116,8 +116,7 @@
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
     </audio>
 @endsection
-
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
             // Cargar médicos cuando se selecciona especialidad
@@ -188,36 +187,36 @@
                         // Verificar si hay horarios
                         if (response.horarios.length === 0) {
                             $('#horariosContainer').append(`
-                        <tr>
-                            <td colspan="3" class="text-center py-4">
-                                <div class="alert alert-info">
-                                    No hay horarios registrados para este médico y turno.
-                                    <a href="{{ route('admin.horarios.create') }}" class="alert-link">
-                                        ¿Desea crear nuevos horarios?
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    `);
+                    <tr>
+                        <td colspan="3" class="text-center py-4">
+                            <div class="alert alert-info">
+                                No hay horarios registrados para este médico y turno.
+                                <a href="{{ route('admin.horarios.create') }}" class="alert-link">
+                                    ¿Desea crear nuevos horarios?
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                `);
                         } else {
                             // Solo mostrar días con horarios existentes
                             response.horarios.forEach(horario => {
                                 const row = `
-                            <tr>
-                                <td>${horario.day_of_week}</td>
-                                <td>
-                                    <input type="time" name="horarios[${horario.day_of_week}][start_time]" 
-                                        class="form-control time-input" value="${horario.start_time}" required>
-                                    <input type="hidden" name="horarios[${horario.day_of_week}][day_of_week]" value="${horario.day_of_week}">
-                                    <div class="invalid-feedback">Los minutos deben ser 00</div>
-                                </td>
-                                <td>
-                                    <input type="time" name="horarios[${horario.day_of_week}][end_time]" 
-                                        class="form-control time-input" value="${horario.end_time}" required>
-                                    <div class="invalid-feedback">Los minutos deben ser 00</div>
-                                </td>
-                            </tr>
-                        `;
+                        <tr>
+                            <td>${horario.day_of_week}</td>
+                            <td>
+                                <input type="time" name="horarios[${horario.day_of_week}][start_time]" 
+                                    class="form-control time-input" value="${horario.start_time}" required>
+                                <input type="hidden" name="horarios[${horario.day_of_week}][day_of_week]" value="${horario.day_of_week}">
+                                <div class="invalid-feedback">Los minutos deben ser 00</div>
+                            </td>
+                            <td>
+                                <input type="time" name="horarios[${horario.day_of_week}][end_time]" 
+                                    class="form-control time-input" value="${horario.end_time}" required>
+                                <div class="invalid-feedback">Los minutos deben ser 00</div>
+                            </td>
+                        </tr>
+                    `;
                                 $('#horariosContainer').append(row);
                             });
 
@@ -289,4 +288,4 @@
             });
         });
     </script>
-@endsection
+@endpush

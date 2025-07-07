@@ -41,9 +41,9 @@
                                         class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
                                         data-bs-toggle="tooltip" data-bs-title="Ver">
                                         <div class="relative">
-                                            <span class="material-icons h-6 w-6 text-2xl text-blue-600">support_agent</span>
+                                            <span class="material-icons text-blue-600">support_agent</span>
                                             <span
-                                                class="material-icons absolute -bottom-1 -right-1 text-xs bg-blue-100 text-blue-600 rounded-full p-0.5">visibility</span>
+                                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-blue-100 text-blue-600 rounded-full p-0.4">visibility</span>
                                         </div>
                                     </a>
                                 </div>
@@ -53,9 +53,9 @@
                                         class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
                                         data-bs-toggle="tooltip" data-bs-title="Editar">
                                         <div class="relative">
-                                            <span class="material-icons h-6 w-6 text-2xl text-blue-600">support_agent</span>
+                                            <span class="material-icons text-orange-500">support_agent</span>
                                             <span
-                                                class="material-icons absolute -bottom-1 -right-1 text-xs bg-orange-100 text-orange-600 rounded-full p-0.5">edit</span>
+                                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-orange-100 text-orange-600 rounded-full p-0.4">edit</span>
                                         </div>
                                     </a>
                                 </div>
@@ -67,12 +67,12 @@
                                         @method('DELETE')
                                         <button type="button"
                                             class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-delete"
-                                            data-form-id="form-{{ $secretaria->id }}"
-                                            data-bs-toggle="tooltip" data-bs-title="Eliminar">
+                                            data-form-id="form-{{ $secretaria->id }}" data-bs-toggle="tooltip"
+                                            data-bs-title="Eliminar">
                                             <div class="relative">
-                                                <span class="material-icons h-6 w-6 text-2xl text-red-500">support_agent</span>
+                                                <span class="material-icons text-red-600">support_agent</span>
                                                 <span
-                                                    class="material-icons absolute -bottom-1 -right-1 text-xs bg-red-100 text-red-600 rounded-full p-0.5">delete</span>
+                                                    class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-red-100 text-red-600 rounded-full p-0.4">delete_outline</span>
                                             </div>
                                         </button>
                                     </form>
@@ -134,12 +134,12 @@
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
     </audio>
 @endsection
-@section('scripts')
+@push('scripts')
     <script>
         // Inicializar tooltips de Bootstrap
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
         });
@@ -148,9 +148,9 @@
         $(document).on('click', '.btn-delete', function() {
             const form = $(this).closest('form');
             const message = `
-                ¿Está seguro que desea eliminar esta secretaria?
-                Esta acción no se puede deshacer.
-            `;
+            ¿Está seguro que desea eliminar esta secretaria?
+            Esta acción no se puede deshacer.
+        `;
             $('#confirmMessage').html(message);
             $('#confirmDeleteModal').data('delete-form', form);
             const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
@@ -168,4 +168,4 @@
             }
         });
     </script>
-@endsection
+@endpush

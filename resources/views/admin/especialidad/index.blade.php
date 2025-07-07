@@ -7,19 +7,17 @@
         <form action="{{ route('admin.especialidad.store') }}" method="POST" id="createEspecialidadForm">
             @csrf
             <div class="row mb-3">
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" name="name" id="name" required
-                            onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
-                            oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
-                            placeholder="Nombre de la Especialidad">
-                        @error('name')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="button" class="btn btn-primary" id="btnShowModal">Guardar</button>
-                    </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="name" id="name" required
+                        onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                        oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
+                        placeholder="Nombre de la Especialidad">
+                    @error('name')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-primary" id="btnShowModal">Guardar</button>
                 </div>
             </div>
         </form>
@@ -61,16 +59,22 @@
                         <td class="px-6 py-4">{{ $index + 1 }}</td>
                         <td class="px-6 py-4">{{ $especialidad->name }}</td>
                         <td>
-                            <div class="mb-3 flex justity-center space-x-2">
-                                {{-- icono editar --}}
+                            <div class="mb-3 flex justify-center space-x-2">
+                                {{-- Icono Editar --}}
                                 <div class="flex flex-col items-center">
-                                    <button type="button" class="btn btn-warning btn-edit"
+                                    <button type="button"
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-edit"
                                         data-especialidad-id="{{ $especialidad->id }}"
-                                        data-especialidad-name="{{ $especialidad->name }}">
-                                        Editar
+                                        data-especialidad-name="{{ $especialidad->name }}" data-bs-toggle="tooltip"
+                                        data-bs-title="Editar">
+                                        <div class="relative">
+                                            <span class="material-icons text-orange-500">medical_information</span>
+                                            <span
+                                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-orange-100 text-orange-600 rounded-full p-0.4">edit</span>
+                                        </div>
                                     </button>
                                 </div>
-                                {{-- icono eliminar --}}
+                                {{-- Icono Eliminar --}}
                                 <div class="flex flex-col items-center">
                                     <form action="{{ route('admin.especialidad.destroy', $especialidad->id) }}"
                                         method="POST" class="d-inline delete-form">
@@ -78,12 +82,12 @@
                                         @method('DELETE')
                                         <button type="button"
                                             class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-delete"
-                                            data-form-id="form-{{ $especialidad->id }}"
-                                            data-bs-toggle="tooltip" data-bs-title="Eliminar">
+                                            data-form-id="form-{{ $especialidad->id }}" data-bs-toggle="tooltip"
+                                            data-bs-title="Eliminar">
                                             <div class="relative">
-                                                <span class="material-icons h-6 w-6 text-2xl text-red-500">medical_information</span>
+                                                <span class="material-icons text-red-600">medical_information</span>
                                                 <span
-                                                    class="material-icons absolute -bottom-1 -right-1 text-xs bg-red-100 text-red-600 rounded-full p-0.5">delete</span>
+                                                    class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-red-100 text-red-600 rounded-full p-0.4">delete_outline</span>
                                             </div>
                                         </button>
                                     </form>
@@ -110,8 +114,9 @@
                         <a class="page-link" href="{{ $especialidades->url($i) }}">{{ $i }}</a>
                     </li>
                 @endfor
-                <li class="page-item {{ $especialidades->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $especialidades->nextPageUrl() }}" aria-label="Next">Siguiente</a>
+                <li class="page-item {{ $especialidades->hasMorePages() ? '' : 'disabled' }}>
+                    <a class="page-link"
+                    href="{{ $especialidades->nextPageUrl() }}" aria-label="Next">Siguiente</a>
                 </li>
             </ul>
         </nav>
@@ -161,7 +166,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" id="btnConfirmEdit" class="btn btn-warning">Confirmar Edición</button>
+                        <button type="submit" class="btn btn-warning">Confirmar Edición</button>
                     </div>
                 </form>
             </div>
@@ -172,12 +177,12 @@
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
     </audio>
 @endsection
-@section('scripts')
+@push('scripts')
     <script>
         // Inicializar tooltips de Bootstrap
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
         });
@@ -189,9 +194,9 @@
                 return;
             }
             const message = `
-                <strong>¿Está seguro de que desea registrar esta especialidad?</strong><br>
-                Nombre de la Especialidad: ${$('#name').val()}<br>
-            `;
+            <strong>¿Está seguro de que desea registrar esta especialidad?</strong><br>
+            Nombre de la Especialidad: ${$('#name').val()}<br>
+        `;
             $('#confirmMessageCreate').html(message);
             const modal = new bootstrap.Modal(document.getElementById('confirmCreateModal'));
             modal.show();
@@ -209,9 +214,9 @@
         $(document).on('click', '.btn-delete', function() {
             const form = $(this).closest('form');
             const message = `
-                ¿Está seguro que desea eliminar esta especialidad?
-                Esta acción no se puede deshacer.
-            `;
+            ¿Está seguro que desea eliminar esta especialidad?
+            Esta acción no se puede deshacer.
+        `;
             $('#confirmMessageDelete').html(message);
             $('#confirmDeleteModal').data('delete-form', form);
             const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
@@ -234,11 +239,11 @@
             const especialidadId = $(this).data('especialidad-id');
             const especialidadName = $(this).data('especialidad-name');
             $('#editEspecialidadName').val(especialidadName);
-            const updateUrl = '{{ route('admin.especialidad.update', ['id' => ':id']) }}'.replace(':id', especialidadId);
+            const updateUrl = '{{ route('admin.especialidad.update', ['id' => ':id']) }}'.replace(':id',
+                especialidadId);
             $('#editEspecialidadForm').attr('action', updateUrl);
             const modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
             modal.show();
-            // Reproducir sonido
             const alertSound = document.getElementById('alertSound');
             if (alertSound) {
                 alertSound.play().catch(e => console.log('Error al reproducir sonido:', e));
@@ -253,4 +258,4 @@
             }
         });
     </script>
-@endsection
+@endpush

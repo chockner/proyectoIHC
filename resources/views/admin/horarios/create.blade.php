@@ -94,8 +94,7 @@
         </div>
     </div>
 @endsection
-
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
             // Verificar si jQuery está cargado
@@ -219,9 +218,9 @@
                 const endTime = $('#end_time').val();
 
                 const message = `¿Crear horario para ${doctor}?<br>
-                         Día: ${day}<br>
-                         Turno: ${shift}<br>
-                         Horario: ${startTime} - ${endTime}`;
+                     Día: ${day}<br>
+                     Turno: ${shift}<br>
+                     Horario: ${startTime} - ${endTime}`;
 
                 $('#confirmMessage').html(message);
 
@@ -237,4 +236,4 @@
             });
         });
     </script>
-@endsection
+@endpush

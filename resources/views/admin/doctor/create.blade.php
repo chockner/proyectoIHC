@@ -73,9 +73,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="experience_years" class="form-label">Años de Experiencia</label>
-                        <input type="number" class="form-control" name="experience_years" id="experience_years" min="0"
-                            max="50" step="1" required
-                            title="Ingrese un número entre 0 y 50">
+                        <input type="number" class="form-control" name="experience_years" id="experience_years"
+                            min="0" max="50" step="1" required title="Ingrese un número entre 0 y 50">
                         @error('experience_years')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -175,7 +174,8 @@
         </form>
 
         <!-- Modal de confirmación -->
-        <div class="modal fade" id="confirmCreateModal" tabindex="-1" aria-labelledby="confirmCreateModalLabel" aria-hidden="true">
+        <div class="modal fade" id="confirmCreateModal" tabindex="-1" aria-labelledby="confirmCreateModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
@@ -200,7 +200,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         // Al hacer clic en el botón "Guardar", mostrar el modal de confirmación
         $('#btnShowModal').click(function() {
@@ -212,20 +212,20 @@
 
             // Construir el mensaje de confirmación
             const message = `
-                <strong>Datos del Doctor:</strong><br>
-                DNI: ${$('#document_id').val()}<br>
-                Nombres: ${$('#first_name').val()}<br>
-                Apellidos: ${$('#last_name').val()}<br>
-                Especialidad: ${$('#specialty_id option:selected').text()}<br>
-                Código de Licencia: ${$('#license_code').val()}<br>
-                Años de Experiencia: ${$('#experience_years').val()}<br>
-                Teléfono: ${$('#phone').val()}<br>
-                Correo Electrónico: ${$('#email').val()}<br>
-                Fecha de Nacimiento: ${$('#birthdate').val()}<br>
-                Género: ${$('#gender option:selected').text()}<br>
-                Estado Civil: ${$('#civil_status option:selected').text()}<br>
-                Dirección: ${$('#address').val()}
-            `;
+            <strong>Datos del Doctor:</strong><br>
+            DNI: ${$('#document_id').val()}<br>
+            Nombres: ${$('#first_name').val()}<br>
+            Apellidos: ${$('#last_name').val()}<br>
+            Especialidad: ${$('#specialty_id option:selected').text()}<br>
+            Código de Licencia: ${$('#license_code').val()}<br>
+            Años de Experiencia: ${$('#experience_years').val()}<br>
+            Teléfono: ${$('#phone').val()}<br>
+            Correo Electrónico: ${$('#email').val()}<br>
+            Fecha de Nacimiento: ${$('#birthdate').val()}<br>
+            Género: ${$('#gender option:selected').text()}<br>
+            Estado Civil: ${$('#civil_status option:selected').text()}<br>
+            Dirección: ${$('#address').val()}
+        `;
             // Establecer el mensaje de confirmación
             $('#confirmMessage').html(message);
 
@@ -246,4 +246,4 @@
             }
         });
     </script>
-@endsection
+@endpush
