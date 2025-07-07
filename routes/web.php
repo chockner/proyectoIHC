@@ -138,6 +138,7 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
     Route::post('/agendar-cita/seleccionar-fecha-hora', [AgendarCitaController::class, 'seleccionarFechaHora'])->name('paciente.agendarCita.seleccionarFechaHora');
     Route::get('/agendar-cita/seleccionar-fecha-hora-preservado', [AgendarCitaController::class, 'seleccionarFechaHoraPreservado'])->name('paciente.agendarCita.seleccionarFechaHoraPreservado');
     Route::post('/agendar-cita/confirmacion', [AgendarCitaController::class, 'confirmacion'])->name('paciente.agendarCita.confirmacion');
+    Route::get('/agendar-cita/confirmacion', [AgendarCitaController::class, 'confirmacionGet'])->name('paciente.agendarCita.confirmacion.get');
     Route::post('/agendar-cita', [AgendarCitaController::class, 'store'])->name('paciente.agendarCita.store');
     /* de aqui para arriba */
     Route::get('/agendar-cita/horarios-disponibles', [AgendarCitaController::class, 'getHorariosDisponibles'])->name('paciente.agendarCita.horariosDisponibles');

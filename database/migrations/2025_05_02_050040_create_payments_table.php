@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('appointment_id')->constrained()->onDelete('cascade');
-            $table->foreignId('uploadted_by')->constrained('users')->onDelete('cascade'); // Usuario que subió el comprobante de pago
+            $table->foreignId('uploaded_by')->constrained('users')->onDelete('cascade'); // Usuario que subió el comprobante de pago
             $table->foreignId('validated_by')->nullable()->constrained('users')->onDelete('cascade'); // Usuario que validó el pago
 
             $table->string('image_path')->nullable(); // Ruta de la imagen del comprobante de pago
@@ -36,7 +36,7 @@ return new class extends Migration
     {
         Schema::table('payments', function (Blueprint $table) {
             $table->dropForeign(['appointment_id']);
-            $table->dropForeign(['uploadted_by']);
+            $table->dropForeign(['uploaded_by']);
             $table->dropForeign(['validated_by']);
         });
         Schema::dropIfExists('payments');
