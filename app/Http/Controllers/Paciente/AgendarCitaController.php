@@ -11,7 +11,6 @@ use App\Models\Appointment;
 use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class AgendarCitaController extends Controller
 {
@@ -160,41 +159,7 @@ class AgendarCitaController extends Controller
     }
 
     /**
-     * Paso 4: Confirmación y Pago (GET - para manejar errores de validación)
-     */
-    public function confirmacionGet()
-    {
-        // Verificar que tenemos todos los datos necesarios en la sesión
-        $specialtyId = session('agendar_cita.specialty_id');
-        $doctorId = session('agendar_cita.doctor_id');
-        $scheduleId = session('agendar_cita.schedule_id');
-        $appointmentDate = session('agendar_cita.appointment_date');
-        $appointmentTime = session('agendar_cita.appointment_time');
-
-        if (!$specialtyId || !$doctorId || !$scheduleId || !$appointmentDate || !$appointmentTime) {
-            return redirect()->route('paciente.agendarCita.create')
-                ->withErrors(['error' => 'Datos de la cita no encontrados. Por favor inicie el proceso nuevamente.']);
-        }
-
-        $especialidad = Specialty::findOrFail($specialtyId);
-        $medico = Doctor::with(['user.profile', 'specialty'])->findOrFail($doctorId);
-        $horario = Schedule::findOrFail($scheduleId);
-        $paciente = auth()->user()->patient;
-
-        // Calcular el costo
-        $costo = 150.00;
-
-        return view('paciente.agendarCita.paso4-confirmacion', compact(
-            'especialidad',
-            'medico',
-            'horario',
-            'paciente',
-            'costo'
-        ));
-    }
-
-    /**
-     * Paso 4: Confirmación y Pago (POST)
+     * Paso 4: Confirmación y Pago
      */
     public function confirmacion(Request $request)
     {
@@ -246,38 +211,17 @@ class AgendarCitaController extends Controller
      */
     public function store(Request $request)
     {
-        // Log para debugging
-        Log::info('Store method called', [
-            'method' => $request->method(),
-            'payment_method' => $request->payment_method,
-            'all_data' => $request->all()
-        ]);
-
-        // Validación condicional según el método de pago
-        $validationRules = [
+        $request->validate([
             'specialty_id' => 'required|exists:specialties,id',
             'doctor_id' => 'required|exists:doctors,id',
             'schedule_id' => 'required|exists:schedules,id',
             'appointment_date' => 'required|date|after:today',
             'appointment_time' => 'required',
-            'payment_method' => 'required|in:tarjeta,transfer,clinica',
+            'payment_method' => 'required|in:online,transfer,clinic',
             'amount' => 'required|numeric|min:0',
+            'payment_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120', // 5MB máximo
             'terms' => 'required|accepted'
-        ];
-
-        // Agregar reglas según el método de pago
-        if ($request->payment_method === 'tarjeta') {
-            $validationRules['card_number'] = 'required|string|min:13';
-            $validationRules['card_holder'] = 'required|string|min:3';
-            $validationRules['card_expiry'] = 'required|string|size:5';
-            $validationRules['card_cvv'] = 'required|string|min:3';
-            $validationRules['card_email'] = 'required|email';
-        } elseif ($request->payment_method === 'transfer') {
-            $validationRules['transfer_method'] = 'required|in:transferencia,yape,plin';
-            $validationRules['payment_proof'] = 'required|file|mimes:jpg,jpeg,png,pdf|max:5120';
-        }
-
-        $request->validate($validationRules);
+        ]);
 
         try {
             DB::beginTransaction();
@@ -305,12 +249,6 @@ class AgendarCitaController extends Controller
                 'status' => 'programada'
             ]);
 
-            // Determinar el método de pago específico
-            $paymentMethod = $request->payment_method;
-            if ($request->payment_method === 'transfer') {
-                $paymentMethod = $request->transfer_method; // transferencia, yape, o plin
-            }
-
             // Procesar el comprobante de pago si se subió
             $imagePath = null;
             if ($request->hasFile('payment_proof')) {
@@ -319,36 +257,23 @@ class AgendarCitaController extends Controller
                 $imagePath = $file->storeAs('payment_proofs', $fileName, 'public');
             }
 
-            // Determinar el estado inicial del pago
-            $paymentStatus = 'pendiente';
-            $validatedBy = null;
-            $validatedAt = null;
-
-            // Si es pago con tarjeta, marcar como validado automáticamente (simulación)
-            if ($request->payment_method === 'tarjeta') {
-                $paymentStatus = 'validado';
-                $validatedBy = auth()->id();
-                $validatedAt = now();
-            }
-
             // Crear el registro de pago
             $payment = Payment::create([
                 'appointment_id' => $cita->id,
                 'uploaded_by' => auth()->id(),
-                'validated_by' => $validatedBy,
-                'payment_method' => $paymentMethod,
+                'payment_method' => $request->payment_method,
                 'amount' => $request->amount,
-                'status' => $paymentStatus,
+                'status' => $request->payment_method === 'online' ? 'validado' : 'pendiente',
                 'uploaded_at' => now(),
-                'validated_at' => $validatedAt,
                 'image_path' => $imagePath
             ]);
 
-            // Si el pago está validado, mantener la cita como programada
-            // Las citas se mantienen como 'programada' hasta que se completen
-            if ($paymentStatus === 'validado') {
-                // No cambiar el status de la cita, mantener como 'programada'
-                // El pago validado es suficiente para confirmar la reserva
+            // Si es pago en línea, marcar como validado automáticamente
+            if ($request->payment_method === 'online') {
+                $payment->update([
+                    'validated_by' => auth()->id(),
+                    'validated_at' => now()
+                ]);
             }
 
             DB::commit();
@@ -356,21 +281,10 @@ class AgendarCitaController extends Controller
             // Limpiar sesión después de agendar exitosamente
             session()->forget(['agendar_cita.specialty_id', 'agendar_cita.doctor_id', 'agendar_cita.schedule_id', 'agendar_cita.appointment_date', 'agendar_cita.appointment_time']);
 
-            // Mensaje de éxito según el método de pago
-            $successMessage = 'Cita agendada exitosamente.';
-            if ($request->payment_method === 'tarjeta') {
-                $successMessage = '¡Pago procesado exitosamente! Su cita ha sido confirmada.';
-            } elseif ($request->payment_method === 'transfer') {
-                $successMessage = 'Cita agendada exitosamente. Su comprobante de pago será revisado y recibirá una confirmación por email.';
-            } elseif ($request->payment_method === 'clinica') {
-                $successMessage = 'Cita agendada exitosamente. Recuerde realizar el pago en la clínica antes de su consulta.';
-            }
-
             return redirect()->route('paciente.citas.show', $cita->id)
-                ->with('success', $successMessage);
+                ->with('success', 'Cita agendada exitosamente.');
         } catch (\Exception $e) {
             DB::rollback();
-            Log::error('Error al agendar cita: ' . $e->getMessage());
             return back()->withErrors(['error' => 'Error al agendar la cita. Por favor intente nuevamente.']);
         }
     }

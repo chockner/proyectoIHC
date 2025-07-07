@@ -54,7 +54,7 @@ class AppointmentsSeeder extends Seeder
                     // Crear el pago
                     Payment::create([
                         'appointment_id' => $cita->id,
-                        'uploaded_by' => $paciente->user_id, 
+                        'uploadted_by' => $paciente->user_id, 
                         'validated_by' => null,
                         'image_path' => null,
                         'payment_method' => 'TARJETA',
@@ -82,7 +82,7 @@ class AppointmentsSeeder extends Seeder
                     // Crear el pago (suponemos que ya fue pagado)
                     Payment::create([
                         'appointment_id' => $cita->id,
-                        'uploaded_by' => $paciente->user_id, 
+                        'uploadted_by' => $paciente->user_id, 
                         'validated_by' => Secretary::inRandomOrder()->first()->id, // Asignar aleatoriamente una secretaria
                         'image_path' => null,
                         'payment_method' => 'TARJETA',

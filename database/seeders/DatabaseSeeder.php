@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
             SecretariesSeeder::class,
             PatientsSeeder::class,
             AppointmentsSeeder::class,
-            PaymentSeeder::class,
             // Otros seeders...
         ]);
     }
