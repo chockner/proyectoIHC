@@ -455,7 +455,19 @@ class AgendarCitaController extends Controller
             ->where('patient_id', auth()->user()->patient->id)
             ->findOrFail($id);
 
-        return view('paciente.citas.edit', compact('cita'));
+        // Obtener horarios del médico
+        $horarios = Schedule::where('doctor_id', $cita->doctor_id)->get();
+
+        // Obtener citas existentes del médico para verificar disponibilidad
+        $citasExistentes = Appointment::where('doctor_id', $cita->doctor_id)
+            ->where('status', 'programada')
+            ->where('id', '!=', $cita->id) // Excluir la cita actual
+            ->get()
+            ->groupBy(function ($cita) {
+                return $cita->appointment_date . ' ' . $cita->appointment_time;
+            });
+
+        return view('paciente.citas.edit', compact('cita', 'horarios', 'citasExistentes'));
     }
 
     public function update(Request $request, $id)
@@ -474,7 +486,7 @@ class AgendarCitaController extends Controller
         ]);
 
         return redirect()->route('paciente.citas.show', $cita->id)
-            ->with('success', 'Cita actualizada exitosamente.');
+            ->with('success', 'Cita reprogramada exitosamente.');
     }
 
     public function destroy($id)
@@ -488,16 +500,8 @@ class AgendarCitaController extends Controller
             ->with('success', 'Cita cancelada exitosamente.');
     }
 
-    public function confirm($id)
-    {
-        $cita = Appointment::where('patient_id', auth()->user()->patient->id)
-            ->findOrFail($id);
-
-        $cita->update(['status' => 'completada']);
-
-        return redirect()->route('paciente.citas.show', $cita->id)
-            ->with('success', 'Cita marcada como completada.');
-    }
+    // Método eliminado: Los pacientes no deben marcar sus propias citas como completadas
+    // Esta responsabilidad corresponde al médico o secretaria
 
     public function cancel($id)
     {
