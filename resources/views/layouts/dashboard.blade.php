@@ -269,7 +269,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{-- {{ route('doctor.agendarCita.create') }} --}}" class="sidebar-link {{-- {{ request()->routeIs('paciente.agendarCita.create') ? 'active-link' : '' }} --}}"
+                                <a href="{{ route('doctor.citas.index') }}"
+                                    class="sidebar-link {{ request()->routeIs('doctor.citas.index') ? 'active-link' : '' }}"
                                     style="display: flex; align-items: center; gap: 10px;">
                                     <span class="material-icons text-gray-500 text-2xl"
                                         style="flex-shrink: 0;">calendar_today</span>

@@ -15,12 +15,16 @@ use App\Http\Controllers\Admin\HistorialMedicoController;
 use App\Http\Controllers\Admin\HorarioController;
 
 /* SECRETARIA CONTROLLERS */
-use App\Http\Controllers\Secretaria\CitaController;
+use App\Http\Controllers\Secretaria\CitaController as SecretariaCitaController;
 
 /* PACIENTE CONTROLLERS */
 use App\Http\Controllers\Paciente\AgendarCitaController;
 use App\Http\Controllers\Paciente\HistorialMedicoPacienteController;
 use App\Http\Controllers\Paciente\NotificacionesPacienteController;
+
+/* DOCTOR CONTROLLERS */
+use App\Http\Controllers\Doctor\CitaController as DoctorCitaController;
+
 
 Route::view('/', 'home')->name('home');
 Route::view('/login', 'auth.login')->name('login');
@@ -120,7 +124,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 Route::prefix('secretaria')->middleware(['auth'])->group(function () {
     
     /* secretaria -> citas */
-    Route::get('/citas', [CitaController::class, 'index'])->name('secretaria.citas.index');
+    Route::get('/citas', [SecretariaCitaController::class, 'index'])->name('secretaria.citas.index');
+    Route::get('/citas/{id}',[SecretariaCitaController::class, 'show'])->name('secretaria.citas.show');
 
 });
 
@@ -159,4 +164,8 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
     /** Notificaciones de usuario del tipo paciente**/
     Route::get('/notificaciones', [NotificacionesPacienteController::class, 'index'])->name('paciente.notificaciones.index');
     
+});
+
+Route::prefix('doctor')->middleware(['auth'])->group(function () {
+    Route::get('/citas',[DoctorCitaController::class, 'index'])->name('doctor.citas.index');
 });
