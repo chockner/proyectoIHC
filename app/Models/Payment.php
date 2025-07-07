@@ -11,7 +11,7 @@ class Payment extends Model
 
     protected $fillable = [
         'appointment_id',
-        'uploadted_by',
+        'uploaded_by',
         'validated_by',
         'image_path',
         'payment_method',

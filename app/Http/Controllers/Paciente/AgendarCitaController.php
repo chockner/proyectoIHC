@@ -605,7 +605,7 @@ class AgendarCitaController extends Controller
 
             $payment = Payment::create([
                 'appointment_id' => $appointment->id,
-                'uploadted_by' => $persona->id,
+                'uploaded_by' => $persona->id,
                 'image_path' => $comprobantePath,
                 'payment_method' => $request->metodo_pago,
                 'amount' => 30,
@@ -613,7 +613,7 @@ class AgendarCitaController extends Controller
         }else{
             $payment = Payment::create([
                 'appointment_id' => $appointment->id,
-                'uploadted_by' => $persona->id,
+                'uploaded_by' => $persona->id,
                 'payment_method' => $request->metodo_pago,
                 'amount' => 30,
             ]);
