@@ -73,8 +73,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="experience_years" class="form-label">Años de Experiencia</label>
-                        <input type="number" class="form-control" name="experience_years" id="experience_years"
-                            min="0" max="50" step="1" required title="Ingrese un número entre 0 y 50">
+                        <input type="text" class="form-control" name="experience_years" id="experience_years"
+                            maxlength="2" inputmode="numeric" pattern="\d{2}" required
+                            oninput="this.value = this.value.replace(/\D/g, '').slice(0, 2);"
+                            title="Ingrese exactamente 2 caracteres numéricos">
                         @error('experience_years')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

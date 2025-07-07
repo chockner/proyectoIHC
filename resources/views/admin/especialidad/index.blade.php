@@ -160,8 +160,10 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="editEspecialidadName" class="form-label">Nombre de la Especialidad</label>
-                            <input type="text" class="form-control" id="editEspecialidadName" name="name"
-                                required>
+                            <input type="text" class="form-control" id="editEspecialidadName" name="name" required
+                                onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                                oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
+                                placeholder="Nombre de la Especialidad">
                         </div>
                     </div>
                     <div class="modal-footer">
