@@ -36,6 +36,9 @@
                             <div class="mb-3 flex justify-center space-x-2">
                                 <a href="{{ route('doctor.citas.show', $cita->id) }}">
                                     ver
+                                    <div class="relative">
+                                        {{-- (icono) --}}
+                                    </div>
                                 </a>
                             </div>
                         </td>
