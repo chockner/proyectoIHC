@@ -98,6 +98,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/historiales/{id}/detail', [HistorialMedicoController::class, 'show_detail'])->name('admin.historialMedico.show_detail');
     Route::get('/historiales/{id}/edit-detail', [HistorialMedicoController::class, 'edit_detail'])->name('admin.historialMedico.edit_detail');
     Route::delete('/historiales/{id}', [HistorialMedicoController::class, 'destroy'])->name('admin.historialMedico.destroy');
+    route::put('/historiales/{id}/update-detail', [HistorialMedicoController::class, 'update_detail'])->name('admin.historialMedico.update_detail');
 
 
     /* admin -> horarios */
