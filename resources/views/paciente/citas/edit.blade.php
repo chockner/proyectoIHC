@@ -170,24 +170,21 @@
 
         function initCalendar() {
             updateCalendar();
-            // Cargar horarios para la fecha actual de la cita
-            loadAvailableTimeSlots(new Date(selectedDate));
+            // Cargar horarios específicos para la fecha actual de la cita
+            const citaDate = createLocalDate(selectedDate);
+            loadAvailableTimeSlots(citaDate);
+            updateSubmitButton();
         }
         
         function preselectCurrentTime() {
-            console.log('🔍 Preseleccionando hora:', selectedTime);
             const timeSlots = document.querySelectorAll('.time-slot');
-            console.log('📅 Slots encontrados:', timeSlots.length);
             
-            timeSlots.forEach((slot, index) => {
+            timeSlots.forEach((slot) => {
                 const slotText = slot.textContent.trim();
-                console.log(`Slot ${index}: "${slotText}" vs "${selectedTime}"`);
                 
                 if (slotText === selectedTime) {
-                    console.log('✅ ¡Hora encontrada! Preseleccionando...');
                     slot.classList.remove('border-gray-300', 'bg-white', 'text-gray-700');
                     slot.classList.add('bg-blue-500', 'text-white', 'border-blue-500', 'selected');
-                    return;
                 }
             });
         }
@@ -216,16 +213,16 @@
                 const date = new Date(startDate);
                 date.setDate(startDate.getDate() + i);
 
-                const dayElement = document.createElement('div');
-                dayElement.className = 'p-2 text-center text-sm cursor-pointer rounded-lg';
-                dayElement.setAttribute('data-date', date.toISOString().split('T')[0]);
+                                        const dayElement = document.createElement('div');
+                        dayElement.className = 'p-2 text-center text-sm cursor-pointer rounded-lg';
+                        dayElement.setAttribute('data-date', formatDateLocal(date));
 
                 // Solo mostrar días del mes actual
                 if (date.getMonth() === month) {
                     const isToday = date.toDateString() === new Date().toDateString();
                     const isPast = date < new Date().setHours(0, 0, 0, 0);
                     const hasSchedule = checkIfDateHasSchedule(date);
-                    const isSelected = date.toISOString().split('T')[0] === selectedDate;
+                    const isSelected = formatDateLocal(date) === selectedDate;
 
                     dayElement.textContent = date.getDate();
 
@@ -256,14 +253,44 @@
             }
         }
 
+        function formatDateLocal(date) {
+            return date.getFullYear() + '-' + 
+                   String(date.getMonth() + 1).padStart(2, '0') + '-' + 
+                   String(date.getDate()).padStart(2, '0');
+        }
+
+        function createLocalDate(dateString) {
+            // Crear fecha de manera segura para evitar problemas de zona horaria
+            const [year, month, day] = dateString.split('-').map(Number);
+            return new Date(year, month - 1, day, 0, 0, 0, 0);
+        }
+
+        function getDayOfWeek(date) {
+            // Usar getDay() directamente y mapear a nuestro formato
+            const dayIndex = date.getDay();
+            
+            // Mapear índice de getDay() a nuestro formato (0=DOMINGO, 1=LUNES, etc.)
+            const dayMapping = {
+                0: 'DOMINGO',
+                1: 'LUNES',
+                2: 'MARTES',
+                3: 'MIERCOLES',
+                4: 'JUEVES',
+                5: 'VIERNES',
+                6: 'SABADO'
+            };
+            
+            return dayMapping[dayIndex] || 'LUNES';
+        }
+
         function checkIfDateHasSchedule(date) {
-            const dayOfWeek = diasSemana[date.getDay()];
+            const dayOfWeek = getDayOfWeek(date);
             const hasSchedule = horarios.some(horario => horario.day_of_week === dayOfWeek);
             return hasSchedule;
         }
 
         function selectDate(date) {
-            selectedDate = date.toISOString().split('T')[0];
+            selectedDate = formatDateLocal(date);
 
             // Actualizar UI del calendario
             document.querySelectorAll('.calendar-day').forEach(day => {
@@ -271,7 +298,7 @@
             });
             
             // Encontrar y seleccionar el elemento correcto
-            const dateStr = date.toISOString().split('T')[0];
+            const dateStr = selectedDate;
             const dayElement = document.querySelector(`[data-date="${dateStr}"]`);
             if (dayElement) {
                 dayElement.classList.add('bg-blue-500', 'text-white', 'font-semibold', 'selected');
@@ -303,13 +330,13 @@
         }
 
         function loadAvailableTimeSlots(date) {
-            const dayOfWeek = diasSemana[date.getDay()];
-            const dateStr = date.toISOString().split('T')[0];
+            const dayOfWeek = getDayOfWeek(date);
+            const dateStr = formatDateLocal(date);
 
-            // Obtener horarios del médico para ese día
+            // Obtener horarios del médico para ese día específico
             const daySchedules = horarios.filter(h => h.day_of_week === dayOfWeek);
 
-            // Obtener citas existentes para esa fecha (excluyendo la cita actual)
+            // Obtener citas existentes para esa fecha específica (excluyendo la cita actual)
             const existingAppointments = citasExistentes[dateStr] || [];
 
             const container = document.getElementById('timeSlotsContainer');
@@ -321,6 +348,7 @@
             }
 
             let availableSlots = 0;
+            let currentTimeSlotFound = false;
             
             daySchedules.forEach(schedule => {
                 const startTime = new Date(`2000-01-01T${schedule.start_time}`);
@@ -341,10 +369,10 @@
                         slotElement.className = 'p-3 text-sm font-medium border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 time-slot';
                         slotElement.textContent = timeSlot;
                         
-                        // Si es el horario actual de la cita, marcarlo como seleccionado
-                        if (timeSlot === selectedTime) {
-                            console.log('🎯 Marcando hora como seleccionada durante creación:', timeSlot);
+                        // Si es el horario actual de la cita Y estamos en la fecha correcta, marcarlo como seleccionado
+                        if (timeSlot === selectedTime && dateStr === '{{ $cita->appointment_date }}') {
                             slotElement.classList.add('bg-blue-500', 'text-white', 'border-blue-500', 'selected');
+                            currentTimeSlotFound = true;
                         }
                         
                         slotElement.addEventListener('click', function() {
@@ -363,8 +391,8 @@
                 container.innerHTML = '<p class="text-gray-500 text-sm">Todos los horarios para este día están ocupados.</p>';
             }
             
-            // Preseleccionar la hora actual si estamos en la fecha de la cita
-            if (dateStr === '{{ $cita->appointment_date }}') {
+            // Solo preseleccionar si estamos en la fecha correcta y no se encontró durante la creación
+            if (dateStr === '{{ $cita->appointment_date }}' && !currentTimeSlotFound) {
                 preselectCurrentTime();
             }
         }
@@ -390,15 +418,28 @@
 
         function updateSubmitButton() {
             const submitButton = document.getElementById('submitButton');
-            const hasDate = selectedDate && selectedDate !== '{{ $cita->appointment_date }}';
-            const hasTime = selectedTime && selectedTime !== '{{ $cita->appointment_time }}';
+            const originalDate = '{{ $cita->appointment_date }}';
+            const originalTime = '{{ \Carbon\Carbon::parse($cita->appointment_time)->format('H:i') }}';
             
-            if (hasDate || hasTime) {
+            const hasNewDate = selectedDate && selectedDate !== originalDate;
+            const hasNewTime = selectedTime && selectedTime !== originalTime;
+            const hasValidTime = selectedTime && selectedTime.trim() !== '';
+            
+            // El botón se habilita solo si:
+            // 1. Se seleccionó una nueva fecha Y se seleccionó una hora válida, O
+            // 2. Se mantiene la misma fecha pero se seleccionó una nueva hora
+            if ((hasNewDate && hasValidTime) || (!hasNewDate && hasNewTime)) {
                 submitButton.disabled = false;
                 submitButton.textContent = 'Reprogramar Cita';
             } else {
                 submitButton.disabled = true;
-                submitButton.textContent = 'Seleccione nueva fecha u hora';
+                if (hasNewDate && !hasValidTime) {
+                    submitButton.textContent = 'Seleccione una hora para la nueva fecha';
+                } else if (!hasNewDate && !hasNewTime) {
+                    submitButton.textContent = 'Seleccione nueva fecha u hora';
+                } else {
+                    submitButton.textContent = 'Seleccione nueva fecha u hora';
+                }
             }
         }
 
@@ -415,12 +456,8 @@
 
         // Inicializar cuando se carga la página
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Inicializando calendario...');
-            console.log('📅 Fecha seleccionada:', selectedDate);
-            console.log('⏰ Hora seleccionada:', selectedTime);
-            
             // Establecer el mes actual al mes de la cita
-            const citaDate = new Date(selectedDate);
+            const citaDate = createLocalDate(selectedDate);
             currentDate = new Date(citaDate.getFullYear(), citaDate.getMonth(), 1);
             
             initCalendar();
