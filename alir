@@ -1,0 +1,361 @@
+[33mcommit 8aec16a92db687490652dd2a521babc8de018e54[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/yenglePaciente[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32myenglePaciente[m[33m)[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sun Jul 6 18:59:05 2025 -0500
+
+    agendarCita
+
+[33mcommit f1585174958ad060b580f3875bb616ae996d80fc[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sun Jul 6 14:15:43 2025 -0500
+
+    citas
+
+[33mcommit 9111d1cff9024b16f7d606766f0f2de2708308c9[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sun Jul 6 08:39:17 2025 -0500
+
+    detallemedico
+
+[33mcommit a3e9606778fc74fe0df36f448f2971c9680d4713[m
+Merge: 25c0583 6657a71
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sun Jul 6 00:01:28 2025 -0500
+
+    actualización
+
+[33mcommit 25c0583b49f062734895440e1601fc0a4dde8dd0[m
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sat Jul 5 23:45:55 2025 -0500
+
+    iconos
+
+[33mcommit 6657a71bf92ecde2c49607489c99116a4d24f989[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat Jul 5 23:40:18 2025 -0500
+
+    histialMedico
+
+[33mcommit 534c39f07908abac9b397f505e1e3c8703890abc[m
+Merge: 39db2a2 aae0d46
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sat Jul 5 20:14:06 2025 -0500
+
+    Merge branch 'main' into cazorla
+
+[33mcommit 39db2a25da65e4ef012fa24c734269aad50cb1f6[m
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sat Jul 5 20:13:22 2025 -0500
+
+    Actualización form: secre, pacientes y doctor listos
+
+[33mcommit aae0d460a2c8387e2859c9c21ba2b3db0a1e2918[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat Jul 5 20:01:56 2025 -0500
+
+    espcialidade
+
+[33mcommit 2094c2cc49178ed8899af886033f6847af923841[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat Jul 5 18:27:11 2025 -0500
+
+    admin-SecretariaIconos
+
+[33mcommit d6840865fd1cb5bb059f008261e05cb158a1e7a4[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat Jul 5 18:01:05 2025 -0500
+
+    admin-DoctorIconos
+
+[33mcommit e164a7179a69daf072b3bb1898fd3a7abc881d48[m
+Merge: 2a91009 b7a36f3
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sat Jul 5 13:25:05 2025 -0500
+
+    Merge branch 'main' into cazorla
+
+[33mcommit 2a910098ed0d2127454afd9a5029471815632528[m
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sat Jul 5 13:24:11 2025 -0500
+
+    Secre
+
+[33mcommit b7a36f3d8951ac81af53f0c535a96d5c2426fe38[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat Jul 5 13:22:36 2025 -0500
+
+    actualizacion
+
+[33mcommit dac4b290aef456807480f7a9ea907e8cdb10a242[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat Jul 5 12:56:28 2025 -0500
+
+    iconoPrueba,pacientecasilisto
+
+[33mcommit 90e5767e65d6aad546e0a292a63c420c6fe49c6b[m
+Merge: 6685dbe 5287152
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sat Jul 5 11:26:10 2025 -0500
+
+    Merge branch 'main' into cazorla
+
+[33mcommit 6685dbe7d49daa462868895408d17381d8d91173[m
+Merge: 2313733 0c01c5b
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sat Jul 5 11:24:35 2025 -0500
+
+    actualización
+
+[33mcommit 528715231b9dc7ed6a7a8e7c78a57a045695ddff[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat Jul 5 10:32:50 2025 -0500
+
+    admin-pacienteEdit,Delete
+
+[33mcommit 0c01c5b79f61274a71674b58f82c835eb05630af[m
+Merge: a0d4526 2687bb1
+Author: Paulo Rojas <89848233+AFO10@users.noreply.github.com>
+Date:   Fri Jul 4 20:40:45 2025 -0500
+
+    Merge pull request #1 from chockner/paulo
+    
+    cambios en página principal, imágenes, estilos
+
+[33mcommit 2687bb10123e4de6e8d8ac1152701d2711fa960a[m[33m ([m[1;31morigin/paulo[m[33m)[m
+Author: Paulo Rojas <paulo1rojas2@gmail.com>
+Date:   Fri Jul 4 20:37:19 2025 -0500
+
+    Cambios en página principal, imágenes, estilos
+
+[33mcommit a0d4526c23106e031d0e53e571aba0bd96cc8ffd[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Fri Jul 4 20:26:08 2025 -0500
+
+    paginationAdmin
+
+[33mcommit 6f4548b21225599c45f714cb876d54663c13cb35[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Fri Jul 4 18:37:07 2025 -0500
+
+    adminSecretariaCasiCompleto-FaltaMariconadas
+
+[33mcommit a58f90bf32bc55249bc80cd9fd80445e951669b1[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Thu Jul 3 17:58:43 2025 -0500
+
+    admin-doctor-casilisto(faltaMaquillar)
+
+[33mcommit 23137332d33b158c119278d4d196ced6d709a992[m
+Merge: 8a55e94 f297ff4
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Wed Jul 2 20:08:43 2025 -0500
+
+    Actualización
+
+[33mcommit f297ff404a823e08b1c84fdaf01edbebea1df859[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Wed Jul 2 19:47:24 2025 -0500
+
+    adminHorarioCompleto-Sonido-iconoDoctor
+
+[33mcommit 384e486a86d4a352fd9c3798fce45bdbae26d01a[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Tue Jul 1 11:33:20 2025 -0500
+
+    admin-horariosCompleto
+
+[33mcommit 1e4a0527077bfb50f809f16538043924ead71c6f[m[33m ([m[1;31morigin/yengleClitas[m[33m)[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Tue Jul 1 10:30:57 2025 -0500
+
+    admin-horarios
+
+[33mcommit c81b4388e72d5b79f27719b6ccf14fce9dbf7075[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Mon Jun 30 23:03:17 2025 -0500
+
+    horarios-add-edit
+
+[33mcommit 842fdaad5d3cc7993fdefab5b1385e260da5bfd1[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Mon Jun 30 22:42:10 2025 -0500
+
+    horarios
+
+[33mcommit 49c74012858771690cad09d2acdf5a829570ce96[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Mon Jun 30 18:53:57 2025 -0500
+
+    citas1Turno
+
+[33mcommit a8c0fab66d8a2510fe3838072590cd9f484b39fa[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Mon Jun 23 19:33:49 2025 -0500
+
+    actualizacion
+
+[33mcommit 9576e193d27c2546350bd51592120fb15db1dce2[m
+Merge: 181ad38 39de651
+Author: chockner <chockner30052@gmail.com>
+Date:   Mon Jun 23 19:31:37 2025 -0500
+
+    Merge branch 'yengle'
+
+[33mcommit 181ad3803795c58418f5673b192beb17b70a39bf[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Mon Jun 23 19:30:38 2025 -0500
+
+    actualizacion
+
+[33mcommit 39de651ad5b352a6706fea776689903f3e4b4eaf[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Mon Jun 23 19:26:40 2025 -0500
+
+    AdminHorarios
+
+[33mcommit 8a55e94e07db4ea00ddbf010d946d5e9a2a79be9[m
+Merge: f3239d2 b8c584b
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sun Jun 15 23:49:29 2025 -0500
+
+    Agregados
+
+[33mcommit f3239d238ee274dcf8d71246ec149651bede65f0[m
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sun Jun 15 23:43:02 2025 -0500
+
+    íconos
+
+[33mcommit b8c584b69cd2f2a0f977106e4b8145f9c7ddcbe0[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sun Jun 15 23:03:25 2025 -0500
+
+    pacienteInicio
+
+[33mcommit 417ca0b50c73968117991c160056eeee13d33370[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sun Jun 15 22:32:11 2025 -0500
+
+    secretaria.citas
+
+[33mcommit 7d83e9ef594875204bfb07311161a1369072fa03[m
+Merge: 6a3d855 90d3892
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Wed Jun 4 20:30:13 2025 -0500
+
+    Merge branch 'main' into cazorla
+
+[33mcommit 6a3d8551a14b6318a24d9a854be747706272e38c[m
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Wed Jun 4 20:28:24 2025 -0500
+
+    Cambio de íconos
+
+[33mcommit 90d38924b283a943c1c9e67e588d3dd3454d7652[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Wed Jun 4 19:06:23 2025 -0500
+
+    seeder citas
+
+[33mcommit eda66a99a4f19b06d70ca5c8f2d4fe7d4717924e[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Wed Jun 4 17:32:19 2025 -0500
+
+    foto innecesaria
+
+[33mcommit 1c128f52aa45ff4b95572c3141ba704052cf6378[m
+Merge: 327fb74 74e483d
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Tue Jun 3 22:26:20 2025 -0500
+
+    Actualización
+
+[33mcommit 327fb7431d87d439029e8d92ce9e36ce5eb47a43[m
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Tue Jun 3 22:18:07 2025 -0500
+
+    Poniendo datos
+
+[33mcommit 74e483d49cc6f36b31d73479ac998c989671f123[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Tue Jun 3 22:02:20 2025 -0500
+
+    bug historia medica
+
+[33mcommit 18f10c8d7a17d1a60182a540f968d520d7738f5f[m
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sun Jun 1 22:38:28 2025 -0500
+
+    historialmedicocontroller.index
+
+[33mcommit 0410b41c690960989a4075fbfe62c42c6cdacabd[m
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sun Jun 1 22:34:35 2025 -0500
+
+    Error HistorialMedicoController
+
+[33mcommit 245a000de2eb41cb0b7af72c6c6b6c3afbe1e442[m
+Merge: e55a1d6 1a810b6
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sun Jun 1 22:12:57 2025 -0500
+
+    Merge branch 'main' into cazorla
+
+[33mcommit e55a1d63436c6e505acf1585ca3d4837803b3b2d[m
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sun Jun 1 21:54:20 2025 -0500
+
+    Inicio de sesión
+
+[33mcommit 1a810b6458b0102afa4917025c736e109414e616[m
+Author: CristianMorales1999 <cm9225064@gmail.com>
+Date:   Sun Jun 1 16:50:14 2025 -0500
+
+    Corrección de Inicio de crear cuenta, iniciar sesion y edición de perfil
+
+[33mcommit ed9f447d7d04f54638d296f9797bcb97f85be64a[m
+Author: CrisJ30 <superonce30@hotmail.com>
+Date:   Sun Jun 1 11:50:37 2025 -0500
+
+    mi rama
+
+[33mcommit 9c9872c1e474e876c21107b485d73753429916a7[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat May 31 11:08:51 2025 -0500
+
+    readme
+
+[33mcommit bfb97d27797708b81e1b7d3cb9da4dbdc05f6da0[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat May 31 11:08:24 2025 -0500
+
+    readme
+
+[33mcommit 7a1380a324f00b292598c416fb04e57e98f0c68a[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat May 31 11:01:29 2025 -0500
+
+    readme
+
+[33mcommit 34ebccebcb39567307f5ebdf301dc1455bb96bc7[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat May 31 11:00:40 2025 -0500
+
+    readme
+
+[33mcommit 5e7ff57c402662ad79f179cdf6bbb0b64fa75c40[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat May 31 10:58:29 2025 -0500
+
+    readme
+
+[33mcommit 0f66a05f190ec07fd0bfb1a34782f75257d29307[m
+Author: chockner <147885670+chockner@users.noreply.github.com>
+Date:   Sat May 31 03:55:24 2025 -0500
+
+    Update README.md
+
+[33mcommit 9259b4c4f01bd1b4c91fd6fa0df9969b1df8f17e[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: chockner <chockner30052@gmail.com>
+Date:   Sat May 31 03:47:04 2025 -0500
+
+    proyecto
