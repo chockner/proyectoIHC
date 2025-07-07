@@ -169,4 +169,6 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
 
 Route::prefix('doctor')->middleware(['auth'])->group(function () {
     Route::get('/citas',[DoctorCitaController::class, 'index'])->name('doctor.citas.index');
+
+    Route::get('/citas/{id}',[DoctorCitaController::class, 'show'])->name('doctor.citas.show');
 });

@@ -3,7 +3,15 @@
 @section('content')
     <div class="container mt-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Citas</h1>
+        <div class="mb-3 flex justify-end">
+            <a href="" {{-- espacio para el buscar --}}
+                class="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2 shadow-sm hover:shadow-md transition-all duration-150">
+                <div class="relative">
 
+                </div>
+                <span class="text-green-700 font-medium text-sm">Buscar</span>
+            </a>
+        </div>
         <table class="table table-bordered table-striped">
             <thead class="table-primary">
                 <tr>
@@ -24,6 +32,13 @@
                         <td class="px-6 py-4 "> {{ $cita->appointment_date }} | {{ $cita->appointment_time }} </td>
                         <td class="px-6 py-4 "> {{ $cita->status }} </td>
                         <td class="px-6 py-4 "> {{ $cita->payment->status }} </td>
+                        <td>
+                            <div class="mb-3 flex justify-center space-x-2">
+                                <a href="{{ route('doctor.citas.show', $cita->id) }}">
+                                    ver
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
