@@ -120,8 +120,7 @@
         <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3" type="audio/mpeg">
     </audio>
 @endsection
-
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
             // Cargar médicos cuando se selecciona especialidad
@@ -191,26 +190,26 @@
 
                         if (response.horarios.length === 0) {
                             $('#horariosContainer').append(`
-                        <tr>
-                            <td colspan="4" class="text-center py-4">
-                                <div class="alert alert-info">
-                                    No hay horarios registrados para este médico y turno.
-                                </div>
-                            </td>
-                        </tr>
-                    `);
+                    <tr>
+                        <td colspan="4" class="text-center py-4">
+                            <div class="alert alert-info">
+                                No hay horarios registrados para este médico y turno.
+                            </div>
+                        </td>
+                    </tr>
+                `);
                         } else {
                             response.horarios.forEach(horario => {
                                 const row = `
-                            <tr>
-                                <td>${horario.day_of_week}</td>
-                                <td>${horario.start_time}</td>
-                                <td>${horario.end_time}</td>
-                                <td class="text-center">
-                                    <input type="checkbox" name="horarios[]" value="${horario.id}" class="form-check-input">
-                                </td>
-                            </tr>
-                        `;
+                        <tr>
+                            <td>${horario.day_of_week}</td>
+                            <td>${horario.start_time}</td>
+                            <td>${horario.end_time}</td>
+                            <td class="text-center">
+                                <input type="checkbox" name="horarios[]" value="${horario.id}" class="form-check-input">
+                            </td>
+                        </tr>
+                    `;
                                 $('#horariosContainer').append(row);
                             });
                         }
@@ -256,4 +255,4 @@
             });
         });
     </script>
-@endsection
+@endpush
