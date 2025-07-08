@@ -248,9 +248,9 @@
                                 </li>
                             </ul>
                             {{-- Citas --}}
-                            <ul class="list-unstyled ps-3">
+                            {{-- <ul class="list-unstyled ps-3">
                                 <li>
-                                    <a href="#" {{-- <a href="{{ route('admin.citas.index') }}" --}}
+                                    <a href="#"
                                         class=" sidebar-link{{ request()->routeIs('admin.citas.index') ? 'active-link' : '' }}"
                                         style="display: flex; align-items: center; gap: 10px;">
                                         <span class="material-icons text-gray-500 text-2xl" fill="currentColor"
@@ -259,7 +259,7 @@
                                     </a>
                                 </li>
 
-                            </ul>
+                            </ul> --}}
                         </div>
                     @endif
 

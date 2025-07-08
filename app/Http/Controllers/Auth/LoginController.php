@@ -24,7 +24,11 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('/dashboard');
+            if(Auth::user()->role->name === 'paciente'){
+                return redirect('/dashboard');
+            }else{
+                return back()->with('error', 'Acceso no autorizado.')->withInput();
+            }
         }
         
         return back()->with('error', 'Credenciales incorrectas.')->withInput();

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\QuickPasswordResetController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 
@@ -41,6 +42,12 @@ Route::post('/login/personal', [LoginController::class, 'loginPersonal'])/* ->na
 // Register
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+
+// Ruta para mostrar el formulario de restablecimiento rápido
+// Ruta para procesar el restablecimiento de contraseña
+Route::get('quick-reset-password', [QuickPasswordResetController::class, 'showForm'])->name('quick.reset.form');
+Route::post('quick-reset-password', [QuickPasswordResetController::class, 'resetPassword'])->name('quick.reset');
+
 
 // profile edit
 Route::middleware('auth')->group(function () {
