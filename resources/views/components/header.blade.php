@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-50 bg-white shadow-md">
+<header class="bg-white shadow-md">
     <div class="container mx-auto flex items-center justify-between whitespace-nowrap px-6 py-4">
         <!-- Logo y Nombre -->
         <div class="flex items-center gap-3 text-blue-600">

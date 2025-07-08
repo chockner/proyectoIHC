@@ -37,38 +37,52 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Sidebar principal */
+        /* Header - debe estar por encima de todo */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Sidebar principal - debajo del header */
         .sidebar-container {
             position: fixed;
             left: 0;
-            top: 0;
-            height: 100vh;
+            top: 80px; /* Altura del header */
+            height: calc(100vh - 80px);
             width: 280px;
             background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
             border-right: 1px solid #e2e8f0;
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
-            z-index: 1000;
+            z-index: 100;
             display: flex;
             flex-direction: column;
         }
 
         /* Header del sidebar */
         .sidebar-header {
-            padding: 1.5rem;
+            padding: 1rem 1.5rem;
             border-bottom: 1px solid #e2e8f0;
-            background: linear-gradient(135deg, #0c64f2 0%, #1a75ff 100%);
-            color: white;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            color: #475569;
         }
 
         .sidebar-header h3 {
-            font-size: 1.25rem;
+            font-size: 0.875rem;
             font-weight: 600;
             margin: 0;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .sidebar-header p {
-            font-size: 0.875rem;
-            opacity: 0.9;
+            font-size: 0.75rem;
+            color: #94a3b8;
             margin: 0.25rem 0 0 0;
         }
 
@@ -76,7 +90,7 @@
         .sidebar-content {
             flex: 1;
             overflow-y: auto;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
             scrollbar-width: thin;
             scrollbar-color: #cbd5e1 #f1f5f9;
         }
@@ -100,7 +114,7 @@
 
         /* Footer del sidebar (logout) */
         .sidebar-footer {
-            padding: 1rem 1.5rem;
+            padding: 1.5rem 1.5rem;
             border-top: 1px solid #e2e8f0;
             background: #ffffff;
         }
@@ -109,7 +123,7 @@
         .sidebar-link {
             display: flex;
             align-items: center;
-            padding: 0.75rem 1.5rem;
+            padding: 1rem 1.5rem;
             color: #475569;
             text-decoration: none;
             transition: all 0.2s ease;
@@ -138,9 +152,9 @@
 
         /* Iconos */
         .sidebar-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 0.75rem;
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -157,7 +171,7 @@
 
         /* Texto de los enlaces */
         .sidebar-text {
-            font-size: 0.875rem;
+            font-size: 1rem;
             font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
@@ -166,12 +180,12 @@
 
         /* Secciones del sidebar */
         .sidebar-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .sidebar-section-title {
-            padding: 0.5rem 1.5rem 0.25rem;
-            font-size: 0.75rem;
+            padding: 0.75rem 1.5rem 0.5rem;
+            font-size: 0.875rem;
             font-weight: 600;
             color: #64748b;
             text-transform: uppercase;
@@ -182,7 +196,7 @@
         .logout-link {
             display: flex;
             align-items: center;
-            padding: 0.75rem 1rem;
+            padding: 1rem 1.25rem;
             color: #dc2626;
             text-decoration: none;
             transition: all 0.2s ease;
@@ -199,9 +213,9 @@
         }
 
         .logout-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 0.75rem;
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -210,7 +224,8 @@
         /* Contenido principal */
         .main-content-wrapper {
             margin-left: 280px;
-            min-height: 100vh;
+            margin-top: 80px; /* Espacio para el header */
+            min-height: calc(100vh - 80px);
             background: #f8fafc;
         }
 
@@ -233,7 +248,7 @@
             font-family: 'Material Icons';
             font-weight: normal;
             font-style: normal;
-            font-size: 20px;
+            font-size: 24px;
             display: inline-block;
             line-height: 1;
             text-transform: none;
@@ -252,6 +267,7 @@
             .sidebar-container {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
+                top: 80px; /* Mantener debajo del header */
             }
 
             .sidebar-container.open {
@@ -288,14 +304,17 @@
 </head>
 
 <body>
-    <x-header />
+    <!-- Header Principal -->
+    <div class="main-header">
+        <x-header />
+    </div>
     
     <!-- Sidebar Container -->
     <div class="sidebar-container">
         <!-- Header del Sidebar -->
         <div class="sidebar-header">
-            <h3>HealthPlus</h3>
-            <p>Panel de Control</p>
+            <h3>Navegación</h3>
+            <p>Acceso rápido a funciones</p>
         </div>
 
         <!-- Contenido del Sidebar -->
