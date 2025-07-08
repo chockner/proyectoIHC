@@ -64,7 +64,7 @@
                     
                     <h3 class="text-sm font-medium text-gray-500 mb-2">Fecha y Hora</h3>
                     <p class="text-lg font-medium text-gray-900 mb-4">
-                        {{ \Carbon\Carbon::parse($cita->appointment_date)->format('l, d \d\e F \d\e Y') }}
+                        {{ ucfirst(\Carbon\Carbon::parse($cita->appointment_date)->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY')) }}
                         <br>
                         <span class="text-blue-600">{{ \Carbon\Carbon::parse($cita->appointment_time)->format('H:i') }}</span>
                     </p>
@@ -181,13 +181,90 @@
                     @endif
                     
                     @if($cita->payment->image_path)
-                        <h3 class="text-sm font-medium text-gray-500 mb-2">Comprobante</h3>
-                        <a href="{{ asset('storage/' . $cita->payment->image_path) }}" 
-                           target="_blank"
-                           class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                            <span class="material-icons mr-2 text-sm">visibility</span>
-                            Ver Comprobante
-                        </a>
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Comprobante de Pago</h3>
+                        <div class="space-y-3">
+                            <!-- Vista previa del comprobante -->
+                            <div class="relative group">
+                                <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-400 transition-colors duration-200 cursor-pointer"
+                                     onclick="openComprobanteModal('{{ asset('storage/' . $cita->payment->image_path) }}', '{{ $cita->payment->payment_method }}')"
+                                     role="button"
+                                     tabindex="0"
+                                     onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openComprobanteModal('{{ asset('storage/' . $cita->payment->image_path) }}', '{{ $cita->payment->payment_method }}'); }"
+                                     aria-label="Hacer clic para ver el comprobante de pago en pantalla completa">
+                                    <div class="flex items-center justify-center">
+                                        @php
+                                            $fileExtension = pathinfo($cita->payment->image_path, PATHINFO_EXTENSION);
+                                            $isImage = in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                        @endphp
+                                        
+                                        @if($isImage)
+                                            <div style="background: #fff; border-radius: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; height: 14rem; width: 100%; max-width: 350px; margin: 0 auto; border: 1px solid #e5e7eb; position: relative;">
+                                                <img src="{{ asset('storage/' . $cita->payment->image_path) }}"
+                                                     alt="Vista previa del comprobante"
+                                                     class="max-w-full max-h-full object-contain rounded-lg"
+                                                     style="background-color: #fff; display: block; margin: 0 auto; z-index: 1; position: relative;"
+                                                     onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=\'text-center text-red-500 text-sm\'>No se pudo cargar la imagen</div>';">
+                                            </div>
+                                        @else
+                                            <div class="text-center">
+                                                <span class="material-icons text-4xl text-gray-400 mb-2">picture_as_pdf</span>
+                                                <p class="text-sm text-gray-600">Comprobante PDF</p>
+                                                <p class="text-xs text-gray-500">{{ strtoupper($fileExtension) }}</p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    
+                                    <!-- Overlay con información -->
+                                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 rounded-lg flex items-center justify-center">
+                                        <div class="bg-white bg-opacity-90 px-3 py-1 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                            <span class="text-sm font-medium text-gray-700">Hacer clic para ampliar</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Botones de acción -->
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="openComprobanteModal('{{ asset('storage/' . $cita->payment->image_path) }}', '{{ $cita->payment->payment_method }}')"
+                                        class="inline-flex items-center px-3 py-2 border border-blue-300 rounded-md text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150">
+                                    <span class="material-icons mr-2 text-sm">zoom_in</span>
+                                    Ampliar
+                                </button>
+                                
+                                <a href="{{ asset('storage/' . $cita->payment->image_path) }}" 
+                                   target="_blank"
+                                   class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-150">
+                                    <span class="material-icons mr-2 text-sm">open_in_new</span>
+                                    Abrir en nueva pestaña
+                                </a>
+                                
+                                <a href="{{ route('paciente.citas.downloadComprobante', $cita->id) }}"
+                                   class="inline-flex items-center px-3 py-2 border border-green-300 rounded-md text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-150">
+                                    <span class="material-icons mr-2 text-sm">download</span>
+                                    Descargar
+                                </a>
+                            </div>
+                            
+                            <!-- Información adicional -->
+                            <div class="text-xs text-gray-500">
+                                <p>• Haga clic en "Ampliar" para ver el comprobante en pantalla completa</p>
+                                <p>• Use "Abrir en nueva pestaña" para ver en el navegador</p>
+                                <p>• "Descargar" guardará el archivo en su dispositivo</p>
+                                <p>• También puede hacer clic directamente en la imagen para ampliarla</p>
+                            </div>
+                            
+                            <!-- Información de seguridad -->
+                            <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                <div class="flex items-start">
+                                    <span class="material-icons text-blue-600 mr-2 text-sm mt-0.5">security</span>
+                                    <div class="text-xs text-blue-700">
+                                        <p class="font-medium">Información de seguridad:</p>
+                                        <p>• Este comprobante es privado y solo visible para usted</p>
+                                        <p>• Se recomienda guardar una copia para sus registros</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -237,6 +314,58 @@
     @endif
 </div>
 
+<!-- Modal para ver comprobante -->
+<div id="comprobanteModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <!-- Header del modal -->
+            <div class="flex items-center justify-between p-4 border-b border-gray-200">
+                <div class="flex items-center">
+                    <span class="material-icons text-blue-600 mr-2">receipt</span>
+                    <h3 class="text-lg font-semibold text-gray-800" id="modalTitle">Comprobante de Pago</h3>
+                </div>
+                <button onclick="closeComprobanteModal()" 
+                        class="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full p-1">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            
+            <!-- Contenido del modal -->
+            <div class="p-4 overflow-auto max-h-[calc(90vh-120px)]">
+                <div class="text-center">
+                    <div id="modalContent" class="flex justify-center">
+                        <!-- El contenido se cargará dinámicamente -->
+                    </div>
+                    <div id="modalLoading" class="hidden">
+                        <div class="flex items-center justify-center py-8">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                            <span class="ml-3 text-gray-600">Cargando comprobante...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer del modal -->
+            <div class="flex items-center justify-between p-4 border-t border-gray-200 bg-gray-50">
+                <div class="text-sm text-gray-600">
+                    <span id="modalInfo">Comprobante de pago de la cita</span>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="downloadFromModal()" 
+                            class="inline-flex items-center px-3 py-2 border border-green-300 rounded-md text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-150">
+                        <span class="material-icons mr-2 text-sm">download</span>
+                        Descargar
+                    </button>
+                    <button onclick="closeComprobanteModal()" 
+                            class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-150">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
 .material-icons {
     font-family: 'Material Icons';
@@ -255,5 +384,258 @@
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: 'liga';
 }
+
+/* Estilos para el modal */
+.modal-open {
+    overflow: hidden;
+}
+
+/* Animaciones para el modal */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Eliminar overlay negro en hover */
+.relative.group .absolute.inset-0 {
+    background: transparent !important;
+}
 </style>
+
+@push('scripts')
+<script>
+// Variables globales para el modal
+let currentComprobanteUrl = '';
+let currentFileName = '';
+
+// Función para abrir el modal del comprobante
+function openComprobanteModal(url, paymentMethod) {
+    currentComprobanteUrl = url;
+    currentFileName = 'comprobante_cita_' + new Date().getTime();
+    
+    const modal = document.getElementById('comprobanteModal');
+    const modalContent = document.getElementById('modalContent');
+    const modalLoading = document.getElementById('modalLoading');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalInfo = document.getElementById('modalInfo');
+    
+    // Determinar el tipo de archivo
+    const fileExtension = url.split('.').pop().toLowerCase();
+    const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension);
+    
+    // Actualizar título e información
+    modalTitle.textContent = 'Comprobante de Pago';
+    modalInfo.textContent = `Método: ${getPaymentMethodName(paymentMethod)} | Formato: ${fileExtension.toUpperCase()}`;
+    
+    // Mostrar modal con animación
+    modal.classList.remove('hidden');
+    modal.classList.add('modal-fade-in');
+    document.body.classList.add('modal-open');
+    
+    // Mostrar indicador de carga
+    modalContent.classList.add('hidden');
+    modalLoading.classList.remove('hidden');
+    
+    // Cargar contenido según el tipo de archivo
+    if (isImage) {
+        const img = new Image();
+        img.onload = function() {
+            modalLoading.classList.add('hidden');
+            modalContent.classList.remove('hidden');
+            modalContent.innerHTML = `
+                <img src="${url}" 
+                     alt="Comprobante de pago" 
+                     class="max-w-full max-h-[70vh] object-contain rounded-lg shadow-lg"
+                     style="opacity: 0; transition: opacity 0.3s ease;">
+            `;
+            // Animar la aparición de la imagen
+            setTimeout(() => {
+                const imgElement = modalContent.querySelector('img');
+                if (imgElement) imgElement.style.opacity = '1';
+            }, 100);
+        };
+        img.onerror = function() {
+            modalLoading.classList.add('hidden');
+            modalContent.classList.remove('hidden');
+            modalContent.innerHTML = `
+                <div class="w-full max-w-2xl">
+                    <div class="bg-red-50 border-2 border-red-200 rounded-lg p-8 text-center">
+                        <span class="material-icons text-6xl text-red-400 mb-4">error</span>
+                        <h4 class="text-lg font-medium text-red-700 mb-2">Error al cargar</h4>
+                        <p class="text-sm text-red-600 mb-4">No se pudo cargar el comprobante</p>
+                        <button onclick="closeComprobanteModal()" 
+                                class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-150">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            `;
+        };
+        img.src = url;
+    } else {
+        // Para PDFs y otros archivos
+        setTimeout(() => {
+            modalLoading.classList.add('hidden');
+            modalContent.classList.remove('hidden');
+            modalContent.innerHTML = `
+                <div class="w-full max-w-2xl">
+                    <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                        <span class="material-icons text-6xl text-gray-400 mb-4">picture_as_pdf</span>
+                        <h4 class="text-lg font-medium text-gray-700 mb-2">Comprobante PDF</h4>
+                        <p class="text-sm text-gray-500 mb-4">Este archivo se abrirá en una nueva pestaña</p>
+                        <a href="${url}" 
+                           target="_blank"
+                           class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-150">
+                            <span class="material-icons mr-2">open_in_new</span>
+                            Abrir PDF
+                        </a>
+                    </div>
+                </div>
+            `;
+        }, 500); // Simular tiempo de carga para PDFs
+    }
+    
+    // Enfocar el botón de cerrar para accesibilidad
+    setTimeout(() => {
+        modal.querySelector('button[onclick="closeComprobanteModal()"]').focus();
+    }, 100);
+}
+
+// Función para cerrar el modal
+function closeComprobanteModal() {
+    const modal = document.getElementById('comprobanteModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('modal-fade-in');
+    document.body.classList.remove('modal-open');
+    
+    // Limpiar contenido
+    document.getElementById('modalContent').innerHTML = '';
+}
+
+// Función para descargar comprobante
+function downloadComprobante(url, filename) {
+    // Usar la ruta segura del servidor
+    const downloadUrl = '{{ route("paciente.citas.downloadComprobante", $cita->id) }}';
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.target = '_blank';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Mostrar notificación
+    showNotification('Descarga iniciada', 'success');
+}
+
+// Función para descargar desde el modal
+function downloadFromModal() {
+    // Usar la ruta segura del servidor
+    const downloadUrl = '{{ route("paciente.citas.downloadComprobante", $cita->id) }}';
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.target = '_blank';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Mostrar notificación
+    showNotification('Descarga iniciada', 'success');
+}
+
+// Función para obtener nombre del método de pago
+function getPaymentMethodName(method) {
+    const methods = {
+        'online': 'Pago en Línea',
+        'transfer': 'Transferencia / Yape / Plin',
+        'clinic': 'Pago en Clínica',
+        'transferencia': 'Transferencia Bancaria',
+        'yape': 'Yape',
+        'plin': 'Plin'
+    };
+    return methods[method] || method;
+}
+
+// Función para mostrar notificaciones
+function showNotification(message, type = 'info') {
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+    
+    // Estilos según el tipo
+    const styles = {
+        success: 'bg-green-500 text-white',
+        error: 'bg-red-500 text-white',
+        info: 'bg-blue-500 text-white',
+        warning: 'bg-yellow-500 text-white'
+    };
+    
+    notification.className += ` ${styles[type] || styles.info}`;
+    notification.innerHTML = `
+        <div class="flex items-center">
+            <span class="material-icons mr-2">${type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info'}</span>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animar entrada
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+    
+    // Remover después de 3 segundos
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Función para manejar errores de descarga
+function handleDownloadError() {
+    showNotification('Error al descargar el comprobante. Intente nuevamente.', 'error');
+}
+
+// Cerrar modal con Escape
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const modal = document.getElementById('comprobanteModal');
+        if (!modal.classList.contains('hidden')) {
+            closeComprobanteModal();
+        }
+    }
+});
+
+// Cerrar modal al hacer clic fuera
+document.getElementById('comprobanteModal').addEventListener('click', function(event) {
+    if (event.target === this) {
+        closeComprobanteModal();
+    }
+});
+
+// Detectar errores de descarga
+window.addEventListener('error', function(event) {
+    if (event.target.tagName === 'IMG' && event.target.closest('#comprobanteModal')) {
+        handleDownloadError();
+    }
+});
+</script>
+@endpush
 @endsection 

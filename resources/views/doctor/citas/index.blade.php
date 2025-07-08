@@ -10,14 +10,16 @@
                 <div class="col-md-4 mb-3">
                     <label class="form-label" for="fecha">Seleccionar fecha:</label>
                     <input type="date" name="fecha" id="fecha" class="form-control"
-                        value="{{ request('fecha') ?? now()->toDateString() }}">
+                        value="{{ request('fecha') ?? '' }}">
                 </div>
+
                 <!-- Botón de búsqueda -->
                 <div class="col-md-2 mb-3">
                     <button type="submit" class="btn btn-primary w-100">
                         Buscar
                     </button>
                 </div>
+
                 <!-- Botón de limpiar (enlace) -->
                 <div class="col-md-2 mb-3">
                     <a href="{{ route('doctor.citas.index') }}" class="btn btn-secondary w-100">
@@ -26,6 +28,7 @@
                 </div>
             </form>
         </div>
+
         <table class="table table-bordered table-striped">
             <thead class="table-primary">
                 <tr>
