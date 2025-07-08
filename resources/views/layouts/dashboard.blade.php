@@ -46,16 +46,19 @@
             z-index: 1000;
             background: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* Sin altura fija */
         }
 
         /* Sidebar principal - debajo del header */
         .sidebar-container {
             position: fixed;
             left: 0;
-            top: 80px;
+            <<<<<<< HEAD top: 80px;
             /* Altura del header */
             height: calc(100vh - 80px);
-            width: 280px;
+            =======
+            /* top y height serán ajustados dinámicamente por JS */
+            >>>>>>>058d3ef2cc22f0eaec1a2c5f56aaa8eeaea6708a width: 280px;
             background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
             border-right: 1px solid #e2e8f0;
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
@@ -127,28 +130,40 @@
             padding: 1rem 1.5rem;
             color: #475569;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(.4, 0, .2, 1);
             border-left: 3px solid transparent;
-            margin: 0.125rem 0;
+            margin: 0.25rem 0;
+            border-radius: 0.75rem;
+            background: transparent;
+            box-shadow: none;
         }
 
         .sidebar-link:hover {
-            background: linear-gradient(90deg, #e6f0ff 0%, #f0f7ff 100%);
+            background: #f0f7ff;
             color: #0c64f2;
             border-left-color: #0c64f2;
-            transform: translateX(2px);
+            transform: translateX(2px) scale(1.03);
+            box-shadow: 0 1px 4px rgba(12, 100, 242, 0.04);
         }
 
         .sidebar-link.active {
-            background: linear-gradient(90deg, #0c64f2 0%, #1a75ff 100%);
-            color: white;
-            border-left-color: #ffffff;
-            box-shadow: 0 2px 8px rgba(12, 100, 242, 0.3);
+            background: #e6f0ff;
+            color: #0c64f2;
+            border-left-color: #0c64f2;
+            box-shadow: 0 2px 8px 0 rgba(12, 100, 242, 0.08);
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transform: scale(1.03);
         }
 
         .sidebar-link.active:hover {
-            background: linear-gradient(90deg, #0b5ed7 0%, #1a75ff 100%);
-            color: white;
+            background: #dbeafe;
+            color: #0c64f2;
+            box-shadow: 0 4px 16px 0 rgba(12, 100, 242, 0.10);
+        }
+
+        .sidebar-link+.sidebar-link {
+            margin-top: 0.25rem;
         }
 
         /* Iconos */
@@ -162,12 +177,13 @@
             transition: all 0.2s ease;
         }
 
-        .sidebar-link:hover .sidebar-icon {
-            transform: scale(1.1);
+        .sidebar-link .sidebar-icon {
+            color: #64748b;
         }
 
-        .sidebar-link.active .sidebar-icon {
-            color: white;
+        .sidebar-link.active .sidebar-icon,
+        .sidebar-link:hover .sidebar-icon {
+            color: #0c64f2;
         }
 
         /* Texto de los enlaces */
@@ -177,6 +193,8 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
         }
 
         /* Secciones del sidebar */
@@ -225,10 +243,12 @@
         /* Contenido principal */
         .main-content-wrapper {
             margin-left: 280px;
-            margin-top: 80px;
+            <<<<<<< HEAD margin-top: 80px;
             /* Espacio para el header */
             min-height: calc(100vh - 80px);
-            background: #f8fafc;
+            =======
+            /* margin-top será ajustado dinámicamente por JS */
+            >>>>>>>058d3ef2cc22f0eaec1a2c5f56aaa8eeaea6708a background: #f8fafc;
         }
 
         .main-content {
@@ -323,12 +343,16 @@
 
 <body>
     <!-- Header Principal -->
-    <div class="main-header">
+    <header class="main-header" id="main-header">
         <x-header />
-    </div>
+        <<<<<<< HEAD </div>
 
+            =======
+    </header>
+
+    >>>>>>> 058d3ef2cc22f0eaec1a2c5f56aaa8eeaea6708a
     <!-- Sidebar Container -->
-    <div class="sidebar-container">
+    <div class="sidebar-container" id="sidebar-container">
         <!-- Header del Sidebar -->
         <div class="sidebar-header">
             <h3>Navegación</h3>
@@ -477,7 +501,10 @@
                             <div class="sidebar-icon">
                                 <span class="material-icons">medical_information</span>
                             </div>
-                            <span class="sidebar-text">Historias Médicas</span>
+                            <<<<<<< HEAD <span class="sidebar-text">Historias Médicas</span>
+                                =======
+                                <span class="sidebar-text">Historia Médica</span>
+                                >>>>>>> 058d3ef2cc22f0eaec1a2c5f56aaa8eeaea6708a
                         </a>
                     </div>
                 @endif
@@ -515,8 +542,8 @@
     </div>
 
     <!-- Contenido Principal -->
-    <div class="main-content-wrapper">
-        <div class="main-content">
+    <div class="main-content-wrapper" id="main-content-wrapper">
+        <div class="main-content pt-32">
             <!-- Mensajes de éxito/error -->
             @if (session('success'))
                 <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg shadow-sm">
@@ -545,7 +572,9 @@
             @endif
 
             @hasSection('content')
-                @yield('content')
+                <div class="container mx-auto">
+                    @yield('content')
+                </div>
             @else
                 <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                     <div class="flex items-center">
@@ -572,6 +601,21 @@
             }, 5000);
         });
     });
+
+    function ajustarLayoutDashboard() {
+        const header = document.getElementById('main-header');
+        const sidebar = document.getElementById('sidebar-container');
+        const mainContent = document.getElementById('main-content-wrapper');
+        if (header && sidebar && mainContent) {
+            const headerHeight = header.offsetHeight;
+            sidebar.style.top = headerHeight + 'px';
+            sidebar.style.height = 'calc(100vh - ' + headerHeight + 'px)';
+            mainContent.style.marginTop = headerHeight + 'px';
+            mainContent.style.minHeight = 'calc(100vh - ' + headerHeight + 'px)';
+        }
+    }
+    window.addEventListener('DOMContentLoaded', ajustarLayoutDashboard);
+    window.addEventListener('resize', ajustarLayoutDashboard);
 </script>
 
 @stack('scripts')
