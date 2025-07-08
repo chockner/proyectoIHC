@@ -38,7 +38,6 @@
             </div>
         </div>
 
-
         <!-- Tabla de citas -->
         <table class="table table-bordered table-striped">
             <thead class="table-primary">
@@ -55,22 +54,24 @@
                 @forelse ($citas as $index => $cita)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $cita->doctor->user->profile->last_name }}</td>
-                        <td>{{ $cita->patient->user->profile->last_name }}</td>
-                        <td>{{ $cita->appointment_date }}</td>
+                        <td>{{ optional($cita->doctor->user->profile)->last_name ?? 'No disponible' }}</td>
+                        <td>{{ optional($cita->patient->user->profile)->last_name ?? 'No disponible' }}</td>
+                        <td>{{ $cita->appointment_date ?? 'No disponible' }}</td>
                         <td>
                             <span
                                 class="badge bg-{{ $cita->status === 'programada' ? 'warning' : ($cita->status === 'completada' ? 'success' : 'danger') }}">
-                                {{ ucfirst($cita->status) }}
+                                {{ ucfirst($cita->status ?? 'No disponible') }}
                             </span>
                         </td>
                         <td>
                             @if ($cita->status === 'programada')
-                                <a href="{{ route('secretaria.citas.show', $cita->id) }}"
-                                    class="btn btn-sm btn-info">Validar</a>
-                            @else
+                                @if ($cita->payment && $cita->payment->status === 'pendiente')
+                                    <a href="{{ route('secretaria.citas.show', $cita->id) }}"
+                                        class="btn btn-sm btn-info">Validar</a>
+                                @elseif ($cita->payment && $cita->payment->status === 'validado')
+                                    <span class="text-success fw-bold">Comprobante Validado</span>
+                                @endif
                             @endif
-
                         </td>
                     </tr>
                 @empty
@@ -88,7 +89,7 @@
                 <li class="page-item {{ $citas->onFirstPage() ? 'disabled' : '' }}">
                     <a class="page-link" href="{{ $citas->appends(request()->query())->previousPageUrl() }}"
                         aria-label="Anterior">
-                        &laquo; Anterior
+                        « Anterior
                     </a>
                 </li>
 
@@ -148,7 +149,7 @@
                 <li class="page-item {{ !$citas->hasMorePages() ? 'disabled' : '' }}">
                     <a class="page-link" href="{{ $citas->appends(request()->query())->nextPageUrl() }}"
                         aria-label="Siguiente">
-                        Siguiente &raquo;
+                        Siguiente »
                     </a>
                 </li>
             </ul>

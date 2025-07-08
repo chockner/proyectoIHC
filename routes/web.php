@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\QuickPasswordResetController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 
@@ -41,6 +42,12 @@ Route::post('/login/personal', [LoginController::class, 'loginPersonal'])/* ->na
 // Register
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+
+// Ruta para mostrar el formulario de restablecimiento rápido
+// Ruta para procesar el restablecimiento de contraseña
+Route::get('quick-reset-password', [QuickPasswordResetController::class, 'showForm'])->name('quick.reset.form');
+Route::post('quick-reset-password', [QuickPasswordResetController::class, 'resetPassword'])->name('quick.reset');
+
 
 // profile edit
 Route::middleware('auth')->group(function () {
@@ -127,6 +134,8 @@ Route::prefix('secretaria')->middleware(['auth'])->group(function () {
     /* secretaria -> citas */
     Route::get('/citas', [SecretariaCitaController::class, 'index'])->name('secretaria.citas.index');
     Route::get('/citas/{id}',[SecretariaCitaController::class, 'show'])->name('secretaria.citas.show');
+    Route::patch('/secretaria/citas/{id}/validate', [SecretariaCitaController::class, 'validatePayment'])->name('secretaria.citas.validate');
+    Route::patch('/secretaria/citas/{id}/reject', [SecretariaCitaController::class, 'rejectPayment'])->name('secretaria.citas.reject');
 
 });
 
@@ -174,6 +183,7 @@ Route::prefix('doctor')->middleware(['auth'])->group(function () {
     route::post('/citas',[DoctorCitaController::class, 'update'])->name('doctor.citas.update');
     Route::get('/citas/{id}',[DoctorCitaController::class, 'show'])->name('doctor.citas.show');
     Route::get('/citas/{id}/edit',[DoctorCitaController::class, 'edit'])->name('doctor.citas.edit');
+    Route::put('/citas/{id}',[DoctorCitaController::class, 'update'])->name('doctor.citas.update');
 
     /* pacientes */
     Route::get('/pacientes',[DoctorPacienteController::class, 'index'])->name('doctor.pacientes.index');

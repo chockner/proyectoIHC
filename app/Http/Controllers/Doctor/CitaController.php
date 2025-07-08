@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\MedicalRecordDetail;
 
 class CitaController extends Controller
 {
@@ -45,10 +46,10 @@ class CitaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = Auth::user();
-        $doctorId = $user->doctor->id;
-        
         $appointment = Appointment::findOrFail($id);
+        $appointment->update([
+            'status' => 'completada',
+        ]);
 
         // Validar los datos del formulario
         $validated = $request->validate([
@@ -58,19 +59,14 @@ class CitaController extends Controller
         ]);
 
         // Actualizar o crear el registro en MedicalRecordDetail
-        $detalle=MedicalRecordDetail::Create(
-            [
-                'medical_record_id' => $appointment->patient->medicalRecord->id,
-                'appointment_id' => $appointment->id,
-                'diagnosis' => $request->diagnosis,
-                'treatment' => $request->treatment,
-                'notes' => $request->notes,
-            ]
-        );
-
-        $appointment->update([
-            'status' => 'completada',
+        $detalle = MedicalRecordDetail::create([
+            'medical_record_id' => $appointment->patient->medicalRecords->id,
+            'appointment_id' => $appointment->id,
+            'diagnosis' => $request->diagnosis,
+            'treatment' => $request->treatment,
+            'notes,' => $request->notes,
         ]);
+        return redirect()->route('doctor.citas.index')->with('success', 'Cita Atendida.');
     }
 
     public function show($id)
