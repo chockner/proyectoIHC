@@ -345,12 +345,10 @@
     <!-- Header Principal -->
     <header class="main-header" id="main-header">
         <x-header />
-        <<<<<<< HEAD </div>
 
-            =======
     </header>
 
-    >>>>>>> 058d3ef2cc22f0eaec1a2c5f56aaa8eeaea6708a
+
     <!-- Sidebar Container -->
     <div class="sidebar-container" id="sidebar-container">
         <!-- Header del Sidebar -->
