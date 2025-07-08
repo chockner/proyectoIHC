@@ -3,12 +3,6 @@
     <div class="container mt-4">
         <h1 class="text-2xl font-bold mb-4">Detalles de la Historia Médica</h1>
 
-        {{-- aqui informacion basica del paciente, solo nombre y apellido y alergias y esas vainas --}}
-        <p>
-            aqui informacion basica del paciente, solo nombre y apellido y alergias y esas vainas
-            divs y asi
-        </p>
-
         <div class="mb-3">
             <table class="table table-bordered table-striped">
                 <thead class="table-primary">
