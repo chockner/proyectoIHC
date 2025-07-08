@@ -56,7 +56,7 @@
                 <div class="mb-3">
                     <label class="form-label">Fecha y Hora</label>
                     <input type="text" class="form-control disabled-field"
-                        value="{{ $appointment->appointment_date }} {{ $appointment->appointment_time }}" disabled>
+                        value="{{ $appointment->appointment_date }} | {{ $appointment->appointment_time }}" disabled>
                 </div>
             </div>
         </div>
@@ -85,10 +85,7 @@
                                 class="img-comprobante" alt="Comprobante de pago">
                         </div>
                     @else
-                        <div>
-                            <img src="{{ asset('storage/profiles/2shc1ujGIPkeshEO9LLaiaHAA6yJgfikq1rqDDuq.png') }}"
-                                class="img-comprobante" alt="Comprobante de pago de prueba">
-                        </div>
+                        <input type="text" class="form-control disabled-field" value="No disponible" disabled>
                     @endif
                 </div>
             </div>
