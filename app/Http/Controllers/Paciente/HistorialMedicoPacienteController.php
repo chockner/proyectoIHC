@@ -17,9 +17,9 @@ class HistorialMedicoPacienteController extends Controller
         //Obtener el id del usuario autenticado
         $user = auth()->user();
         $paciente = Patient::where('user_id', $user->id)->first();
-        $historialMedico = MedicalRecord::where('patient_id', $paciente->id)->get();
+        $Historia = MedicalRecord::where('patient_id', $paciente->id)->get();
 
-        return view('paciente.historialMedico.index', compact('historialMedico'));
+        return view('paciente.historialMedico.index', compact('paciente'));
     }
 
     /**
