@@ -280,18 +280,12 @@
         </div>
         <div class="p-6">
             <div class="flex flex-wrap gap-3">
-                <form action="{{ route('paciente.citas.cancel', $cita->id) }}" 
-                      method="POST" 
-                      class="inline"
-                      onsubmit="return confirm('¿Está seguro de que desea cancelar esta cita? Esta acción no se puede deshacer.')">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" 
-                            class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-150">
-                        <span class="material-icons mr-2">cancel</span>
-                        Cancelar Cita
-                    </button>
-                </form>
+                <button type="button" 
+                        onclick="openCancelModal()"
+                        class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-150">
+                    <span class="material-icons mr-2">cancel</span>
+                    Cancelar Cita
+                </button>
             </div>
             
             <!-- Información adicional -->
@@ -366,6 +360,59 @@
     </div>
 </div>
 
+<!-- Modal de confirmación de cancelación -->
+<div id="cancelModal" class="fixed inset-0 z-50 hidden backdrop-blur-sm">
+    <div class="flex items-center justify-center min-h-screen p-4" id="cancelModalBackdrop">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="cancelModalContent" tabindex="-1">
+            <!-- Contenido del modal -->
+            <div class="p-8 text-center">
+                <!-- Icono simple -->
+                <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-red-50 flex items-center justify-center">
+                    <span class="material-icons text-red-500 text-3xl">cancel</span>
+                </div>
+                <!-- Título -->
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Cancelar Cita</h3>
+                <!-- Información de la cita -->
+                <div class="bg-gray-50 rounded-xl p-4 mb-6">
+                    <p class="text-sm text-gray-600 mb-2">
+                        <span class="font-medium">{{ ucfirst(\Carbon\Carbon::parse($cita->appointment_date)->locale('es')->isoFormat('dddd, D [de] MMMM')) }}</span>
+                    </p>
+                    <p class="text-lg font-semibold text-gray-900">
+                        {{ \Carbon\Carbon::parse($cita->appointment_time)->format('H:i') }}
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Dr. {{ $cita->doctor->user->profile->first_name ?? 'Médico' }} {{ $cita->doctor->user->profile->last_name ?? '' }}
+                    </p>
+                </div>
+                <!-- Mensaje de confirmación -->
+                <p class="text-sm text-gray-600 mb-6">
+                    ¿Está seguro de que desea cancelar esta cita? Esta acción no se puede deshacer.
+                </p>
+                <!-- Bloque de advertencia -->
+                <div class="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 mb-4 mx-auto text-xs text-blue-700 max-w-xs">
+                    <span class="material-icons text-blue-400 text-base">info</span>
+                    <span><strong>Importante:</strong> Si ya realizó un pago, deberá contactar con la clínica para solicitar un reembolso.</span>
+                </div>
+            </div>
+            <!-- Botones -->
+            <div class="flex gap-3 p-6 pt-0">
+                <button onclick="closeCancelModal()" 
+                        class="flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all duration-200">
+                    Mantener
+                </button>
+                <form action="{{ route('paciente.citas.cancel', $cita->id) }}" method="POST" id="cancelForm" class="flex-1">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" 
+                            class="w-full px-4 py-3 text-sm font-medium text-white bg-red-500 rounded-xl hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200">
+                        Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
 .material-icons {
     font-family: 'Material Icons';
@@ -412,6 +459,44 @@
 /* Eliminar overlay negro en hover */
 .relative.group .absolute.inset-0 {
     background: transparent !important;
+}
+
+/* Estilos para el modal minimalista */
+#cancelModalContent {
+    position: relative;
+    z-index: 2;
+    background: #fff;
+}
+
+/* Efecto de backdrop blur mejorado */
+.backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* Hover effects para botones */
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#cancelModal {
+    background: transparent !important;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+}
+#cancelModal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.13);
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 0;
 }
 </style>
 
@@ -635,6 +720,77 @@ window.addEventListener('error', function(event) {
     if (event.target.tagName === 'IMG' && event.target.closest('#comprobanteModal')) {
         handleDownloadError();
     }
+});
+
+// Funciones para el modal de cancelación
+function openCancelModal() {
+    const modal = document.getElementById('cancelModal');
+    const modalContent = document.getElementById('cancelModalContent');
+    
+    modal.classList.remove('hidden');
+    document.body.classList.add('modal-open');
+    
+    // Animar entrada del modal
+    setTimeout(() => {
+        modalContent.classList.remove('scale-95', 'opacity-0');
+        modalContent.classList.add('scale-100', 'opacity-100');
+    }, 10);
+    
+    // Enfocar el botón de mantener para accesibilidad
+    setTimeout(() => {
+        modal.querySelector('button[onclick="closeCancelModal()"]').focus();
+    }, 300);
+}
+
+function closeCancelModal() {
+    const modal = document.getElementById('cancelModal');
+    const modalContent = document.getElementById('cancelModalContent');
+    
+    // Animar salida del modal
+    modalContent.classList.remove('scale-100', 'opacity-100');
+    modalContent.classList.add('scale-95', 'opacity-0');
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        document.body.classList.remove('modal-open');
+    }, 200);
+}
+
+// Cerrar modal de cancelación con Escape
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const cancelModal = document.getElementById('cancelModal');
+        if (!cancelModal.classList.contains('hidden')) {
+            closeCancelModal();
+        }
+    }
+});
+
+// Cerrar modal de cancelación al hacer clic fuera
+document.getElementById('cancelModalBackdrop').addEventListener('click', function(event) {
+    // Si el clic es directamente en el fondo (no en el contenido)
+    if (event.target === this) {
+        closeCancelModal();
+    }
+});
+
+// Manejar el envío del formulario de cancelación
+document.getElementById('cancelForm').addEventListener('submit', function(e) {
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+    
+    // Deshabilitar botón y mostrar estado de carga
+    submitButton.disabled = true;
+    submitButton.textContent = 'Cancelando...';
+    submitButton.classList.add('opacity-75', 'cursor-not-allowed');
+    
+    // Permitir que el formulario se envíe normalmente
+    // El botón se habilitará automáticamente si hay un error
+    setTimeout(() => {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+        submitButton.classList.remove('opacity-75', 'cursor-not-allowed');
+    }, 5000); // Timeout de seguridad
 });
 </script>
 @endpush

@@ -506,13 +506,67 @@ class AgendarCitaController extends Controller
 
     public function cancel($id)
     {
-        $cita = Appointment::where('patient_id', auth()->user()->patient->id)
-            ->findOrFail($id);
+        try {
+            // Buscar la cita del paciente autenticado
+            $cita = Appointment::with(['payment', 'doctor.user.profile', 'doctor.specialty'])
+                ->where('patient_id', auth()->user()->patient->id)
+                ->findOrFail($id);
 
-        $cita->update(['status' => 'cancelada']);
+            // Verificar que la cita se puede cancelar
+            if ($cita->status !== 'programada') {
+                return back()->withErrors(['error' => 'Solo se pueden cancelar citas programadas.']);
+            }
 
-        return redirect()->route('paciente.citas.index')
-            ->with('success', 'Cita cancelada exitosamente.');
+            // Verificar que la cita no sea de hoy o de días pasados
+            $fechaCita = Carbon::parse($cita->appointment_date);
+            $hoy = Carbon::today();
+            
+            if ($fechaCita->lt($hoy)) {
+                return back()->withErrors(['error' => 'No se pueden cancelar citas de días pasados.']);
+            }
+
+            // Si la cita es de hoy, verificar que no sea en las próximas 2 horas
+            if ($fechaCita->eq($hoy)) {
+                $horaCita = Carbon::parse($cita->appointment_time);
+                $horaActual = Carbon::now();
+                $diferenciaHoras = $horaCita->diffInHours($horaActual, false);
+                
+                if ($diferenciaHoras <= 2) {
+                    return back()->withErrors(['error' => 'No se pueden cancelar citas que están programadas en las próximas 2 horas.']);
+                }
+            }
+
+            // Actualizar el estado de la cita
+            $cita->update(['status' => 'cancelada']);
+
+            // Si hay un pago asociado, actualizar su estado
+            if ($cita->payment) {
+                $cita->payment->update([
+                    'status' => 'pendiente', // Mantener como pendiente para revisión de reembolso
+                    'validated_at' => null
+                ]);
+            }
+
+            // Log de la acción
+            Log::info('Cita cancelada', [
+                'cita_id' => $cita->id,
+                'paciente_id' => auth()->user()->patient->id,
+                'doctor_id' => $cita->doctor_id,
+                'fecha' => $cita->appointment_date,
+                'hora' => $cita->appointment_time
+            ]);
+
+            return redirect()->route('paciente.citas.index')
+                ->with('success', 'Cita cancelada exitosamente. Si realizó un pago, contacte con la clínica para solicitar el reembolso.');
+
+        } catch (\Exception $e) {
+            Log::error('Error al cancelar cita: ' . $e->getMessage(), [
+                'cita_id' => $id,
+                'user_id' => auth()->id()
+            ]);
+
+            return back()->withErrors(['error' => 'Error al cancelar la cita. Por favor intente nuevamente.']);
+        }
     }
 
     /**
