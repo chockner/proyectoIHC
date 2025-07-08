@@ -5,8 +5,26 @@
         <h2>Lista de Citas</h2>
 
         <!-- Filtros y Búsqueda -->
-        <div class="card mb-4">
+        <div class="card mb-4" style="background: transparent; border: none;">
             <div class="card-body">
+                <style>
+                    .action-btn {
+                        width: 45px;
+                        height: 45px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border: 1px solid #e2e8f0;
+                        background-color: #ffffff;
+                        border-radius: 0.375rem;
+                        padding: 0;
+                    }
+
+                    .action-btn-container {
+                        display: flex;
+                        gap: 10px;
+                    }
+                </style>
                 <form method="GET" action="{{ route('secretaria.citas.index') }}" class="row g-3">
                     <!-- Filtro de estado -->
                     <div class="col-md-3">
@@ -30,9 +48,28 @@
                     </div>
 
                     <!-- Botones -->
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary">Aplicar</button>
-                        <a href="{{ route('secretaria.citas.index') }}" class="btn btn-outline-secondary ms-2">Limpiar</a>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <div class="action-btn-container">
+                            <button type="submit" class="action-btn" data-bs-toggle="tooltip" data-bs-title="Buscar">
+                                <div class="relative">
+                                    <span class="material-icons text-slate-600">calendar_today</span>
+                                    <span
+                                        class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-blue-100 text-blue-600 rounded-full p-0.4">search</span>
+                                </div>
+                            </button>
+                            <a href="{{ route('secretaria.citas.index') }}" class="action-btn" data-bs-toggle="tooltip"
+                                data-bs-title="Limpiar">
+                                <div class="relative">
+                                    <span class="material-icons text-slate-600">clear</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('secretaria.citas.exportPdf') . '?' . http_build_query(request()->query()) }}"
+                                class="action-btn" data-bs-toggle="tooltip" data-bs-title="Exportar a PDF">
+                                <div class="relative">
+                                    <span class="material-icons text-slate-600">picture_as_pdf</span>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -66,10 +103,15 @@
                         <td>
                             @if ($cita->status === 'programada')
                                 @if ($cita->payment && $cita->payment->status === 'pendiente')
-                                    <a href="{{ route('secretaria.citas.show', $cita->id) }}"
-                                        class="btn btn-sm btn-info">Validar</a>
+                                    <a href="{{ route('secretaria.citas.show', $cita->id) }}" class="btn btn-sm action-btn"
+                                        data-bs-toggle="tooltip" data-bs-title="Validar">
+                                        <span class="material-icons text-green-600"
+                                            style="material-icons; vertical-align: middle;">check_circle</span>
+                                    </a>
                                 @elseif ($cita->payment && $cita->payment->status === 'validado')
                                     <span class="text-success fw-bold">Comprobante Validado</span>
+                                @elseif ($cita->payment && $cita->payment->status === 'rechazado')
+                                    <span class="text-danger fw-bold">Comprobante rechazado</span>
                                 @endif
                             @endif
                         </td>
@@ -156,3 +198,15 @@
         </nav>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        // Inicializar tooltips de Bootstrap
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+@endpush

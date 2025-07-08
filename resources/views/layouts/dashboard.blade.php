@@ -379,14 +379,6 @@
                                     <span>Citas</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" {{-- class="sidebar-link {{ request()->routeIs('secretaria.reportes.index') ? 'active-link' : '' }}" --}}
-                                    style="display: flex; align-items: center; gap: 10px;">
-                                    <span class="material-icons text-gray-500 text-2xl"
-                                        style="flex-shrink: 0;">assessment</span>
-                                    <span>Reportes</span>
-                                </a>
-                            </li>
                         </ul>
                     @endif
 
