@@ -27,6 +27,7 @@ class LoginController extends Controller
             if(Auth::user()->role->name === 'paciente'){
                 return redirect('/dashboard');
             }else{
+                Auth::logout();
                 return back()->with('error', 'Acceso no autorizado.')->withInput();
             }
         }
@@ -66,6 +67,7 @@ class LoginController extends Controller
                 case 'doctor':
                     return redirect('/dashboard');
                 default:
+                    Auth::logout();
                     return back()->with('error', 'Acceso no autorizado.')->withInput();
             }
 
