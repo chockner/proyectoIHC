@@ -24,6 +24,7 @@ use App\Http\Controllers\Paciente\NotificacionesPacienteController;
 
 /* DOCTOR CONTROLLERS */
 use App\Http\Controllers\Doctor\CitaController as DoctorCitaController;
+use App\Http\Controllers\Doctor\PacienteController as DoctorPacienteController;
 
 
 Route::view('/', 'home')->name('home');
@@ -170,7 +171,11 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
 
 Route::prefix('doctor')->middleware(['auth'])->group(function () {
     Route::get('/citas',[DoctorCitaController::class, 'index'])->name('doctor.citas.index');
-
+    route::post('/citas',[DoctorCitaController::class, 'update'])->name('doctor.citas.update');
     Route::get('/citas/{id}',[DoctorCitaController::class, 'show'])->name('doctor.citas.show');
     Route::get('/citas/{id}/edit',[DoctorCitaController::class, 'edit'])->name('doctor.citas.edit');
+
+    /* pacientes */
+    Route::get('/pacientes',[DoctorPacienteController::class, 'index'])->name('doctor.pacientes.index');
+    Route::get('/pacientes/{id}',[DoctorPacienteController::class, 'show'])->name('doctor.pacientes.show');
 });

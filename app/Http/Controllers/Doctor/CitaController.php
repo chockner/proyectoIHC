@@ -37,9 +37,40 @@ class CitaController extends Controller
         return view('doctor.citas.index', compact('citas'));
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $cita = Appointment::findOrFail($id);
         return view('doctor.citas.edit', compact('cita'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = Auth::user();
+        $doctorId = $user->doctor->id;
+        
+        $appointment = Appointment::findOrFail($id);
+
+        // Validar los datos del formulario
+        $validated = $request->validate([
+            'diagnosis' => 'nullable|string',
+            'treatment' => 'nullable|string',
+            'notes' => 'nullable|string',
+        ]);
+
+        // Actualizar o crear el registro en MedicalRecordDetail
+        $detalle=MedicalRecordDetail::Create(
+            [
+                'medical_record_id' => $appointment->patient->medicalRecord->id,
+                'appointment_id' => $appointment->id,
+                'diagnosis' => $request->diagnosis,
+                'treatment' => $request->treatment,
+                'notes' => $request->notes,
+            ]
+        );
+
+        $appointment->update([
+            'status' => 'completada',
+        ]);
     }
 
     public function show($id)

@@ -78,11 +78,11 @@
             </div>
             <div class="col-md-4">
                 <div class="mb-3">
-                    <label class="form-label">Comprobante</label>
+                    <label class="form-label">Comprobante:</label>
                     @if ($appointment->payment && $appointment->payment->image_path)
                         <div>
-                            <img src="{{ asset('storage/profiles/' . $appointment->payment->image_path) }}"
-                                class="img-comprobante" alt="Comprobante de pago">
+                            <img src="{{ asset('storage/' . $appointment->payment->image_path) }}" class="img-comprobante"
+                                alt="Comprobante de pago">
                         </div>
                     @else
                         <input type="text" class="form-control disabled-field" value="No disponible" disabled>
@@ -129,6 +129,11 @@
                 <a href="{{ route('doctor.citas.index') }}" class="btn btn-outline-secondary">Volver a la lista de
                     citas</a>
             </div>
+            @if ($appointment->status === 'pendiente')
+                <div class="col-md-4 d-flex justify-content-end">
+                    <a href="{{ route('doctor.citas.edit', $appointment->id) }}" class="btn btn-primary">Atender Cita</a>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

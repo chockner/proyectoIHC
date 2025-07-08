@@ -10,16 +10,14 @@
                 <div class="col-md-4 mb-3">
                     <label class="form-label" for="fecha">Seleccionar fecha:</label>
                     <input type="date" name="fecha" id="fecha" class="form-control"
-                        value="{{ request('fecha') ?? '' }}">
+                        value="{{ request('fecha') ?? now()->toDateString() }}">
                 </div>
-
                 <!-- Botón de búsqueda -->
                 <div class="col-md-2 mb-3">
                     <button type="submit" class="btn btn-primary w-100">
                         Buscar
                     </button>
                 </div>
-
                 <!-- Botón de limpiar (enlace) -->
                 <div class="col-md-2 mb-3">
                     <a href="{{ route('doctor.citas.index') }}" class="btn btn-secondary w-100">
@@ -28,7 +26,6 @@
                 </div>
             </form>
         </div>
-
         <table class="table table-bordered table-striped">
             <thead class="table-primary">
                 <tr>
@@ -43,15 +40,15 @@
             <tbody>
                 @foreach ($citas as $index => $cita)
                     <tr>
-                        <td class="px-6 py-4 "> {{ $index + 1 }} </td>
-                        <td class="px-6 py-4 "> {{ $cita->patient->user->profile->last_name }}
-                            {{ $cita->patient->user->profile->first_name }} </td>
-                        <td class="px-6 py-4 "> {{ $cita->appointment_date }} | {{ $cita->appointment_time }} </td>
-                        <td class="px-6 py-4 "> {{ $cita->status }} </td>
-                        <td class="px-6 py-4 "> {{ $cita->payment->status }} </td>
+                        <td class="px-6 py-4">{{ $index + 1 }}</td>
+                        <td class="px-6 py-4">{{ optional($cita->patient->user->profile)->last_name ?? 'No disponible' }}
+                            {{ optional($cita->patient->user->profile)->first_name ?? '' }}</td>
+                        <td class="px-6 py-4">{{ $cita->appointment_date }} | {{ $cita->appointment_time }}</td>
+                        <td class="px-6 py-4">{{ $cita->status ?? 'No disponible' }}</td>
+                        <td class="px-6 py-4">{{ optional($cita->payment)->status ?? 'No disponible' }}</td>
                         <td>
-                            <div class="mb-3 flex justity-center space-x-2">
-                                {{-- icono ver --}}
+                            <div class="mb-3 flex justify-center space-x-2">
+                                {{-- Icono Ver --}}
                                 <div class="flex flex-col items-center">
                                     <a href="{{ route('doctor.citas.show', $cita->id) }}"
                                         class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
@@ -63,24 +60,27 @@
                                         </div>
                                     </a>
                                 </div>
-                                {{-- icono Atender --}}
-                                <div class="flex flex-col items-center">
-                                    <a href="{{ route('doctor.citas.edit', $cita->id) }}"
-                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
-                                        data-bs-toggle="tooltip" data-bs-title="Atender">
-                                        <div class="relative">
-                                            <span class="material-icons text-green-500">calendar_today</span>
-                                            <span
-                                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-green-100 text-green-600 rounded-full p-0.4">room_service</span>
-                                        </div>
-                                    </a>
-                                </div>
+                                @if ($cita->status === 'programada')
+                                    {{-- Icono Atender --}}
+                                    <div class="flex flex-col items-center">
+                                        <a href="{{ route('doctor.citas.edit', $cita->id) }}"
+                                            class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                            data-bs-toggle="tooltip" data-bs-title="Atender">
+                                            <div class="relative">
+                                                <span class="material-icons text-green-500">calendar_today</span>
+                                                <span
+                                                    class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-green-100 text-green-600 rounded-full p-0.4">room_service</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @endforeach
                 @if ($citas->isEmpty())
                     <tr>
-                        <td colspan="7" class="text-center">No hay citas registradas en este mes.</td>
+                        <td colspan="6" class="text-center">No hay citas registradas en este mes.</td>
                     </tr>
                 @endif
             </tbody>
@@ -92,7 +92,7 @@
                 <li class="page-item {{ $citas->onFirstPage() ? 'disabled' : '' }}">
                     <a class="page-link" href="{{ $citas->appends(request()->query())->previousPageUrl() }}"
                         aria-label="Anterior">
-                        &laquo; Anterior
+                        « Anterior
                     </a>
                 </li>
 
@@ -152,14 +152,26 @@
                 <li class="page-item {{ !$citas->hasMorePages() ? 'disabled' : '' }}">
                     <a class="page-link" href="{{ $citas->appends(request()->query())->nextPageUrl() }}"
                         aria-label="Siguiente">
-                        Siguiente &raquo;
+                        Siguiente »
                     </a>
                 </li>
             </ul>
         </nav>
     </div>
 @endsection
+
 @push('scripts')
+    <style>
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5e7eb;
+            background-color: #ffffff;
+            padding: 8px;
+            border-radius: 6px;
+        }
+    </style>
     <script>
         // Inicializar tooltips de Bootstrap
         document.addEventListener('DOMContentLoaded', function() {
