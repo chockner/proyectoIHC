@@ -80,6 +80,28 @@ class CitaController extends Controller
 
         $cita->payment->update(['status' => 'rechazado']);
 
-        return redirect()->route('secretaria.citas.show', $id)->with('success', 'Comprobante rechazado correctamente.');
+        return redirect()->route('secretaria.citas.show', $id)->with('error', 'Comprobante rechazado correctamente.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $status = $request->input('status');
+        $fecha = $request->input('fecha');
+
+        $query = Appointment::with(['patient.user.profile', 'doctor.user.profile']);
+
+        if ($status && in_array($status, ['programada', 'completada', 'cancelada'])) {
+            $query->where('status', $status);
+        }
+
+        if ($fecha) {
+            $query->whereDate('appointment_date', $fecha);
+        }
+
+        $query->orderBy('appointment_date', 'desc');
+
+        $citas = $query->get();
+
+        return view('secretaria.citas.pdf_citas', compact('citas', 'status', 'fecha'));
     }
 }

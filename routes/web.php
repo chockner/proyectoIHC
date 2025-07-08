@@ -136,7 +136,7 @@ Route::prefix('secretaria')->middleware(['auth'])->group(function () {
     Route::get('/citas/{id}',[SecretariaCitaController::class, 'show'])->name('secretaria.citas.show');
     Route::patch('/secretaria/citas/{id}/validate', [SecretariaCitaController::class, 'validatePayment'])->name('secretaria.citas.validate');
     Route::patch('/secretaria/citas/{id}/reject', [SecretariaCitaController::class, 'rejectPayment'])->name('secretaria.citas.reject');
-
+    Route::get('/secretaria/citas/export/pdf', [SecretariaCitaController::class, 'exportPdf'])->name('secretaria.citas.exportPdf');
 });
 
 /* PACIENTE ROUTES */

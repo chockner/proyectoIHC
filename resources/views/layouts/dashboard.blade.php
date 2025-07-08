@@ -139,7 +139,7 @@
         <!-- Sidebar -->
         <div class="sidebar p-3">
             <div class="flex-grow-1">
-                
+
                 @if (!Auth::user()->profile)
                     <div
                         class="alert alert-warning mt-4 text-center fw-bold d-flex justify-content-between align-items-center">
@@ -159,7 +159,7 @@
                         </div>
                         <h4
                             class="text-gray-800 text-lg font-medium leading-tight text-center group-hover:text-[#1A75FF] transition-colors">
-                            Dashboard</h4>
+                            Inicio</h4>
                     </a>
                     {{-- Fin Primera opción de la sidebar --}}
 
@@ -376,14 +376,6 @@
                                     <span class="material-icons text-gray-500 text-2xl"
                                         style="flex-shrink: 0;">calendar_today</span>
                                     <span>Citas</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" {{-- class="sidebar-link {{ request()->routeIs('secretaria.reportes.index') ? 'active-link' : '' }}" --}}
-                                    style="display: flex; align-items: center; gap: 10px;">
-                                    <span class="material-icons text-gray-500 text-2xl"
-                                        style="flex-shrink: 0;">assessment</span>
-                                    <span>Reportes</span>
                                 </a>
                             </li>
                         </ul>
