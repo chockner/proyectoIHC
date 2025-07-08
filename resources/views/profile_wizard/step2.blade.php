@@ -221,14 +221,9 @@
                                     <input type="text" name="emergency_contact" id="emergency_contact"
                                         class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm @error('emergency_contact') border-red-300 @enderror"
                                         placeholder="Nombre del contacto" value="{{ old('emergency_contact') }}"
-                                        maxlength="9" inputmode="numeric" pattern="9\d{8}"
-                                        oninput="this.value = this.value.replace(/\D/g, '');
-                                        if (this.value.length === 1 && this.value !== '9') {
-                                            this.value = '';
-                                        }
-                                        if (this.value.length > 9) {
-                                            this.value = this.value.slice(0, 9);
-                                        }" />
+                                        pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                                        onkeyup="this.value = this.value.toUpperCase();"
+                                        oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');" />
                                     @error('emergency_contact')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
