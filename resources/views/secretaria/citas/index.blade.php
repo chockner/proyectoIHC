@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-4">
-        <h2>Lista de Citas</h2>
+        <h2 class="fw-bold">Lista de Citas</h2>
 
         <!-- Filtros y Búsqueda -->
         <div class="card mb-4" style="background: transparent; border: none;">
@@ -15,7 +15,8 @@
                         align-items: center;
                         justify-content: center;
                         border: 1px solid #e2e8f0;
-                        background-color: #ffffff;
+                        background-color: #ffffff !important;
+                        /* Fondo blanco explícito */
                         border-radius: 0.375rem;
                         padding: 0;
                     }
@@ -23,6 +24,18 @@
                     .action-btn-container {
                         display: flex;
                         gap: 10px;
+                    }
+
+                    .btn-sm.action-btn {
+                        width: auto;
+                        padding: 0.25rem 0.5rem;
+                        font-size: 0.875rem;
+                        line-height: 1.5;
+                        display: inline-flex;
+                        align-items: center;
+                        background-color: #ffffff !important;
+                        /* Fondo blanco explícito para btn-sm */
+                        border: 1px solid #e2e8f0;
                     }
                 </style>
                 <form method="GET" action="{{ route('secretaria.citas.index') }}" class="row g-3">
@@ -111,7 +124,7 @@
                                 @elseif ($cita->payment && $cita->payment->status === 'validado')
                                     <span class="text-success fw-bold">Comprobante Validado</span>
                                 @elseif ($cita->payment && $cita->payment->status === 'rechazado')
-                                    <span class="text-danger fw-bold">Comprobante rechazado</span>
+                                    <span class="text-danger fw-bold">Comprobante Rechazado</span>
                                 @endif
                             @endif
                         </td>
