@@ -420,7 +420,6 @@
         </div>
 
     </div>
-    <x-footer />
 </body>
 @stack('scripts')
 
