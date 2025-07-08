@@ -81,8 +81,8 @@
                     <button class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="user-menu-button">
                         <div class="relative">
                             <div class="w-9 h-9 rounded-full overflow-hidden ring-1 ring-slate-200 hover:ring-blue-300 transition-all duration-200">
-                                @if(auth()->user()->profile && auth()->user()->profile->photo_path)
-                                    <img src="{{ asset('storage/' . auth()->user()->profile->photo_path) }}" 
+                                @if(auth()->user()->profile && auth()->user()->profile->photo)
+                                    <img src="{{ asset('storage/' . auth()->user()->profile->photo) }}" 
                                          alt="Foto de perfil de {{ auth()->user()->name }}"
                                          class="w-full h-full object-cover"
                                          onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&color=0c64f2&background=e6f0ff&size=160'">
@@ -115,8 +115,8 @@
                         <div class="px-4 py-3 border-b border-slate-100">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full overflow-hidden">
-                                    @if(auth()->user()->profile && auth()->user()->profile->photo_path)
-                                        <img src="{{ asset('storage/' . auth()->user()->profile->photo_path) }}" 
+                                    @if(auth()->user()->profile && auth()->user()->profile->photo)
+                                        <img src="{{ asset('storage/' . auth()->user()->profile->photo) }}" 
                                              alt="Foto de perfil"
                                              class="w-full h-full object-cover"
                                              onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&color=0c64f2&background=e6f0ff&size=160'">
@@ -149,13 +149,13 @@
                             <a href="{{ route('home') }}" 
                                class="flex items-center gap-3 px-4 py-2.5 text-sm {{ request()->routeIs('home') ? 'text-blue-600 bg-blue-50 font-medium' : 'text-slate-700 hover:bg-blue-50 hover:text-blue-600' }} transition-colors duration-150">
                                 <span class="material-icons text-lg {{ request()->routeIs('home') ? 'text-blue-600' : 'text-slate-400' }}">home</span>
-                                <span>Inicio</span>
+                                <span>Página Principal</span>
                             </a>
                             
                             <a href="{{ route('dashboard') }}" 
                                class="flex items-center gap-3 px-4 py-2.5 text-sm {{ request()->routeIs('dashboard') ? 'text-blue-600 bg-blue-50 font-medium' : 'text-slate-700 hover:bg-blue-50 hover:text-blue-600' }} transition-colors duration-150">
                                 <span class="material-icons text-lg {{ request()->routeIs('dashboard') ? 'text-blue-600' : 'text-slate-400' }}">dashboard</span>
-                                <span>Dashboard</span>
+                                <span>Inicio</span>
                             </a>
                         </div>
                         

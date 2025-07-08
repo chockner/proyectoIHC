@@ -365,7 +365,7 @@
                     <div class="sidebar-icon">
                         <span class="material-icons">grid_view</span>
                     </div>
-                    <span class="sidebar-text">Dashboard</span>
+                    <span class="sidebar-text">Inicio</span>
                 </a>
 
                 {{-- ADMINISTRADOR --}}
