@@ -47,7 +47,7 @@
                 <div>
                     <h3 class="text-sm font-medium text-gray-500 mb-2">Fecha Actual</h3>
                     <p class="text-lg font-medium text-gray-900 mb-4">
-                        {{ \Carbon\Carbon::parse($cita->appointment_date)->format('l, d \d\e F \d\e Y') }}
+                        {{ ucfirst(\Carbon\Carbon::parse($cita->appointment_date)->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY')) }}
                     </p>
                     
                     <h3 class="text-sm font-medium text-gray-500 mb-2">Hora Actual</h3>
@@ -119,7 +119,7 @@
                         <h3 class="text-lg font-semibold text-gray-700 mb-4">Seleccionar Hora</h3>
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <p class="text-sm text-blue-600 mb-4" id="selectedDateText">
-                                Horarios disponibles para el {{ \Carbon\Carbon::parse($cita->appointment_date)->format('l, d \d\e F \d\e Y') }}
+                                Horarios disponibles para el {{ ucfirst(\Carbon\Carbon::parse($cita->appointment_date)->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY')) }}
                             </p>
                             <div class="grid grid-cols-2 gap-3" id="timeSlotsContainer">
                                 <!-- Los horarios se cargarán dinámicamente -->
@@ -193,11 +193,18 @@
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
 
-            document.getElementById('currentMonthYear').textContent =
-                new Date(year, month).toLocaleDateString('es-ES', {
-                    month: 'long',
-                    year: 'numeric'
-                });
+            const monthYearDate = new Date(year, month);
+            const monthYearText = monthYearDate.toLocaleDateString('es-ES', {
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            // Capitalizar la primera letra del mes
+            const capitalizedMonthYear = monthYearText.split(' ').map(word => {
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            }).join(' ');
+            
+            document.getElementById('currentMonthYear').textContent = capitalizedMonthYear;
 
             const firstDay = new Date(year, month, 1);
             let startDay = firstDay.getDay();
@@ -265,6 +272,24 @@
             return new Date(year, month - 1, day, 0, 0, 0, 0);
         }
 
+        function formatDateSpanish(date) {
+            // Formatear fecha en español de manera consistente
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            
+            // Obtener la fecha formateada en español
+            const formattedDate = date.toLocaleDateString('es-ES', options);
+            
+            // Capitalizar la primera letra de cada palabra (día y mes)
+            return formattedDate.split(' ').map(word => {
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            }).join(' ');
+        }
+
         function getDayOfWeek(date) {
             // Usar getDay() directamente y mapear a nuestro formato
             const dayIndex = date.getDay();
@@ -305,14 +330,8 @@
             }
 
             // Actualizar texto de fecha seleccionada
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
             document.getElementById('selectedDateText').textContent =
-                `Horarios disponibles para el ${date.toLocaleDateString('es-ES', options)}`;
+                `Horarios disponibles para el ${formatDateSpanish(date)}`;
 
             // Cargar horarios disponibles
             loadAvailableTimeSlots(date);

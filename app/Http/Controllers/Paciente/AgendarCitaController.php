@@ -12,6 +12,7 @@ use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class AgendarCitaController extends Controller
 {
@@ -512,6 +513,55 @@ class AgendarCitaController extends Controller
 
         return redirect()->route('paciente.citas.index')
             ->with('success', 'Cita cancelada exitosamente.');
+    }
+
+    /**
+     * Descargar comprobante de pago
+     */
+    public function downloadComprobante($id)
+    {
+        $cita = Appointment::with(['payment'])
+            ->where('patient_id', auth()->user()->patient->id)
+            ->findOrFail($id);
+
+        // Verificar que la cita tenga un pago con comprobante
+        if (!$cita->payment || !$cita->payment->image_path) {
+            return back()->withErrors(['error' => 'No se encontró el comprobante de pago.']);
+        }
+
+        // Verificar que el archivo existe
+        $filePath = storage_path('app/public/' . $cita->payment->image_path);
+        if (!file_exists($filePath)) {
+            return back()->withErrors(['error' => 'El archivo del comprobante no se encuentra disponible.']);
+        }
+
+        // Generar nombre de archivo para descarga
+        $originalName = basename($cita->payment->image_path);
+        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+        $downloadName = 'comprobante_cita_' . $cita->id . '_' . date('Y-m-d') . '.' . $extension;
+
+        // Retornar el archivo para descarga
+        return response()->download($filePath, $downloadName, [
+            'Content-Type' => $this->getMimeType($extension),
+            'Content-Disposition' => 'attachment; filename="' . $downloadName . '"'
+        ]);
+    }
+
+    /**
+     * Obtener el tipo MIME según la extensión del archivo
+     */
+    private function getMimeType($extension)
+    {
+        $mimeTypes = [
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'webp' => 'image/webp',
+            'pdf' => 'application/pdf'
+        ];
+
+        return $mimeTypes[strtolower($extension)] ?? 'application/octet-stream';
     }
 
     /**

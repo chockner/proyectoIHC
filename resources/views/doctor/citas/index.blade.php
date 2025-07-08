@@ -50,26 +50,31 @@
                         <td class="px-6 py-4 "> {{ $cita->status }} </td>
                         <td class="px-6 py-4 "> {{ $cita->payment->status }} </td>
                         <td>
-                            <div class="mb-3 flex justify-center space-x-2">
+                            <div class="mb-3 flex justity-center space-x-2">
                                 {{-- icono ver --}}
                                 <div class="flex flex-col items-center">
-                                    <a href="{{ route('doctor.citas.show', $cita->id) }}">
-                                        ver
+                                    <a href="{{ route('doctor.citas.show', $cita->id) }}"
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                        data-bs-toggle="tooltip" data-bs-title="Ver">
                                         <div class="relative">
-                                            {{-- (icono) --}}
+                                            <span class="material-icons text-blue-600">calendar_today</span>
+                                            <span
+                                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-blue-100 text-blue-600 rounded-full p-0.4">visibility</span>
                                         </div>
                                     </a>
                                 </div>
-                                {{-- icono editar --}}
+                                {{-- icono Atender --}}
                                 <div class="flex flex-col items-center">
-                                    <a href="{{ route('doctor.citas.edit', $cita->id) }}">
-                                        editar
+                                    <a href="{{ route('doctor.citas.edit', $cita->id) }}"
+                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                        data-bs-toggle="tooltip" data-bs-title="Atender">
                                         <div class="relative">
-                                            {{-- (icono) --}}
+                                            <span class="material-icons text-green-500">calendar_today</span>
+                                            <span
+                                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-green-100 text-green-600 rounded-full p-0.4">room_service</span>
                                         </div>
                                     </a>
                                 </div>
-                            </div>
                         </td>
                     </tr>
                 @endforeach
@@ -156,6 +161,12 @@
 @endsection
 @push('scripts')
     <script>
-        /* en caso necesites scripts */
+        // Inicializar tooltips de Bootstrap
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
     </script>
 @endpush
