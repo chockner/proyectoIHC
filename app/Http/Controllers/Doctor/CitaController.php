@@ -8,7 +8,6 @@ use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-
 class CitaController extends Controller
 {
     public function index(Request $request){
@@ -43,8 +42,16 @@ class CitaController extends Controller
         return view('doctor.citas.edit', compact('cita'));
     }
 
-    public function show($id){
-        $cita = Appointment::findOrFail($id);
-        return view('doctor.citas.show', compact('cita'));
+    public function show($id)
+    {
+        $appointment = Appointment::with([
+            'patient.user.profile',
+            'doctor.user.profile',
+            'doctor.specialty',
+            'payment',
+            'medicalRecordDetail'
+        ])->findOrFail($id);
+
+        return view('doctor.citas.show', compact('appointment'));
     }
 }
