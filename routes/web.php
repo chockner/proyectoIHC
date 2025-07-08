@@ -28,7 +28,7 @@ use App\Http\Controllers\Doctor\CitaController as DoctorCitaController;
 use App\Http\Controllers\Doctor\PacienteController as DoctorPacienteController;
 
 
-Route::view('/', 'home')->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::view('/login', 'auth.login')->name('login');
 
 // Login
