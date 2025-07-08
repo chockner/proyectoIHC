@@ -10,7 +10,7 @@
 
         <!-- Navegación para usuarios no autenticados -->
         @guest
-            @if(!request()->routeIs('login') && !request()->routeIs('register'))
+            @if (!request()->routeIs('login') && !request()->routeIs('register'))
                 <nav class="hidden md:flex items-center gap-6">
                     <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors"
                         href="{{ route('home') }}#inicio">Inicio</a>
@@ -25,7 +25,7 @@
                 </nav>
             @endif
             <div class="flex items-center gap-3">
-                @if(request()->routeIs('login'))
+                @if (request()->routeIs('login'))
                     <!-- Solo en login: mostrar botón Registrarse con estilo principal -->
                     <a href="{{ route('register') }}"
                         class="flex min-w-[90px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-10 px-4 bg-blue-600 text-white text-sm font-semibold leading-normal tracking-wide shadow-sm hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
@@ -92,9 +92,9 @@
                     </button>
                     <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block">
                         <a class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600"
-                            href="#">Mi Perfil</a>
-                        <a class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600"
-                            href="#">Configuración</a>
+                            href="{{ route('perfil.edit') }}">Mi Perfil</a>
+                        {{-- <a class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600"
+                            href="#">Configuración</a> --}}
                         <a class="block px-4 py-2 text-sm {{ request()->routeIs('home') ? 'text-blue-600 font-medium' : 'text-slate-600' }} hover:bg-blue-50 hover:text-blue-600"
                             href="{{ route('home') }}">Inicio</a>
                         <a class="block px-4 py-2 text-sm {{ request()->routeIs('dashboard') ? 'text-blue-600 font-medium' : 'text-slate-600' }} hover:bg-blue-50 hover:text-blue-600"
