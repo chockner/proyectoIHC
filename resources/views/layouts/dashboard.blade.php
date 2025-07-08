@@ -501,10 +501,7 @@
                             <div class="sidebar-icon">
                                 <span class="material-icons">medical_information</span>
                             </div>
-                            <<<<<<< HEAD <span class="sidebar-text">Historias Médicas</span>
-                                =======
-                                <span class="sidebar-text">Historia Médica</span>
-                                >>>>>>> 058d3ef2cc22f0eaec1a2c5f56aaa8eeaea6708a
+                            <span class="sidebar-text">Historia Médica</span>
                         </a>
                     </div>
                 @endif
