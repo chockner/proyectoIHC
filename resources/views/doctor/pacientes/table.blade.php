@@ -1,0 +1,24 @@
+@foreach ($pacientes as $index => $paciente)
+    <tr>
+        <td>{{ $index + 1 }}</td>
+        <td>{{ $paciente->user->profile->first_name }}</td>
+        <td>{{ $paciente->user->profile->last_name }}</td>
+        <td>{{ $paciente->blood_type }}</td>
+        <td>
+            <div class="mb-3 flex justify-center space-x-2">
+                {{-- Icono Ver --}}
+                <div class="flex flex-col items-center">
+                    <a href="{{ route('doctor.pacientes.show', $paciente->medicalRecords->id) }}"
+                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                        data-bs-toggle="tooltip" data-bs-title="Ver">
+                        <div class="relative">
+                            <span class="material-icons text-blue-600">assist_walker</span>
+                            <span
+                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-blue-100 text-blue-600 rounded-full p-0.4">visibility</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </td>
+    </tr>
+@endforeach

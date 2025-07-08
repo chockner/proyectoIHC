@@ -102,34 +102,107 @@
 
             <div class="row mt-4 justify-content-center">
                 <h5 class="text-center mb-4 fw-bold">DETALLES MÉDICOS</h5>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label for="diagnosis" class="form-label fw-bold">Diagnóstico</label>
-                        <textarea name="diagnosis" id="diagnosis" class="form-control disabled-field" rows="4">{{ optional($cita->medicalRecordDetail)->diagnosis ?? '' }}</textarea>
+                {{-- formulario para guardar la info de la cita --}}
+                <form action="{{ route('doctor.citas.update', $cita->id) }}" method="POST" id="editCitaForm">
+                    @csrf
+                    @method('PUT')
+                    <div class="d-flex justify-content-center align-items-start">
+                        <!-- Diagnóstico y Tratamiento en la misma línea -->
+                        <div class="col-md-5 mb-3 me-3">
+                            <label for="diagnosis" class="form-label fw-bold">Diagnóstico</label>
+                            <textarea name="diagnosis" id="diagnosis" class="form-control w-100" rows="6"
+                                placeholder="Escriba el diagnóstico aquí..." required></textarea>
+                        </div>
+
+                        <div class="col-md-5 mb-3">
+                            <label for="treatment" class="form-label fw-bold">Tratamiento</label>
+                            <textarea name="treatment" id="treatment" class="form-control w-100" rows="6"
+                                placeholder="Escriba el tratamiento aquí..." required></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label for="treatment" class="form-label fw-bold">Tratamiento</label>
-                        <textarea name="treatment" id="treatment" class="form-control disabled-field" rows="4">{{ optional($cita->medicalRecordDetail)->treatment ?? '' }}</textarea>
-                    </div>
-                    <div class="mb-3">
+
+                    <!-- Campo de Notas debajo de los anteriores -->
+                    <div class="col-md-10 offset-md-1 mb-3">
                         <label for="notes" class="form-label fw-bold">Notas</label>
-                        <textarea name="notes" id="notes" class="form-control disabled-field" rows="4">{{ optional($cita->medicalRecordDetail)->notes ?? '' }}</textarea>
+                        <textarea name="notes" id="notes" class="form-control w-100" rows="6"
+                            placeholder="Escriba las notas aquí..." required></textarea>
+                    </div>
+
+
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-md-4 d-flex justify-content-start">
+                            <a href="{{ route('doctor.citas.index') }}" class="btn btn-outline-secondary">Volver a la lista
+                                de
+                                citas</a>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <button type="button" class="btn btn-success" id="btnEdit">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Modal de confirmación -->
+                <div class="modal fade" id="confirmEditModal" tabindex="-1" aria-labelledby="confirmEditModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-warning text-white">
+                                <h5 class="modal-title" id="confirmEditModalLabel">Confirmar Atencion</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-center mb-3">
+                                    <p id="confirmMessage"></p>
+                                    <div class="alert alert-warning mt-2">
+                                        Esta acción puede afectar la consistencia de los datos.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" id="btnConfirmEdit" class="btn btn-warning">Confirmar
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- Audio para el sonido de alerta -->
+                <audio id="alertSound" preload="auto">
+                    <source src="https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3"
+                        type="audio/mpeg">
+                </audio>
+
             </div>
             <hr>
         @endif
 
-        <div class="row mt-4 justify-content-center">
-            <div class="col-md-4 d-flex justify-content-start">
-                <a href="{{ route('doctor.citas.index') }}" class="btn btn-outline-secondary">Volver a la lista de
-                    citas</a>
-            </div>
-            <div class="col-md-4 d-flex justify-content-end">
-                <a href="{{ route('doctor.citas.update', $cita->id) }}" class="btn btn-primary">Guardar Cambios</a>
-            </div>
-        </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        // Validación del formulario y modal de confirmación
+        $('#btnEdit').click(function() {
+            if (!$('#editCitaForm')[0].checkValidity()) {
+                $('#editCitaForm')[0].reportValidity();
+                return;
+            }
+
+            const message = `¿Estás seguro de que deseas finalizar esta cita?`;
+            $('#confirmMessage').html(message);
+
+            const modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
+            modal.show();
+
+            const alertSound = document.getElementById('alertSound');
+            if (alertSound) {
+                alertSound.play().catch(e => console.log('Error al reproducir el sonido:', e));
+            }
+        });
+
+        $('#btnConfirmEdit').click(function() {
+            $('#editCitaForm').submit();
+        });
+    </script>
+@endpush

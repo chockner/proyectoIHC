@@ -174,6 +174,7 @@ Route::prefix('doctor')->middleware(['auth'])->group(function () {
     route::post('/citas',[DoctorCitaController::class, 'update'])->name('doctor.citas.update');
     Route::get('/citas/{id}',[DoctorCitaController::class, 'show'])->name('doctor.citas.show');
     Route::get('/citas/{id}/edit',[DoctorCitaController::class, 'edit'])->name('doctor.citas.edit');
+    Route::put('/citas/{id}',[DoctorCitaController::class, 'update'])->name('doctor.citas.update');
 
     /* pacientes */
     Route::get('/pacientes',[DoctorPacienteController::class, 'index'])->name('doctor.pacientes.index');
