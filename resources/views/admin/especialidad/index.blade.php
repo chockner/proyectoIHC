@@ -1,55 +1,5 @@
 @extends('layouts.dashboard')
 
-<style>
-    /* Ensure table layout and responsiveness */
-    .equal-width-table {
-        table-layout: fixed;
-        width: 100%;
-    }
-
-    .equal-width-table th,
-    .equal-width-table td {
-        text-align: center;
-        /* Center content horizontally */
-        vertical-align: middle;
-        /* Center content vertically */
-    }
-
-    /* Specific column widths */
-    .equal-width-table th:nth-child(1),
-    .equal-width-table td:nth-child(1) {
-        width: 10%;
-        /* Narrow width for # column */
-    }
-
-    .equal-width-table th:nth-child(2),
-    .equal-width-table td:nth-child(2) {
-        width: 60%;
-        /* Wider width for Nombre column */
-    }
-
-    .equal-width-table th:nth-child(3),
-    .equal-width-table td:nth-child(3) {
-        width: 30%;
-        /* Moderate width for Acción column */
-    }
-
-    /* Optional: Add overflow for responsiveness on small screens */
-    .table-responsive {
-        overflow-x: auto;
-    }
-
-    /* Ensure action buttons are centered */
-    .action-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        /* Center buttons vertically */
-        gap: 0.5rem;
-        /* Consistent spacing between buttons */
-    }
-</style>
-
 @section('content')
     <div class="container mt-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Especialidades</h1>
