@@ -53,8 +53,12 @@
         .sidebar-container {
             position: fixed;
             left: 0;
+            <<<<<<< HEAD top: 80px;
+            /* Altura del header */
+            height: calc(100vh - 80px);
+            =======
             /* top y height serán ajustados dinámicamente por JS */
-            width: 280px;
+            >>>>>>>058d3ef2cc22f0eaec1a2c5f56aaa8eeaea6708a width: 280px;
             background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
             border-right: 1px solid #e2e8f0;
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
@@ -126,7 +130,7 @@
             padding: 1rem 1.5rem;
             color: #475569;
             text-decoration: none;
-            transition: all 0.2s cubic-bezier(.4,0,.2,1);
+            transition: all 0.2s cubic-bezier(.4, 0, .2, 1);
             border-left: 3px solid transparent;
             margin: 0.25rem 0;
             border-radius: 0.75rem;
@@ -158,7 +162,7 @@
             box-shadow: 0 4px 16px 0 rgba(12, 100, 242, 0.10);
         }
 
-        .sidebar-link + .sidebar-link {
+        .sidebar-link+.sidebar-link {
             margin-top: 0.25rem;
         }
 
@@ -176,6 +180,7 @@
         .sidebar-link .sidebar-icon {
             color: #64748b;
         }
+
         .sidebar-link.active .sidebar-icon,
         .sidebar-link:hover .sidebar-icon {
             color: #0c64f2;
@@ -238,8 +243,12 @@
         /* Contenido principal */
         .main-content-wrapper {
             margin-left: 280px;
+            <<<<<<< HEAD margin-top: 80px;
+            /* Espacio para el header */
+            min-height: calc(100vh - 80px);
+            =======
             /* margin-top será ajustado dinámicamente por JS */
-            background: #f8fafc;
+            >>>>>>>058d3ef2cc22f0eaec1a2c5f56aaa8eeaea6708a background: #f8fafc;
         }
 
         .main-content {
@@ -336,8 +345,12 @@
     <!-- Header Principal -->
     <header class="main-header" id="main-header">
         <x-header />
+        <<<<<<< HEAD </div>
+
+            =======
     </header>
-    
+
+    >>>>>>> 058d3ef2cc22f0eaec1a2c5f56aaa8eeaea6708a
     <!-- Sidebar Container -->
     <div class="sidebar-container" id="sidebar-container">
         <!-- Header del Sidebar -->
@@ -347,8 +360,12 @@
         </div>
 
         <!-- Contenido del Sidebar -->
-        <div class="sidebar-content pt-12">
-            @if (!Auth::user()->profile || !Auth::user()->profile->first_name || !Auth::user()->profile->last_name || !Auth::user()->profile->email)
+        <div class="sidebar-content">
+            @if (
+                !Auth::user()->profile ||
+                    !Auth::user()->profile->first_name ||
+                    !Auth::user()->profile->last_name ||
+                    !Auth::user()->profile->email)
                 <div class="alert-warning">
                     <div class="flex items-center justify-between">
                         <span class="text-sm font-medium text-amber-800">Completa tu perfil</span>
@@ -484,7 +501,10 @@
                             <div class="sidebar-icon">
                                 <span class="material-icons">medical_information</span>
                             </div>
-                            <span class="sidebar-text">Historia Médica</span>
+                            <<<<<<< HEAD <span class="sidebar-text">Historias Médicas</span>
+                                =======
+                                <span class="sidebar-text">Historia Médica</span>
+                                >>>>>>> 058d3ef2cc22f0eaec1a2c5f56aaa8eeaea6708a
                         </a>
                     </div>
                 @endif
@@ -550,7 +570,7 @@
                     </div>
                 </div>
             @endif
-            
+
             @hasSection('content')
                 <div class="container mx-auto">
                     @yield('content')

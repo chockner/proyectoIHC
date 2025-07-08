@@ -1,25 +1,80 @@
 @extends('layouts.dashboard')
 
+<style>
+    /* Ensure table layout and responsiveness */
+    .equal-width-table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .equal-width-table th,
+    .equal-width-table td {
+        text-align: center;
+        /* Center content horizontally */
+        vertical-align: middle;
+        /* Center content vertically */
+    }
+
+    /* Specific column widths */
+    .equal-width-table th:nth-child(1),
+    .equal-width-table td:nth-child(1) {
+        width: 10%;
+        /* Narrow width for # column */
+    }
+
+    .equal-width-table th:nth-child(2),
+    .equal-width-table td:nth-child(2) {
+        width: 60%;
+        /* Wider width for Nombre column */
+    }
+
+    .equal-width-table th:nth-child(3),
+    .equal-width-table td:nth-child(3) {
+        width: 30%;
+        /* Moderate width for Acción column */
+    }
+
+    /* Optional: Add overflow for responsiveness on small screens */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    /* Ensure action buttons are centered */
+    .action-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Center buttons vertically */
+        gap: 0.5rem;
+        /* Consistent spacing between buttons */
+    }
+</style>
+
 @section('content')
     <div class="container mt-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Especialidades</h1>
 
-        <form action="{{ route('admin.especialidad.store') }}" method="POST" id="createEspecialidadForm">
+        <form action="{{ route('admin.especialidad.store') }}" method="POST" id="createEspecialidadForm"
+            class="d-flex align-items-end gap-3 mb-3">
             @csrf
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" name="name" id="name" required
-                        onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
-                        oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
-                        placeholder="Nombre de la Especialidad">
-                    @error('name')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="button" class="btn btn-primary" id="btnShowModal">Guardar</button>
-                </div>
+            <div class="flex-grow-2">
+                <input type="text" class="form-control" name="name" id="name" required
+                    onkeyup="this.value = this.value.toUpperCase();" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                    oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');"
+                    placeholder="Nombre de la Especialidad">
+                @error('name')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
+            <button type="button"
+                class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2 btn-primary"
+                id="btnShowModal" data-bs-toggle="tooltip" data-bs-title="Guardar">
+                <div class="relative">
+                    <span class="material-icons text-green-500" style="font-size: 24px;">medical_information</span>
+                    <span
+                        class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-green-100 text-green-600 rounded-full p-0.4">add_circle</span>
+                </div>
+            </button>
         </form>
         <!-- Modal de confirmación para creación -->
         <div class="modal fade" id="confirmCreateModal" tabindex="-1" aria-labelledby="confirmCreateModalLabel"
@@ -45,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped equal-width-table">
             <thead class="table-primary">
                 <tr>
                     <th>#</th>
@@ -114,9 +169,8 @@
                         <a class="page-link" href="{{ $especialidades->url($i) }}">{{ $i }}</a>
                     </li>
                 @endfor
-                <li class="page-item {{ $especialidades->hasMorePages() ? '' : 'disabled' }}>
-                    <a class="page-link"
-                    href="{{ $especialidades->nextPageUrl() }}" aria-label="Next">Siguiente</a>
+                <li class="page-item {{ $especialidades->hasMorePages() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $especialidades->nextPageUrl() }}" aria-label="Next">Siguiente</a>
                 </li>
             </ul>
         </nav>
