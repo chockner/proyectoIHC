@@ -136,7 +136,18 @@
                                 citas</a>
                         </div>
                         <div class="col-md-4 d-flex justify-content-end">
-                            <button type="button" class="btn btn-success" id="btnEdit">Guardar Cambios</button>
+                            <button type="button" id="btnEdit"
+                                class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                data-bs-toggle="tooltip" data-bs-title="Guardar Cambios">
+                                <div class="relative">
+                                    <!-- Ícono principal de guardar -->
+                                    <span class="material-icons text-green-500" style="font-size: 60px;">save</span>
+                                    <!-- Pequeño ícono sobre el ícono de guardar -->
+                                    <span
+                                        class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-gray-100 text-green-600 rounded-full p-0.4">check_circle</span>
+                                </div>
+                                {{-- Guardar Cambios --}}
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -182,6 +193,14 @@
 @endsection
 @push('scripts')
     <script>
+        // Inicializar tooltips de Bootstrap
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
         // Validación del formulario y modal de confirmación
         $('#btnEdit').click(function() {
             if (!$('#editCitaForm')[0].checkValidity()) {
