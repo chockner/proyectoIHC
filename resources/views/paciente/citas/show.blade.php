@@ -231,8 +231,8 @@
                                     Ampliar
                                 </button>
                                 
-                                <a href="{{ asset('storage/' . $cita->payment->image_path) }}" 
-                                   target="_blank"
+                        <a href="{{ asset('storage/' . $cita->payment->image_path) }}" 
+                           target="_blank"
                                    class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-150">
                                     <span class="material-icons mr-2 text-sm">open_in_new</span>
                                     Abrir en nueva pestaña

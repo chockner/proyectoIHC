@@ -134,13 +134,12 @@
 </head>
 
 <body>
-
+    <x-header />
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar p-3">
             <div class="flex-grow-1">
-                <h4 class="text-center mb-4"><strong>Hospital</strong></h4>
-                <hr>
+                
                 @if (!Auth::user()->profile)
                     <div
                         class="alert alert-warning mt-4 text-center fw-bold d-flex justify-content-between align-items-center">
@@ -414,40 +413,6 @@
 
         <!-- Content -->
         <div class="flex-grow-1">
-            <div class="topbar d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
-                <span class="fw-bold">Bienvenido al sistema</span>
-                <div class="d-flex align-items-center gap-3">
-                    <span class="text-muted">{{ now()->format('d/m/Y') }}</span>
-
-                    <!-- Dropdown de usuario -->
-                    <div class="dropdown">
-                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
-                            id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=0D8ABC&color=fff&size=32"
-                                alt="avatar" class="rounded-circle me-2" width="32" height="32">
-                            <span class="d-none d-sm-inline">{{ Auth::user()->name }}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li>
-                                <a class="dropdown-item {{ !Auth::user()->profile ? 'bg-warning text-dark fw-bold' : '' }}"
-                                    href="{{ route('perfil.edit') }}">
-                                    Editar perfil
-                                </a>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">Cerrar sesión</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
 
             <div class="main-content p-4">
 
@@ -463,7 +428,7 @@
         </div>
 
     </div>
-
+    <x-footer />
 </body>
 @stack('scripts')
 
