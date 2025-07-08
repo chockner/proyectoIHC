@@ -60,7 +60,7 @@
                             <a href="{{ route('secretaria.citas.index') }}" class="action-btn" data-bs-toggle="tooltip"
                                 data-bs-title="Limpiar">
                                 <div class="relative">
-                                    <span class="material-icons text-slate-600">clear</span>
+                                    <span class="material-icons text-slate-600">cleaning_services</span>
                                 </div>
                             </a>
                             <a href="{{ route('secretaria.citas.exportPdf') . '?' . http_build_query(request()->query()) }}"
