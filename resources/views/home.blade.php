@@ -37,8 +37,16 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     @foreach($featuredSpecialties as $specialty)
                         <div class="group flex flex-col bg-slate-50 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
-                            <div class="w-full h-48 bg-center bg-no-repeat bg-cover bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                                <span class="material-icons text-6xl text-blue-600">medical_services</span>
+                            <div class="w-full h-48 bg-center bg-no-repeat bg-cover flex items-center justify-center overflow-hidden">
+                                @if(isset($specialty->photo) && $specialty->photo)
+                                    <img src="{{ asset('storage/' . $specialty->photo) }}" 
+                                         alt="{{ $specialty->name }}" 
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                @else
+                                    <div class="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                                        <span class="material-icons text-6xl text-blue-600">medical_services</span>
+                                    </div>
+                                @endif
                             </div>
                             <div class="p-6 flex-grow">
                                 <h3 class="text-xl font-semibold text-slate-800 mb-2">{{ $specialty->name }}</h3>
@@ -92,8 +100,16 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     @foreach($allSpecialties as $specialty)
                         <div class="group flex flex-col bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
-                            <div class="w-full h-48 bg-center bg-no-repeat bg-cover bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-                                <span class="material-icons text-6xl text-slate-600">medical_information</span>
+                            <div class="w-full h-48 bg-center bg-no-repeat bg-cover flex items-center justify-center overflow-hidden">
+                                @if(isset($specialty->photo) && $specialty->photo)
+                                    <img src="{{ asset('storage/' . $specialty->photo) }}" 
+                                         alt="{{ $specialty->name }}" 
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                @else
+                                    <div class="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                                        <span class="material-icons text-6xl text-slate-600">medical_information</span>
+                                    </div>
+                                @endif
                             </div>
                             <div class="p-6 flex-grow">
                                 <h3 class="text-xl font-semibold text-slate-800 mb-2">{{ $specialty->name }}</h3>
@@ -135,8 +151,14 @@
                         <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
                             <div class="p-6">
                                 <div class="flex items-center mb-4">
-                                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                                        <span class="material-icons text-2xl text-blue-600">person</span>
+                                    <div class="w-16 h-16 rounded-full flex items-center justify-center mr-4 overflow-hidden bg-blue-100">
+                                        @if(isset($doctor->user->profile->photo) && $doctor->user->profile->photo)
+                                            <img src="{{ asset('storage/' . $doctor->user->profile->photo) }}" 
+                                                 alt="Dr. {{ $doctor->user->profile->first_name ?? 'Médico' }} {{ $doctor->user->profile->last_name ?? '' }}" 
+                                                 class="w-full h-full object-cover">
+                                        @else
+                                            <span class="material-icons text-2xl text-blue-600">person</span>
+                                        @endif
                                     </div>
                                     <div>
                                         <h3 class="text-lg font-semibold text-slate-800">

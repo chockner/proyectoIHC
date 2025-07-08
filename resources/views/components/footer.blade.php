@@ -13,10 +13,44 @@
             <div>
                 <h3 class="text-lg font-semibold text-white mb-4">Enlaces Rápidos</h3>
                 <ul class="space-y-2">
-                    <li><a class="hover:text-blue-400 transition-colors text-sm" href="#">Encontrar un Médico</a></li>
-                    <li><a class="hover:text-blue-400 transition-colors text-sm" href="#">Reservar Cita</a></li>
-                    <li><a class="hover:text-blue-400 transition-colors text-sm" href="#">Portal del Paciente</a></li>
-                    <li><a class="hover:text-blue-400 transition-colors text-sm" href="#">Nuestro Blog</a></li>
+                    @guest
+                        <!-- Enlaces para usuarios no autenticados -->
+                        <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('home') }}#equipo-medico">Conoce Nuestros Médicos</a></li>
+                        <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('home') }}#especialidades">Nuestras Especialidades</a></li>
+                        <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('register') }}">Registrarse</a></li>
+                        <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('login') }}">Iniciar Sesión</a></li>
+                    @else
+                        @if(auth()->user()->role->name === 'admin')
+                            <!-- Enlaces para Administradores -->
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('admin.doctor.index') }}">Gestionar Médicos</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('admin.secretaria.index') }}">Gestionar Secretarias</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('admin.especialidad.index') }}">Gestionar Especialidades</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('admin.paciente.index') }}">Gestionar Pacientes</a></li>
+                        @elseif(auth()->user()->role->name === 'doctor')
+                            <!-- Enlaces para Doctores -->
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('doctor.citas.index') }}">Mis Citas</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('doctor.pacientes.index') }}">Mis Pacientes</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('perfil.edit') }}">Mi Perfil</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('dashboard') }}">Dashboard</a></li>
+                        @elseif(auth()->user()->role->name === 'secretaria')
+                            <!-- Enlaces para Secretarias -->
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('secretaria.citas.index') }}">Gestionar Citas</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('perfil.edit') }}">Mi Perfil</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('dashboard') }}">Dashboard</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('home') }}#especialidades">Ver Especialidades</a></li>
+                        @elseif(auth()->user()->role->name === 'paciente')
+                            <!-- Enlaces para Pacientes -->
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('paciente.agendarCita.create') }}">Reservar Cita</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('paciente.citas.index') }}">Mis Citas</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('paciente.historialMedico.index') }}">Mi Historial Médico</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('perfil.edit') }}">Mi Perfil</a></li>
+                        @else
+                            <!-- Enlaces genéricos para otros roles -->
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('dashboard') }}">Dashboard</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('perfil.edit') }}">Mi Perfil</a></li>
+                            <li><a class="hover:text-blue-400 transition-colors text-sm" href="{{ route('home') }}#especialidades">Especialidades</a></li>
+                        @endif
+                    @endguest
                 </ul>
             </div>
             <div>
