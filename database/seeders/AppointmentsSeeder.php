@@ -7,11 +7,11 @@ use Illuminate\Database\Seeder;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
-use App\Models\schedule;
-use App\Models\MedicalRecordDetail;
-use App\Models\MedicalRecord;
+use App\Models\Schedule;
 use App\Models\Payment;
-use App\Models\Secretary;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class AppointmentsSeeder extends Seeder
 {
@@ -21,121 +21,163 @@ class AppointmentsSeeder extends Seeder
     
     public function run(): void
     {
-        for ($i = 1; $i <= 8; $i++) {
-            $doctor = Doctor::findOrFail($i);
-
-            for ($j = 1; $j <= 40; $j++) {
-                $schedule = Schedule::findOrFail($j);
-
-                for ($k = 1; $k <= 10; $k++) {
-                    $paciente = Patient::findOrFail($k);
-
-                    // Genera una fecha aleatoria entre 1 y 30 días hacia adelante, pero solo días laborables (lunes a viernes)
-                    $appointmentDate = $this->generateWeekdayDate();
-
-                    // Generar un número aleatorio entre 0 y 20 para representar los intervalos de media hora
-                    $randomInterval = rand(0, 20);
-
-                    // Sumar las horas y minutos correspondientes a la hora aleatoria
-                    $appointmentTime = now()->setTime(8, 0) // Comienza desde las 08:00
-                                            ->addMinutes($randomInterval * 30) // Sumar intervalos de 30 minutos
-                                            ->format('H:i:s'); // Formato de hora de 24 horas                
-
-                    // Crear la cita
-                    $cita = Appointment::create([
-                        'patient_id' => $paciente->id,
-                        'doctor_id' => $doctor->id,
-                        'schedule_id' => $schedule->id,
-                        'appointment_date' => $appointmentDate,
-                        'appointment_time' => $appointmentTime,
-                        'status' => 'programada', // Estado inicial de la cita
-                    ]);
-
-                    // Crear el pago
-                    Payment::create([
-                        'appointment_id' => $cita->id,
-                        'uploaded_by' => $paciente->user_id, 
-                        'validated_by' => null,
-                        'image_path' => null,
-                        'payment_method' => 'TARJETA',
-                        'amount' => 30,
-                        'status' => 'pendiente',
-                        'uploaded_at' => now(), // Fecha de subida del comprobante de pago
-                        'validated_at' => null, // Aún no validado
-                    ]);
-
-                    /* citas pasadas */
-
-                    // Genera una fecha aleatoria en el pasado dentro de los últimos 30 días, pero solo días laborables (lunes a viernes)
-                    $appointmentPastDate = $this->generatePastWeekdayDate();
-
-                    // Crear la cita (en el pasado)
-                    $cita = Appointment::create([
-                        'patient_id' => $paciente->id,
-                        'doctor_id' => $doctor->id,
-                        'schedule_id' => $schedule->id,
-                        'appointment_date' => $appointmentPastDate,
-                        'appointment_time' => $appointmentTime,
-                        'status' => 'completada', // Estado de cita ya terminada
-                    ]);
-
-                    // Crear el pago (suponemos que ya fue pagado)
-                    Payment::create([
-                        'appointment_id' => $cita->id,
-                        'uploaded_by' => $paciente->user_id, 
-                        'validated_by' => Secretary::inRandomOrder()->first()->id, // Asignar aleatoriamente una secretaria
-                        'image_path' => null,
-                        'payment_method' => 'TARJETA',
-                        'amount' => 30,
-                        'status' => 'validado', // Ya pagado porque la cita fue terminada
-                        'validated_at' => now(), // Fecha de validación del pago
-                        'uploaded_at' => now(), // Fecha de subida del comprobante de pago
-                    ]);
-
-                    // Crear detalle del historial médico (ahora que la cita ya está terminada)
-                    $medicalRecord = MedicalRecord::where('patient_id', $paciente->id)->first();
-                    if ($medicalRecord) {
-                        MedicalRecordDetail::create([
-                            'medical_record_id' => $medicalRecord->id,
-                            'appointment_id' => $cita->id,
-                            'diagnosis' => 'Consulta médica realizada con el doctor ' . $doctor->name,
-                            'treatment' => 'Tratamiento aplicado y consultas realizadas con éxito.',
-                            'notes' => 'Detalles de la consulta médica realizada.',
-                        ]);
+        $doctores = Doctor::with('schedules')->get();
+        $pacientes = Patient::all();
+        $paymentMethods = ['tarjeta', 'transferencia', 'yape', 'plin', 'clinica'];
+        $comprobantesEjemplo = [
+            'comprobantes/ejemplo_1.jpg',
+            'comprobantes/ejemplo_2.jpg',
+            'comprobantes/ejemplo_3.jpg',
+        ];
+        $diasFuturos = 15;
+        $citasPorDoctor = 8;
+        $estadosCita = ['programada', 'cancelada', 'completada'];
+        $estadoPagoPorCita = [
+            'programada' => 'pendiente',
+            'cancelada' => 'pendiente',
+            'completada' => 'validado',
+        ];
+        $citasPorPaciente = 3; // Una de cada estado si es posible
+        // Primero, asegurar que cada paciente tenga al menos una cita de cada estado
+        foreach ($pacientes as $paciente) {
+            $slotsUsados = [];
+            foreach ($estadosCita as $estadoCita) {
+                // Buscar un slot disponible aleatorio
+                $slot = null;
+                foreach ($doctores->shuffle() as $doctor) {
+                    $horarios = $doctor->schedules;
+                    if ($horarios->isEmpty()) continue;
+                    $carbonToDbDay = [
+                        'lunes' => 'LUNES',
+                        'martes' => 'MARTES',
+                        'miercoles' => 'MIERCOLES',
+                        'miércoles' => 'MIERCOLES',
+                        'jueves' => 'JUEVES',
+                        'viernes' => 'VIERNES',
+                        'sabado' => 'SABADO',
+                        'sábado' => 'SABADO',
+                        'domingo' => 'DOMINGO',
+                    ];
+                    for ($d = 1; $d <= $diasFuturos; $d++) {
+                        $fecha = Carbon::now()->addDays($d);
+                        $carbonDay = strtolower($fecha->locale('es')->isoFormat('dddd'));
+                        $dbDay = $carbonToDbDay[$carbonDay] ?? null;
+                        if (!$dbDay) continue;
+                        foreach ($horarios as $horario) {
+                            if ($dbDay !== $horario->day_of_week) continue;
+                            $start = Carbon::parse($horario->start_time);
+                            $end = Carbon::parse($horario->end_time);
+                            while ($start < $end) {
+                                $key = $doctor->id.'-'.$fecha->toDateString().'-'.$start->format('H:i:s');
+                                if (!isset($slotsUsados[$key])) {
+                                    $slot = [
+                                        'doctor' => $doctor,
+                                        'schedule_id' => $horario->id,
+                                        'date' => $fecha->toDateString(),
+                                        'time' => $start->format('H:i:s'),
+                                    ];
+                                    $slotsUsados[$key] = true;
+                                    break 5;
+                                }
+                                $start->addMinutes(30);
+                            }
+                        }
                     }
+                }
+                if ($slot) {
+                    $metodo = Arr::random($paymentMethods);
+                    $imagePath = null;
+                    if (in_array($metodo, ['transferencia', 'yape', 'plin'])) {
+                        $imagePath = Arr::random($comprobantesEjemplo);
+                    }
+                    $cita = Appointment::create([
+                        'patient_id' => $paciente->id,
+                        'doctor_id' => $slot['doctor']->id,
+                        'schedule_id' => $slot['schedule_id'],
+                        'appointment_date' => $slot['date'],
+                        'appointment_time' => $slot['time'],
+                        'status' => $estadoCita,
+                    ]);
+                    Payment::create([
+                        'appointment_id' => $cita->id,
+                        'uploaded_by' => $paciente->user_id,
+                        'validated_by' => null,
+                        'image_path' => $imagePath,
+                        'payment_method' => $metodo,
+                        'amount' => 35.00,
+                        'status' => $estadoPagoPorCita[$estadoCita],
+                        'uploaded_at' => now(),
+                        'validated_at' => $estadoCita === 'completada' ? now() : null,
+                    ]);
                 }
             }
         }
-    }
-
-    private function generateWeekdayDate()
-    {
-        $randomDays = rand(1, 30); // Número de días aleatorios entre 1 y 30
-
-        // Genera una fecha en el futuro
-        $date = now()->addDays($randomDays);
-
-        // Si el día es sábado (6) o domingo (7), sumar días hasta que sea lunes
-        while ($date->isWeekend()) {
-            $date = $date->addDay(); // Sumar un día hasta que caiga en lunes a viernes
+        // Luego, completar el resto de slots para los doctores (citas adicionales aleatorias)
+        foreach ($doctores as $doctor) {
+            $horarios = $doctor->schedules;
+            if ($horarios->isEmpty()) continue;
+            $slotsDisponibles = [];
+            $carbonToDbDay = [
+                'lunes' => 'LUNES',
+                'martes' => 'MARTES',
+                'miercoles' => 'MIERCOLES',
+                'miércoles' => 'MIERCOLES',
+                'jueves' => 'JUEVES',
+                'viernes' => 'VIERNES',
+                'sabado' => 'SABADO',
+                'sábado' => 'SABADO',
+                'domingo' => 'DOMINGO',
+            ];
+            for ($d = 1; $d <= $diasFuturos; $d++) {
+                $fecha = Carbon::now()->addDays($d);
+                $carbonDay = strtolower($fecha->locale('es')->isoFormat('dddd'));
+                $dbDay = $carbonToDbDay[$carbonDay] ?? null;
+                if (!$dbDay) continue;
+                foreach ($horarios as $horario) {
+                    if ($dbDay !== $horario->day_of_week) continue;
+                    $start = Carbon::parse($horario->start_time);
+                    $end = Carbon::parse($horario->end_time);
+                    while ($start < $end) {
+                        $slotsDisponibles[] = [
+                            'date' => $fecha->toDateString(),
+                            'time' => $start->format('H:i:s'),
+                            'schedule_id' => $horario->id
+                        ];
+                        $start->addMinutes(30);
+                    }
+                }
+            }
+            shuffle($slotsDisponibles);
+            $slotsSeleccionados = array_slice($slotsDisponibles, 0, $citasPorDoctor);
+            foreach ($slotsSeleccionados as $slot) {
+                $paciente = $pacientes->random();
+                $estadoCita = Arr::random($estadosCita);
+                $metodo = Arr::random($paymentMethods);
+                $imagePath = null;
+                if (in_array($metodo, ['transferencia', 'yape', 'plin'])) {
+                    $imagePath = Arr::random($comprobantesEjemplo);
+                }
+                $cita = Appointment::create([
+                    'patient_id' => $paciente->id,
+                    'doctor_id' => $doctor->id,
+                    'schedule_id' => $slot['schedule_id'],
+                    'appointment_date' => $slot['date'],
+                    'appointment_time' => $slot['time'],
+                    'status' => $estadoCita,
+                ]);
+                Payment::create([
+                    'appointment_id' => $cita->id,
+                    'uploaded_by' => $paciente->user_id,
+                    'validated_by' => null,
+                    'image_path' => $imagePath,
+                    'payment_method' => $metodo,
+                    'amount' => 35.00,
+                    'status' => $estadoPagoPorCita[$estadoCita],
+                    'uploaded_at' => now(),
+                    'validated_at' => $estadoCita === 'completada' ? now() : null,
+                ]);
+            }
         }
-
-        return $date;
-    }
-
-    private function generatePastWeekdayDate()
-    {
-        $randomDays = rand(1, 30); // Número de días aleatorios entre 1 y 30
-
-        // Genera una fecha en el pasado, restando los días aleatorios
-        $date = now()->subDays($randomDays);
-
-        // Si el día es sábado (6) o domingo (7), restar días hasta que sea lunes
-        while ($date->isWeekend()) {
-            $date = $date->subDay(); // Restar un día hasta que caiga en lunes a viernes
-        }
-
-        return $date;
     }
 }
 
