@@ -8,6 +8,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <form method="GET" action="{{ route('secretaria.citas.index') }}" class="row g-3">
+                    <!-- Filtro de estado -->
                     <div class="col-md-3">
                         <label for="status" class="form-label">Filtrar por estado:</label>
                         <select name="status" id="status" class="form-select">
@@ -16,26 +17,19 @@
                             </option>
                             <option value="completada" {{ request('status') == 'completada' ? 'selected' : '' }}>Completadas
                             </option>
-                            {{-- <option value="cancelada" {{ request('status') == 'cancelada' ? 'selected' : '' }}>Canceladas</option> --}}
+                            <option value="cancelada" {{ request('status') == 'cancelada' ? 'selected' : '' }}>Canceladas
+                            </option>
                         </select>
                     </div>
 
+                    <!-- Filtro de fecha -->
                     <div class="col-md-3">
-                        <label for="sort" class="form-label">Ordenar por:</label>
-                        <select name="sort" id="sort" class="form-select">
-                            <option value="date" {{ request('sort') == 'date' ? 'selected' : '' }}>Fecha</option>
-                            {{-- <option value="status" {{ request('sort') == 'status' ? 'selected' : '' }}>Estado</option> --}}
-                        </select>
+                        <label for="fecha" class="form-label">Seleccionar fecha:</label>
+                        <input type="date" name="fecha" id="fecha" class="form-control"
+                            value="{{ request('fecha') ?? '' }}">
                     </div>
 
-                    <div class="col-md-3">
-                        <label for="order" class="form-label">Orden:</label>
-                        <select name="order" id="order" class="form-select">
-                            <option value="asc" {{ request('order') == 'asc' ? 'selected' : '' }}>Ascendente</option>
-                            <option value="desc" {{ request('order') == 'desc' ? 'selected' : '' }}>Descendente</option>
-                        </select>
-                    </div>
-
+                    <!-- Botones -->
                     <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary">Aplicar</button>
                         <a href="{{ route('secretaria.citas.index') }}" class="btn btn-outline-secondary ms-2">Limpiar</a>
@@ -43,6 +37,7 @@
                 </form>
             </div>
         </div>
+
 
         <!-- Tabla de citas -->
         <table class="table table-bordered table-striped">
@@ -70,8 +65,12 @@
                             </span>
                         </td>
                         <td>
-                            <a href="{{ route('secretaria.citas.show', $cita->id) }}" class="btn btn-sm btn-info">Ver</a>
-                            <a href="{{-- route('secretaria.citas.edit', $cita->id) --}}" class="btn btn-sm btn-primary">Editar</a>
+                            @if ($cita->status === 'programada')
+                                <a href="{{ route('secretaria.citas.show', $cita->id) }}"
+                                    class="btn btn-sm btn-info">Validar</a>
+                            @else
+                            @endif
+
                         </td>
                     </tr>
                 @empty

@@ -64,19 +64,21 @@
                                     </a>
                                 </div>
                                 {{-- icono Atender --}}
-                                <div class="flex flex-col items-center">
-                                    <a href="{{ route('doctor.citas.edit', $cita->id) }}"
-                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
-                                        data-bs-toggle="tooltip" data-bs-title="Atender">
-                                        <div class="relative">
-                                            <span class="material-icons text-green-500">calendar_today</span>
-                                            <span
-                                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-green-100 text-green-600 rounded-full p-0.4">room_service</span>
-                                        </div>
-                                    </a>
-                                </div>
-                        </td>
-                    </tr>
+
+                @endif
+                <div class="flex flex-col items-center">
+                    <a href="{{ route('doctor.citas.edit', $cita->id) }}"
+                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                        data-bs-toggle="tooltip" data-bs-title="Atender">
+                        <div class="relative">
+                            <span class="material-icons text-green-500">calendar_today</span>
+                            <span
+                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-green-100 text-green-600 rounded-full p-0.4">room_service</span>
+                        </div>
+                    </a>
+                </div>
+                </td>
+                </tr>
                 @endforeach
                 @if ($citas->isEmpty())
                     <tr>
