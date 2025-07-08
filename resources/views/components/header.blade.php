@@ -11,10 +11,11 @@
         <!-- Navegación para usuarios no autenticados -->
         @guest
             <nav class="hidden md:flex items-center gap-6">
-                <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="#inicio">Inicio</a>
-                <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="#nosotros">Nosotros</a>
-                <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="#especialidades">Especialidades</a>
-                <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="#contacto">Contacto</a>
+                <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="{{ route('home') }}#inicio">Inicio</a>
+                <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="{{ route('home') }}#nosotros">Nosotros</a>
+                <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="{{ route('home') }}#especialidades">Especialidades</a>
+                <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="{{ route('home') }}#equipo-medico">Equipo Médico</a>
+                <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="{{ route('home') }}#contacto">Contacto</a>
             </nav>
             <div class="flex items-center gap-3">
                 <a href="{{ route('login') }}" class="flex min-w-[90px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-10 px-4 bg-blue-600 text-white text-sm font-semibold leading-normal tracking-wide shadow-sm hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
@@ -31,10 +32,11 @@
             <!-- Navegación para usuarios autenticados -->
             @if(request()->routeIs('home'))
                 <nav class="hidden md:flex items-center gap-6">
-                    <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="#inicio">Inicio</a>
-                    <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="#nosotros">Nosotros</a>
-                    <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="#especialidades">Especialidades</a>
-                    <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="#contacto">Contacto</a>
+                    <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="{{ route('home') }}#inicio">Inicio</a>
+                    <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="{{ route('home') }}#nosotros">Nosotros</a>
+                    <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="{{ route('home') }}#especialidades">Especialidades</a>
+                    <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="{{ route('home') }}#equipo-medico">Equipo Médico</a>
+                    <a class="text-slate-700 hover:text-blue-600 text-sm font-medium transition-colors" href="{{ route('home') }}#contacto">Contacto</a>
                 </nav>
             @endif
 
