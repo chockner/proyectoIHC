@@ -14,6 +14,7 @@ class Doctor extends Model
         'specialty_id',
         'license_code',
         'experience_years',
+        'professional_bio',
     ];
 
     public function user()

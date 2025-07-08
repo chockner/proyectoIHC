@@ -140,11 +140,11 @@
         <div class="sidebar p-3">
             <div class="flex-grow-1">
 
-                @if (!Auth::user()->profile)
+                @if (!Auth::user()->profile || !Auth::user()->profile->first_name || !Auth::user()->profile->last_name || !Auth::user()->profile->email)
                     <div
                         class="alert alert-warning mt-4 text-center fw-bold d-flex justify-content-between align-items-center">
                         <span>Antes de continuar, por favor </span>
-                        <a href="{{ route('perfil.edit') }}" class="btn btn-warning btn-sm ms-3 fw-bold">
+                        <a href="{{ route('profile.wizard.step1') }}" class="btn btn-warning btn-sm ms-3 fw-bold">
                             Completar perfil.
                         </a>
                     </div>
@@ -407,6 +407,32 @@
         <div class="flex-grow-1">
 
             <div class="main-content p-4">
+                <!-- Mensajes de éxito/error -->
+                @if(session('success'))
+                    <div class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <span class="material-icons text-green-400">check_circle</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-green-800">{{ session('success') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <span class="material-icons text-red-400">error</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-800">{{ session('error') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
                 @hasSection('content')
                     @yield('content')
@@ -421,6 +447,23 @@
 
     </div>
 </body>
+
+<script>
+    // Auto-hide success/error messages after 5 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const messages = document.querySelectorAll('.bg-green-50, .bg-red-50');
+        messages.forEach(function(message) {
+            setTimeout(function() {
+                message.style.transition = 'opacity 0.5s ease-out';
+                message.style.opacity = '0';
+                setTimeout(function() {
+                    message.remove();
+                }, 500);
+            }, 5000);
+        });
+    });
+</script>
+
 @stack('scripts')
 
 </html>

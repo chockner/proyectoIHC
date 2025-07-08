@@ -27,6 +27,8 @@ use App\Http\Controllers\Paciente\NotificacionesPacienteController;
 use App\Http\Controllers\Doctor\CitaController as DoctorCitaController;
 use App\Http\Controllers\Doctor\PacienteController as DoctorPacienteController;
 
+// Rutas para el flujo de completar perfil paso a paso
+use App\Http\Controllers\ProfileWizardController;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::view('/login', 'auth.login')->name('login');
@@ -67,11 +69,11 @@ Route::get('/dashboard', function () {
         // otros roles aquí
         default => abort(403),
     };
-})->middleware('auth')->name('dashboard');
+})->middleware(['auth', 'profile.complete'])->name('dashboard');
 
 /* Admin Routes */
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'profile.complete'])->group(function () {
     
     /* admin -> doctor */
     Route::get('/doctors', [DoctorController::class, 'index'])->name('admin.doctor.index');
@@ -129,7 +131,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 });
 
 /* Secretaria Routes */
-Route::prefix('secretaria')->middleware(['auth'])->group(function () {
+Route::prefix('secretaria')->middleware(['auth', 'profile.complete'])->group(function () {
     
     /* secretaria -> citas */
     Route::get('/citas', [SecretariaCitaController::class, 'index'])->name('secretaria.citas.index');
@@ -140,7 +142,7 @@ Route::prefix('secretaria')->middleware(['auth'])->group(function () {
 });
 
 /* PACIENTE ROUTES */
-Route::prefix('paciente')->middleware(['auth'])->group(function () {
+Route::prefix('paciente')->middleware(['auth', 'profile.complete'])->group(function () {
     /* paciente -> agendar cita */
     Route::get('/agendar-cita', [AgendarCitaController::class, 'create'])->name('paciente.agendarCita.create');
     Route::post('/agendar-cita/seleccionar-medico', [AgendarCitaController::class, 'seleccionarMedico'])->name('paciente.agendarCita.seleccionarMedico');
@@ -178,7 +180,7 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
     
 });
 
-Route::prefix('doctor')->middleware(['auth'])->group(function () {
+Route::prefix('doctor')->middleware(['auth', 'profile.complete'])->group(function () {
     Route::get('/citas',[DoctorCitaController::class, 'index'])->name('doctor.citas.index');
     route::post('/citas',[DoctorCitaController::class, 'update'])->name('doctor.citas.update');
     Route::get('/citas/{id}',[DoctorCitaController::class, 'show'])->name('doctor.citas.show');
@@ -188,4 +190,15 @@ Route::prefix('doctor')->middleware(['auth'])->group(function () {
     /* pacientes */
     Route::get('/pacientes',[DoctorPacienteController::class, 'index'])->name('doctor.pacientes.index');
     Route::get('/pacientes/{id}',[DoctorPacienteController::class, 'show'])->name('doctor.pacientes.show');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/completar-perfil', [ProfileWizardController::class, 'step1'])->name('profile.wizard.step1');
+    Route::post('/completar-perfil', [ProfileWizardController::class, 'postStep1']);
+
+    Route::get('/completar-perfil/rol', [ProfileWizardController::class, 'step2'])->name('profile.wizard.step2');
+    Route::post('/completar-perfil/rol', [ProfileWizardController::class, 'postStep2']);
+
+    Route::get('/completar-perfil/resumen', [ProfileWizardController::class, 'summary'])->name('profile.wizard.summary');
+    Route::post('/completar-perfil/resumen', [ProfileWizardController::class, 'finish'])->name('profile.wizard.finish');
 });

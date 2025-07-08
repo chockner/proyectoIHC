@@ -18,6 +18,7 @@ return new class extends Migration
 
             $table->string('license_code', 6)->unique();
             $table->integer('experience_years')->default(0);
+            $table->text('professional_bio')->nullable();
             $table->timestamps(0);
             $table->softDeletes(); // opcional, pero útil para eliminar doctores sin borrarlos de la base de datos
         });

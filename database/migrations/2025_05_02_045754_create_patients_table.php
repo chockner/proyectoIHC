@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('blood_type', 3)->nullable();
             $table->text('allergies')->nullable();
             $table->text('vaccination_received')->nullable();
+            $table->string('emergency_contact', 100)->nullable();
+            $table->string('emergency_phone', 15)->nullable();
             $table->timestamps(0);
             $table->softDeletes(); // opcional, pero útil para eliminar pacientes sin borrarlos de la base de datos
         });
