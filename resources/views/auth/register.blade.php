@@ -136,11 +136,36 @@
                     @enderror
                 </div>
 
+                <!-- Términos y Condiciones -->
+                <div class="flex items-start">
+                    <div class="flex items-center h-5">
+                        <input 
+                            id="terms" 
+                            name="terms" 
+                            type="checkbox" 
+                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 @error('terms') border-red-300 @enderror"
+                            required
+                        >
+                    </div>
+                    <div class="ml-3 text-sm">
+                        <label for="terms" class="text-gray-700 leading-relaxed">
+                            He leído y acepto los 
+                            <a href="#" class="text-blue-600 hover:text-blue-500 underline font-medium">Términos y Condiciones</a> 
+                            y la 
+                            <a href="#" class="text-blue-600 hover:text-blue-500 underline font-medium">Política de Privacidad</a>
+                        </label>
+                    </div>
+                </div>
+                @error('terms')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+
                 <!-- Botón de Envío -->
                 <div>
                     <button
                         type="submit"
-                        class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                        class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        id="submitButton"
                     >
                         <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                             <span class="material-icons text-blue-500 group-hover:text-blue-400">person_add</span>
@@ -163,7 +188,7 @@
     </div>
 </div>
 
-<!-- Script para mostrar/ocultar contraseñas -->
+<!-- Script para mostrar/ocultar contraseñas y controlar términos -->
 <script>
     // Toggle para contraseña principal
     const togglePassword = document.getElementById('togglePassword');
@@ -186,6 +211,28 @@
         passwordConfirmation.setAttribute('type', type);
         eyeIconConfirmation.textContent = type === 'password' ? 'visibility' : 'visibility_off';
     });
+
+    // Control del botón de envío según el checkbox de términos
+    const termsCheckbox = document.getElementById('terms');
+    const submitButton = document.getElementById('submitButton');
+    
+    function updateSubmitButton() {
+        if (termsCheckbox.checked) {
+            submitButton.disabled = false;
+            submitButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
+            submitButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        } else {
+            submitButton.disabled = true;
+            submitButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+            submitButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        }
+    }
+    
+    // Inicializar estado del botón
+    updateSubmitButton();
+    
+    // Escuchar cambios en el checkbox
+    termsCheckbox.addEventListener('change', updateSubmitButton);
 </script>
 
 <style>
