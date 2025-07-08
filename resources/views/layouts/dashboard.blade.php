@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Panel de Control - Hospital</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css"
+        rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -354,19 +360,7 @@
                                 <!-- Fin Historial Médico -->
 
                                 <!-- Notificaciones -->
-                                <li>
-                                    <a href="{{ route('paciente.notificaciones.index') }}"
-                                        class="sidebar-link {{ request()->routeIs('paciente.notificaciones.index') ? 'active-link' : '' }}"
-                                        style="display: flex; align-items: center; gap: 10px;">
 
-                                        <div class="text-[#1A75FF]">
-                                            <span class="material-icons text-4xl">notifications</span>
-                                        </div>
-                                        <h4
-                                            class="text-gray-800 text-lg font-medium leading-tight text-center group-hover:text-[#1A75FF] transition-colors">
-                                            Notificaciones</h4>
-                                    </a>
-                                </li>
                                 <!-- Fin Notificaciones -->
                             </ul>
                         </div>
