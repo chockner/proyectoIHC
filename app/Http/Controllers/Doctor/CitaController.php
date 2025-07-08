@@ -64,7 +64,7 @@ class CitaController extends Controller
             'appointment_id' => $appointment->id,
             'diagnosis' => $request->diagnosis,
             'treatment' => $request->treatment,
-            'notes,' => $request->notes,
+            'notes' => $request->notes,
         ]);
         return redirect()->route('doctor.citas.index')->with('success', 'Cita Atendida.');
     }
