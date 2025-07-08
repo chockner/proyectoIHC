@@ -52,7 +52,8 @@
         .sidebar-container {
             position: fixed;
             left: 0;
-            top: 80px; /* Altura del header */
+            top: 80px;
+            /* Altura del header */
             height: calc(100vh - 80px);
             width: 280px;
             background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
@@ -224,7 +225,8 @@
         /* Contenido principal */
         .main-content-wrapper {
             margin-left: 280px;
-            margin-top: 80px; /* Espacio para el header */
+            margin-top: 80px;
+            /* Espacio para el header */
             min-height: calc(100vh - 80px);
             background: #f8fafc;
         }
@@ -267,7 +269,8 @@
             .sidebar-container {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
-                top: 80px; /* Mantener debajo del header */
+                top: 80px;
+                /* Mantener debajo del header */
             }
 
             .sidebar-container.open {
@@ -285,6 +288,7 @@
                 opacity: 0;
                 transform: translateX(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -295,11 +299,25 @@
             animation: slideIn 0.3s ease forwards;
         }
 
-        .sidebar-link:nth-child(1) { animation-delay: 0.1s; }
-        .sidebar-link:nth-child(2) { animation-delay: 0.2s; }
-        .sidebar-link:nth-child(3) { animation-delay: 0.3s; }
-        .sidebar-link:nth-child(4) { animation-delay: 0.4s; }
-        .sidebar-link:nth-child(5) { animation-delay: 0.5s; }
+        .sidebar-link:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .sidebar-link:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .sidebar-link:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .sidebar-link:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .sidebar-link:nth-child(5) {
+            animation-delay: 0.5s;
+        }
     </style>
 </head>
 
@@ -308,7 +326,7 @@
     <div class="main-header">
         <x-header />
     </div>
-    
+
     <!-- Sidebar Container -->
     <div class="sidebar-container">
         <!-- Header del Sidebar -->
@@ -319,20 +337,24 @@
 
         <!-- Contenido del Sidebar -->
         <div class="sidebar-content">
-            @if (!Auth::user()->profile || !Auth::user()->profile->first_name || !Auth::user()->profile->last_name || !Auth::user()->profile->email)
+            @if (
+                !Auth::user()->profile ||
+                    !Auth::user()->profile->first_name ||
+                    !Auth::user()->profile->last_name ||
+                    !Auth::user()->profile->email)
                 <div class="alert-warning">
                     <div class="flex items-center justify-between">
                         <span class="text-sm font-medium text-amber-800">Completa tu perfil</span>
-                        <a href="{{ route('profile.wizard.step1') }}" 
-                           class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors">
+                        <a href="{{ route('profile.wizard.step1') }}"
+                            class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors">
                             Completar
                         </a>
                     </div>
                 </div>
             @else
                 <!-- Dashboard -->
-                <a href="{{ route('dashboard') }}" 
-                   class="sidebar-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a href="{{ route('dashboard') }}"
+                    class="sidebar-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <div class="sidebar-icon">
                         <span class="material-icons">grid_view</span>
                     </div>
@@ -343,51 +365,53 @@
                 @if (Auth::user()->role->name == 'admin')
                     <div class="sidebar-section">
                         <div class="sidebar-section-title">Gestión</div>
-                        
-                        <a href="{{ route('admin.doctor.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('admin.doctor.*') ? 'active' : '' }}">
+
+                        <a href="{{ route('admin.doctor.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.doctor.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
-                                <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="width: 20px; height: 20px;">
-                                    <path d="M212,152a12,12,0,1,1-12-12A12,12,0,0,1,212,152Zm-4.55,39.29A48.08,48.08,0,0,1,160,232H136a48.05,48.05,0,0,1-48-48V143.49A64,64,0,0,1,32,80V40A16,16,0,0,1,48,24H64a8,8,0,0,1,0,16H48V80a48,48,0,0,0,48.64,48c26.11-.34,47.36-22.25,47.36-48.83V40H128a8,8,0,0,1,0-16h16a16,16,0,0,1,16,16V79.17c0,32.84-24.53,60.29-56,64.31V184a32,32,0,0,0,32,32h24a32.06,32.06,0,0,0,31.22-25,40,40,0,1,1,16.23.27ZM224,152a24,24,0,1,0-24,24A24,24,0,0,0,224,152Z" />
+                                <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    style="width: 20px; height: 20px;">
+                                    <path
+                                        d="M212,152a12,12,0,1,1-12-12A12,12,0,0,1,212,152Zm-4.55,39.29A48.08,48.08,0,0,1,160,232H136a48.05,48.05,0,0,1-48-48V143.49A64,64,0,0,1,32,80V40A16,16,0,0,1,48,24H64a8,8,0,0,1,0,16H48V80a48,48,0,0,0,48.64,48c26.11-.34,47.36-22.25,47.36-48.83V40H128a8,8,0,0,1,0-16h16a16,16,0,0,1,16,16V79.17c0,32.84-24.53,60.29-56,64.31V184a32,32,0,0,0,32,32h24a32.06,32.06,0,0,0,31.22-25,40,40,0,1,1,16.23.27ZM224,152a24,24,0,1,0-24,24A24,24,0,0,0,224,152Z" />
                                 </svg>
                             </div>
                             <span class="sidebar-text">Doctores</span>
                         </a>
 
-                        <a href="{{ route('admin.secretaria.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('admin.secretaria.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.secretaria.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.secretaria.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">support_agent</span>
                             </div>
                             <span class="sidebar-text">Secretarias</span>
                         </a>
 
-                        <a href="{{ route('admin.especialidad.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('admin.especialidad.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.especialidad.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.especialidad.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">medical_information</span>
                             </div>
                             <span class="sidebar-text">Especialidades</span>
                         </a>
 
-                        <a href="{{ route('admin.paciente.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('admin.paciente.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.paciente.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.paciente.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">assist_walker</span>
                             </div>
                             <span class="sidebar-text">Pacientes</span>
                         </a>
 
-                        <a href="{{ route('admin.historialMedico.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('admin.historialMedico.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.historialMedico.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.historialMedico.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">assignment</span>
                             </div>
                             <span class="sidebar-text">Historias Médicas</span>
                         </a>
 
-                        <a href="{{ route('admin.horarios.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('admin.horarios.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.horarios.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.horarios.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">schedule</span>
                             </div>
@@ -400,17 +424,17 @@
                 @if (Auth::user()->role->name == 'doctor')
                     <div class="sidebar-section">
                         <div class="sidebar-section-title">Gestión Médica</div>
-                        
-                        <a href="{{ route('doctor.pacientes.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('doctor.pacientes.*') ? 'active' : '' }}">
+
+                        <a href="{{ route('doctor.pacientes.index') }}"
+                            class="sidebar-link {{ request()->routeIs('doctor.pacientes.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">assist_walker</span>
                             </div>
                             <span class="sidebar-text">Mis Pacientes</span>
                         </a>
 
-                        <a href="{{ route('doctor.citas.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('doctor.citas.*') ? 'active' : '' }}">
+                        <a href="{{ route('doctor.citas.index') }}"
+                            class="sidebar-link {{ request()->routeIs('doctor.citas.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">calendar_today</span>
                             </div>
@@ -423,37 +447,37 @@
                 @if (Auth::user()->role->name == 'paciente')
                     <div class="sidebar-section">
                         <div class="sidebar-section-title">Servicios</div>
-                        
-                        <a href="{{ route('perfil.edit') }}" 
-                           class="sidebar-link {{ request()->routeIs('perfil.*') ? 'active' : '' }}">
+
+                        <a href="{{ route('perfil.edit') }}"
+                            class="sidebar-link {{ request()->routeIs('perfil.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">person</span>
                             </div>
                             <span class="sidebar-text">Mi Perfil</span>
                         </a>
 
-                        <a href="{{ route('paciente.agendarCita.create') }}" 
-                           class="sidebar-link {{ request()->routeIs('paciente.agendarCita.*') ? 'active' : '' }}">
+                        <a href="{{ route('paciente.agendarCita.create') }}"
+                            class="sidebar-link {{ request()->routeIs('paciente.agendarCita.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">calendar_month</span>
                             </div>
                             <span class="sidebar-text">Reservar Cita</span>
                         </a>
 
-                        <a href="{{ route('paciente.citas.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('paciente.citas.*') ? 'active' : '' }}">
+                        <a href="{{ route('paciente.citas.index') }}"
+                            class="sidebar-link {{ request()->routeIs('paciente.citas.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">event_note</span>
                             </div>
                             <span class="sidebar-text">Mis Citas</span>
                         </a>
 
-                        <a href="{{ route('paciente.historialMedico.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('paciente.historialMedico.*') ? 'active' : '' }}">
+                        <a href="{{ route('paciente.historialMedico.index') }}"
+                            class="sidebar-link {{ request()->routeIs('paciente.historialMedico.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">medical_information</span>
                             </div>
-                            <span class="sidebar-text">Historial Médico</span>
+                            <span class="sidebar-text">Historias Médicas</span>
                         </a>
                     </div>
                 @endif
@@ -462,9 +486,9 @@
                 @if (Auth::user()->role->name == 'secretaria')
                     <div class="sidebar-section">
                         <div class="sidebar-section-title">Gestión</div>
-                        
-                        <a href="{{ route('secretaria.citas.index') }}" 
-                           class="sidebar-link {{ request()->routeIs('secretaria.citas.*') ? 'active' : '' }}">
+
+                        <a href="{{ route('secretaria.citas.index') }}"
+                            class="sidebar-link {{ request()->routeIs('secretaria.citas.*') ? 'active' : '' }}">
                             <div class="sidebar-icon">
                                 <span class="material-icons">calendar_today</span>
                             </div>
@@ -477,9 +501,8 @@
 
         <!-- Footer del Sidebar (Logout) -->
         <div class="sidebar-footer">
-            <a href="{{ route('logout') }}" 
-               class="logout-link"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <a href="{{ route('logout') }}" class="logout-link"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <div class="logout-icon">
                     <span class="material-icons">logout</span>
                 </div>
@@ -495,7 +518,7 @@
     <div class="main-content-wrapper">
         <div class="main-content">
             <!-- Mensajes de éxito/error -->
-            @if(session('success'))
+            @if (session('success'))
                 <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg shadow-sm">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
@@ -508,7 +531,7 @@
                 </div>
             @endif
 
-            @if(session('error'))
+            @if (session('error'))
                 <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg shadow-sm">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">

@@ -1,43 +1,53 @@
 @extends('layouts.dashboard')
 
 @section('content')
+    <style>
+        .equal-width-table th,
+        .equal-width-table td {
+            text-align: center;
+            /* Center content horizontally */
+            vertical-align: middle;
+            /* Center content vertically */
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
+
     <div class="container mt-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Citas</h1>
         <div class="mb-4">
-            <form action="{{ route('doctor.citas.index') }}" method="GET"
-                class="row justify-content-start align-items-center">
+            <form action="{{ route('doctor.citas.index') }}" method="GET" class="d-flex align-items-end gap-3">
                 <!-- Selector de fecha -->
-                <div class="col-md-4 mb-3">
+                <div class="flex-grow-6">
                     <label class="form-label" for="fecha">Seleccionar fecha:</label>
                     <input type="date" name="fecha" id="fecha" class="form-control"
                         value="{{ request('fecha') ?? now()->toDateString() }}">
                 </div>
                 <!-- Botón de búsqueda -->
-                <div class="col-md-2 mb-3">
+                <div class="d-flex align-items-end gap-2">
                     <button type="submit"
-                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
-                        data-bs-toggle="tooltip" data-bs-title="Buscar">
+                        class="action-btn d-flex align-items-center justify-content-center rounded-md border border-gray-200 bg-white"
+                        style="width: 40px; height: 38px;" data-bs-toggle="tooltip" data-bs-title="Buscar">
                         <div class="relative">
-                            <span class="material-icons text-gray-500 " style="font-size: 30px;">calendar_today</span>
+                            <span class="material-icons text-gray-500 ">calendar_today</span>
                             <span
                                 class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-gray-100 text-green-600 rounded-full p-0.4">search</span>
                         </div>
                     </button>
-                </div>
-                <!-- Botón de limpiar (enlace) -->
-                <div class="col-md-2 mb-3">
                     <a href="{{ route('doctor.citas.index') }}"
-                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
-                        data-bs-toggle="tooltip" data-bs-title="Limpiar Filtro">
+                        class="action-btn d-flex align-items-center justify-content-center rounded-md border border-gray-200 bg-white"
+                        style="width: 40px; height: 38px;" data-bs-toggle="tooltip" data-bs-title="Limpiar Filtro">
                         {{-- Limpiar Filtro --}}
                         <div class="relative">
-                            <span class="material-icons text-gris-600" style="font-size: 35px;">cleaning_services</span>
+                            <span class="material-icons text-gris-600">cleaning_services</span>
                         </div>
                     </a>
                 </div>
             </form>
         </div>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped equal-width-table">
             <thead class="table-primary">
                 <tr>
                     <th>#</th>

@@ -1,5 +1,26 @@
 @extends('layouts.dashboard')
 @section('content')
+    <style>
+        /* Ensure equal column widths */
+        .equal-width-table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .equal-width-table th,
+        .equal-width-table td {
+            width: 20%;
+            /* Equal width for 5 columns (100% / 5 = 20%) */
+            text-align: center;
+            /* Optional: Center content for better appearance */
+        }
+
+        /* Optional: Add overflow for responsiveness on small screens */
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
+
     <div class="container mt-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Pacientes</h1>
         <div class="mb-3 flex justify-end">
@@ -7,46 +28,47 @@
                 autocomplete="off" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
                 oninput="this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');">
         </div>
-        <table class="table table-bordered table-striped">
-            <thead class="table-primary">
-                <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Grupo sanguíneo</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($pacientes as $index => $paciente)
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped equal-width-table">
+                <thead class="table-primary">
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $paciente->user->profile->first_name }}</td>
-                        <td>{{ $paciente->user->profile->last_name }}</td>
-                        <td>{{ $paciente->blood_type }}</td>
-                        <td>
-                            <div class="mb-3 flex justify-center space-x-2">
-                                {{-- Icono Ver --}}
-                                <div class="flex flex-col items-center">
-                                    <a href="{{ route('doctor.pacientes.show', $paciente->medicalRecords->id) }}"
-                                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
-                                        data-bs-toggle="tooltip" data-bs-title="Ver">
-                                        <div class="relative">
-                                            <span class="material-icons text-blue-600">assist_walker</span>
-                                            <span
-                                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-blue-100 text-blue-600 rounded-full p-0.4">visibility</span>
-                                        </div>
-                                    </a>
-                                </div>
-
-
-                            </div>
-                        </td>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Grupo sanguíneo</th>
+                        <th>Acciones</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($pacientes as $index => $paciente)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $paciente->user->profile->first_name }}</td>
+                            <td>{{ $paciente->user->profile->last_name }}</td>
+                            <td>{{ $paciente->blood_type }}</td>
+                            <td>
+                                <div class="mb-3 flex justify-center space-x-2">
+                                    {{-- Icono Ver --}}
+                                    <div class="flex flex-col items-center">
+                                        <a href="{{ route('doctor.pacientes.show', $paciente->medicalRecords->id) }}"
+                                            class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                                            data-bs-toggle="tooltip" data-bs-title="Ver">
+                                            <div class="relative">
+                                                <span class="material-icons text-blue-600">assist_walker</span>
+                                                <span
+                                                    class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-blue-100 text-blue-600 rounded-full p-0.4">visibility</span>
+                                            </div>
+                                        </a>
+                                    </div>
 
+
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
         {{-- Pagination --}}
         <nav aria-label="Page navigation example">
