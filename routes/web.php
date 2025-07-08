@@ -151,7 +151,7 @@ Route::prefix('paciente')->middleware(['auth'])->group(function () {
     Route::put('/citas/{id}', [AgendarCitaController::class, 'update'])->name('paciente.citas.update');
     Route::delete('/citas/{id}', [AgendarCitaController::class, 'destroy'])->name('paciente.citas.destroy');
     // Ruta eliminada: Los pacientes no deben confirmar sus propias citas
-    Route::post('/citas/{id}/cancelar', [AgendarCitaController::class, 'cancel'])->name('paciente.citas.cancel');
+    Route::patch('/citas/{id}/cancelar', [AgendarCitaController::class, 'cancel'])->name('paciente.citas.cancel');
     Route::get('/citas/{id}/descargar-comprobante', [AgendarCitaController::class, 'downloadComprobante'])->name('paciente.citas.downloadComprobante');
 
     /** Historial médico de usuario del tipo paciente**/

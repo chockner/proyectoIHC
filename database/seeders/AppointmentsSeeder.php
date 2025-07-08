@@ -25,9 +25,9 @@ class AppointmentsSeeder extends Seeder
         $pacientes = Patient::all();
         $paymentMethods = ['tarjeta', 'transferencia', 'yape', 'plin', 'clinica'];
         $comprobantesEjemplo = [
-            'comprobantes/ejemplo_1.jpg',
-            'comprobantes/ejemplo_2.jpg',
-            'comprobantes/ejemplo_3.jpg',
+            'payment_proofs/payment_proof_1751946776_MORALES_ESQUIVEL CHRISTIAN_ANTHONY.jpg',
+            'payment_proofs/payment_proof_1751947523_BOUCHER_PROYECTO_DE_TESIS.jpg',
+            'payment_proofs/payment_proof_1751947746_PAGO DE POSTULACIÓN A DIRECTIVA - MORALES ESQUIVEL CHRISTIAN ANTHONY - TI.jpg',
         ];
         $diasFuturos = 15;
         $citasPorDoctor = 8;
