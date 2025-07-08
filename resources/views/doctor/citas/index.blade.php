@@ -26,8 +26,13 @@
                 </div>
                 <!-- Botón de limpiar (enlace) -->
                 <div class="col-md-2 mb-3">
-                    <a href="{{ route('doctor.citas.index') }}" class="btn btn-secondary w-100">
-                        Limpiar Filtro
+                    <a href="{{ route('doctor.citas.index') }}"
+                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                        data-bs-toggle="tooltip" data-bs-title="Limpiar Filtro">
+                        {{-- Limpiar Filtro --}}
+                        <div class="relative">
+                            <span class="material-icons text-gris-600" style="font-size: 35px;">cleaning_services</span>
+                        </div>
                     </a>
                 </div>
             </form>
