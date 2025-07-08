@@ -354,19 +354,7 @@
                                 <!-- Fin Historial Médico -->
 
                                 <!-- Notificaciones -->
-                                <li>
-                                    <a href="{{ route('paciente.notificaciones.index') }}"
-                                        class="sidebar-link {{ request()->routeIs('paciente.notificaciones.index') ? 'active-link' : '' }}"
-                                        style="display: flex; align-items: center; gap: 10px;">
 
-                                        <div class="text-[#1A75FF]">
-                                            <span class="material-icons text-4xl">notifications</span>
-                                        </div>
-                                        <h4
-                                            class="text-gray-800 text-lg font-medium leading-tight text-center group-hover:text-[#1A75FF] transition-colors">
-                                            Notificaciones</h4>
-                                    </a>
-                                </li>
                                 <!-- Fin Notificaciones -->
                             </ul>
                         </div>
