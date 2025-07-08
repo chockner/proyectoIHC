@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Patient;
 use App\Models\Profile;
+use App\Models\MedicalRecord;
 
 class RegisterController extends Controller
 {
@@ -44,9 +45,13 @@ class RegisterController extends Controller
         ]);
 
         // Crear el registro de paciente
-        Patient::create([
+        $paciente = Patient::create([
             'user_id' => $user->id,
             // Los demás campos se pueden completar después
+        ]);
+
+        MedicalRecord::create([
+            'patient_id' => $paciente->id,
         ]);
 
         return redirect()->route('login')->with('excelente', 'Registro exitoso. Ahora puedes iniciar sesión.');
