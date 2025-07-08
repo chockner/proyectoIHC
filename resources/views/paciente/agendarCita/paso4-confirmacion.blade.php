@@ -71,7 +71,7 @@
                     <div>
                         <p class="text-gray-500">Fecha:</p>
                         <p class="font-medium text-gray-700">
-                            {{ \Carbon\Carbon::parse(session('agendar_cita.appointment_date'))->format('d \d\e F, Y') }}
+                            {{ ucfirst(\Carbon\Carbon::parse(session('agendar_cita.appointment_date'))->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY')) }}
                         </p>
                     </div>
                     <div>
