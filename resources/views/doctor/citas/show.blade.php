@@ -129,9 +129,6 @@
                 <a href="{{ route('doctor.citas.index') }}" class="btn btn-outline-secondary">Volver a la lista de
                     citas</a>
             </div>
-            <div class="col-md-4 d-flex justify-content-end">
-                <a href="{{ route('doctor.citas.edit', $appointment->id) }}" class="btn btn-primary">Editar Cita</a>
-            </div>
         </div>
     </div>
 @endsection
