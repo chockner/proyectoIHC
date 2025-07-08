@@ -267,7 +267,8 @@
                     @if (Auth::user()->role->name == 'doctor')
                         <ul class="list-unstyled ps-3">
                             <li>
-                                <a href="#" class="sidebar-link {{-- {{ request()->routeIs('doctor.historias.index') ? 'active-link' : '' }} --}}"
+                                <a href="{{ route('doctor.pacientes.index') }}"
+                                    class="sidebar-link {{ request()->routeIs('doctor.pacientes.index') ? 'active-link' : '' }}"
                                     style="display: flex; align-items: center; gap: 10px;">
                                     <span class="material-icons text-gray-500 text-2xl"
                                         style="flex-shrink: 0;">assist_walker</span>

@@ -22,42 +22,36 @@ class CitaController extends Controller
     {
         // Obtener parámetros de búsqueda
         $status = $request->input('status');
-        $sort = $request->input('sort', 'date'); // Ordenar por fecha por defecto
-        $order = $request->input('order', 'asc'); // Orden ascendente por defecto
-
+        $fecha = $request->input('fecha');
+    
         // Consulta base con relaciones
         $query = Appointment::with(['patient.user', 'doctor.user']);
-
+    
         // Aplicar filtro por estado si existe
         if ($status && in_array($status, ['programada', 'completada', 'cancelada'])) {
             $query->where('status', $status);
         }
-
-        // Ordenar según parámetros
-        switch ($sort) {
-            case 'status':
-                // Ordenar por estado (programadas primero)
-                $query->orderByRaw("FIELD(status, 'programada', 'completada', 'cancelada')");
-                break;
-            case 'date':
-            default:
-                // Ordenar por fecha (más recientes primero o según el orden)
-                $query->orderBy('appointment_date', $order);
-                break;
+    
+        // Aplicar filtro por fecha si existe
+        if ($fecha) {
+            $query->whereDate('appointment_date', $fecha);
         }
-
+    
+        // Ordenar por fecha (más recientes primero, descendente)
+        $query->orderBy('appointment_date', 'desc');
+    
         // Paginar resultados
         $citas = $query->paginate(10);
-
+    
         // Mantener parámetros de búsqueda en la paginación
         $citas->appends([
             'status' => $status,
-            'sort' => $sort,
-            'order' => $order
+            'fecha' => $fecha
         ]);
-
+    
         return view('secretaria.citas.index', compact('citas'));
     }
+    
 
     public function show($id){
         $cita = Appointment::findOrFail($id);
