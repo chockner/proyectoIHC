@@ -14,14 +14,20 @@
                 </div>
                 <!-- Botón de búsqueda -->
                 <div class="col-md-2 mb-3">
-                    <button type="submit" class="btn btn-primary w-100">
-                        Buscar
+                    <button type="submit"
+                        class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
+                        data-bs-toggle="tooltip" data-bs-title="Buscar">
+                        <div class="relative">
+                            <span class="material-icons text-gray-500 " style="font-size: 30px;">calendar_today</span>
+                            <span
+                                class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-gray-100 text-green-600 rounded-full p-0.4">search</span>
+                        </div>
                     </button>
                 </div>
                 <!-- Botón de limpiar (enlace) -->
                 <div class="col-md-2 mb-3">
                     <a href="{{ route('doctor.citas.index') }}" class="btn btn-secondary w-100">
-                        Limpiar
+                        Limpiar Filtro
                     </a>
                 </div>
             </form>
@@ -54,7 +60,8 @@
                                         class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
                                         data-bs-toggle="tooltip" data-bs-title="Ver">
                                         <div class="relative">
-                                            <span class="material-icons text-blue-600">calendar_today</span>
+                                            <span class="material-icons text-blue-600"
+                                                style="font-size: 30px;">calendar_today</span>
                                             <span
                                                 class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-blue-100 text-blue-600 rounded-full p-0.4">visibility</span>
                                         </div>
@@ -67,7 +74,8 @@
                                             class="action-btn flex items-center justify-center rounded-md border border-gray-200 bg-white p-2"
                                             data-bs-toggle="tooltip" data-bs-title="Atender">
                                             <div class="relative">
-                                                <span class="material-icons text-green-500">calendar_today</span>
+                                                <span class="material-icons text-green-500"
+                                                    style="font-size: 30px;">calendar_today</span>
                                                 <span
                                                     class="material-icons absolute -bottom-0 -right-1.5 text-xs bg-green-100 text-green-600 rounded-full p-0.4">room_service</span>
                                             </div>
